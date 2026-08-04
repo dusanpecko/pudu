@@ -1,0 +1,55 @@
+import ContactForm, {
+  type ContactProductOption,
+} from "@/components/contact/ContactForm";
+import Reveal from "@/components/effects/Reveal";
+import { products } from "@/data/products";
+import { getTranslations } from "@/data/translations";
+import type { Locale } from "@/lib/i18n";
+import { getProductContent } from "@/lib/products";
+import { sectionId } from "@/lib/routes";
+import type { ProductSlug } from "@/types/product";
+
+type ContactSectionProps = {
+  locale: Locale;
+  /** Overrides the generic heading on product pages. */
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  /** Preselects the product in the enquiry form. */
+  defaultProduct?: ProductSlug;
+};
+
+export default function ContactSection({
+  locale,
+  eyebrow,
+  title,
+  description,
+  defaultProduct,
+}: ContactSectionProps) {
+  const t = getTranslations(locale);
+
+  const productOptions: ContactProductOption[] = products.map((product) => ({
+    value: product.slug,
+    label: getProductContent(product, locale).name,
+  }));
+
+  return (
+    <section id={sectionId(locale, "contact")} className="section">
+      <div className="wrap">
+        <Reveal className="cta">
+          <div>
+            <p className="eyebrow center">{eyebrow ?? t.contact.eyebrow}</p>
+            <h2>{title ?? t.contact.title}</h2>
+            <p>{description ?? t.contact.description}</p>
+
+            <ContactForm
+              content={t.contact}
+              productOptions={productOptions}
+              defaultProduct={defaultProduct}
+            />
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}

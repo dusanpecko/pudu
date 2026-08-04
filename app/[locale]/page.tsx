@@ -1,0 +1,52 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+
+import ContactSection from "@/components/contact/ContactSection";
+import FutureSection from "@/components/home/FutureSection";
+import HomeHero from "@/components/home/HomeHero";
+import ProductGrid from "@/components/home/ProductGrid";
+import TechnologySection from "@/components/home/TechnologySection";
+import TickerBand from "@/components/home/TickerBand";
+import { getTranslations } from "@/data/translations";
+import { isLocale, locales } from "@/lib/i18n";
+import { buildPageMetadata } from "@/lib/metadata";
+import { getProduct, getProductContent } from "@/lib/products";
+
+type PageParams = { params: Promise<{ locale: string }> };
+
+export function generateStaticParams() {
+  return locales.map((locale) => ({ locale }));
+}
+
+export async function generateMetadata({ params }: PageParams): Promise<Metadata> {
+  const { locale } = await params;
+  if (!isLocale(locale)) return {};
+
+  const t = getTranslations(locale);
+  const hero = getProduct("pudu-t300");
+
+  return buildPageMetadata({
+    locale,
+    route: { type: "home" },
+    title: t.meta.homeTitle,
+    description: t.meta.homeDescription,
+    image: hero.heroImage,
+    imageAlt: getProductContent(hero, locale).imageAlt,
+  });
+}
+
+export default async function HomePage({ params }: PageParams) {
+  const { locale } = await params;
+  if (!isLocale(locale)) notFound();
+
+  return (
+    <>
+      <HomeHero locale={locale} />
+      <TickerBand locale={locale} />
+      <ProductGrid locale={locale} />
+      <TechnologySection locale={locale} />
+      <FutureSection locale={locale} />
+      <ContactSection locale={locale} />
+    </>
+  );
+}
