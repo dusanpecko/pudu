@@ -86,12 +86,36 @@ types/          product.ts, translation.ts
 ## SEO
 
 Every page provides a localized `title` and `description`, Open Graph and
-Twitter tags, a canonical URL and `alternates.languages` for all three
-languages. The `/cz` URL prefix maps to the standard `cs` code in `hreflang`
-and `<html lang>`. `sitemap.xml` lists all 15 URLs with their alternates.
+Twitter tags, an absolute canonical URL and `alternates.languages` for all three
+languages. The `/cz` URL prefix maps to the standard `cs` code in `hreflang` and
+`<html lang>`. `sitemap.xml` lists all 15 URLs with their alternates.
 
-Set `NEXT_PUBLIC_SITE_URL` (see [.env.example](.env.example)) so canonical and
-Open Graph URLs point at the real domain.
+## Domains and deployment (Vercel)
+
+One project serves both domains, and each language declares a single canonical
+host, so the two domains never compete as duplicate content:
+
+| Language | Canonical origin |
+| --- | --- |
+| Slovak (`/sk`) | `https://pududotoho.sk` |
+| Czech (`/cz`) | `https://pududotoho.cz` |
+| English (`/en`) | `https://pududotoho.sk` |
+
+The mapping lives in [lib/site.ts](lib/site.ts) and drives canonical URLs,
+`hreflang` alternates, `og:url`, Open Graph images, `sitemap.xml` and
+`robots.txt`. Environment variables (see [.env.example](.env.example)), both
+read at build time — changing them needs a redeploy:
+
+- `NEXT_PUBLIC_SITE_URL` — primary origin (Slovak, English, `robots.txt`).
+  Falls back to `VERCEL_PROJECT_PRODUCTION_URL`, then `http://localhost:3000`.
+- `NEXT_PUBLIC_SITE_URL_CZ` — Czech origin. Set it **only in production**;
+  unset, every language stays on the primary host, which is what local
+  development and preview deployments need.
+
+Add both domains to the same Vercel project (neither one redirecting). Because
+the shared `sitemap.xml` contains URLs for both hosts, verify both domains in
+Search Console and submit the sitemap for each — `robots.txt` already advertises
+both sitemap URLs.
 
 ## Animations and accessibility
 
