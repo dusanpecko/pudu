@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
+import Umami from "@/components/analytics/Umami";
 import CursorGlow from "@/components/effects/CursorGlow";
 import NoiseOverlay from "@/components/effects/NoiseOverlay";
 import Footer from "@/components/layout/Footer";
@@ -86,6 +87,7 @@ export default async function LocaleLayout({
 
         <Footer locale={locale} />
         <NoiseOverlay />
+        <Umami />
       </body>
     </html>
   );
