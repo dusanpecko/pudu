@@ -1,4 +1,4 @@
-import type { Product, ProductSlug } from "@/types/product";
+import type { Product } from "@/types/product";
 
 const IMAGES = {
   t150: {
@@ -59,6 +59,7 @@ export const products: Product[] = [
 
   {
     slug: "pudu-t300",
+    featured: true,
     heroImage: IMAGES.t300,
     socialImage: IMAGES.t300Social,
     galleryImages: [IMAGES.t300Safety],
@@ -128,12 +129,4 @@ export const products: Product[] = [
       { key: "lift", value: { kind: "measure", amount: 60, unit: "mm" } },
     ],
   },
-];
-
-/** Order used by the product grid on the home page (as in the original design). */
-export const homeProductOrder: ProductSlug[] = [
-  "pudu-t300",
-  "pudu-t150",
-  "pudu-t600-upright",
-  "pudu-t600-underride",
 ];

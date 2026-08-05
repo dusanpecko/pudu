@@ -1,4 +1,4 @@
-import { homeProductOrder, products } from "@/data/products";
+import { products } from "@/data/products";
 import { productTexts } from "@/data/products/translations";
 import { getTranslations } from "@/data/translations";
 import { decimalSeparators, type Locale } from "@/lib/i18n";
@@ -34,9 +34,12 @@ export function getProductContent(
   return productTexts[locale][product.slug];
 }
 
-/** Products in the order used by the home page grid. */
+/**
+ * Products for the home page grid. Deliberately the canonical fleet order, so a
+ * newly added product cannot be missing from the grid.
+ */
 export function getHomeProducts(): Product[] {
-  return homeProductOrder.map(getProduct);
+  return products;
 }
 
 /** Neighbours in the canonical fleet order, wrapping around the ends. */

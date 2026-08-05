@@ -136,6 +136,7 @@ export const sk = {
     navigation: "Navigácia",
     charging: "Nabíjanie",
     learnMore: "Zistiť viac",
+    featuredBadge: "Odporúčame",
     requestOffer: "Vyžiadať ponuku",
     specifications: "Technické parametre",
     features: "Hlavné funkcie",

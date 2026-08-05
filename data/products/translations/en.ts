@@ -115,7 +115,7 @@ export const productTextsEn: Record<
   },
   "pudu-t600-upright": {
     name: "PUDU T600 Upright",
-    category: "Heavy-duty autonomous transport",
+    category: "Heavy-duty AMR",
     headline: "Heavy work, handled intelligently.",
     shortDescription:
       "A high-capacity platform with an ergonomic handle for moving heavy loads safely.",

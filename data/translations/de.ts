@@ -130,6 +130,7 @@ export const de: Translation = {
     navigation: "Navigation",
     charging: "Ladezeit",
     learnMore: "Mehr erfahren",
+    featuredBadge: "Empfehlung",
     requestOffer: "Angebot anfragen",
     specifications: "Technische Daten",
     features: "Hauptfunktionen",

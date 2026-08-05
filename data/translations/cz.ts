@@ -130,6 +130,7 @@ export const cz: Translation = {
     navigation: "Navigace",
     charging: "Nabíjení",
     learnMore: "Zjistit více",
+    featuredBadge: "Doporučujeme",
     requestOffer: "Vyžádat nabídku",
     specifications: "Technické parametry",
     features: "Hlavní funkce",

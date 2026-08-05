@@ -130,6 +130,7 @@ export const en: Translation = {
     navigation: "Navigation",
     charging: "Charging",
     learnMore: "Learn more",
+    featuredBadge: "Recommended",
     requestOffer: "Request a quote",
     specifications: "Technical specifications",
     features: "Key features",

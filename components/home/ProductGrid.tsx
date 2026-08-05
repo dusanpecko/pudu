@@ -30,6 +30,7 @@ export default function ProductGrid({ locale }: ProductGridProps) {
               locale={locale}
               payloadLabel={t.specs.payload}
               runtimeLabel={t.specs.runtime}
+              featuredLabel={t.product.featuredBadge}
             />
           ))}
         </div>
