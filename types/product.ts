@@ -71,6 +71,11 @@ export type LocalizedProductContent = {
 export type Product = {
   slug: ProductSlug;
   heroImage: ProductImage;
+  /**
+   * Open Graph image. Only needed when `heroImage` is a WebP and a PNG or JPEG
+   * twin exists — some crawlers (LinkedIn in particular) skip WebP previews.
+   */
+  socialImage?: ProductImage;
   galleryImages?: ProductImage[];
   /** Language neutral headline values, reused in cards and hero HUD. */
   payload: string;

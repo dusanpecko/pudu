@@ -32,7 +32,7 @@ export default function ProductCard({
         <span className="tag">{content.category}</span>
         <span className="shot">
           <Image
-            className={product.heroImage.hasBackdrop ? "blend-screen" : undefined}
+            className={product.heroImage.hasBackdrop ? "blend-backdrop" : undefined}
             src={product.heroImage.src}
             alt={content.imageAlt}
             width={product.heroImage.width}

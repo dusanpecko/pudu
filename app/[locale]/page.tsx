@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
     route: { type: "home" },
     title: t.meta.homeTitle,
     description: t.meta.homeDescription,
-    image: hero.heroImage,
+    image: hero.socialImage ?? hero.heroImage,
     imageAlt: getProductContent(hero, locale).imageAlt,
   });
 }

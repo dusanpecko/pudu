@@ -69,7 +69,7 @@ export default function HologramPanel({
       <RadarAnimation />
       <Image
         ref={imageRef}
-        className={cx("robot", image.hasBackdrop && "blend-screen")}
+        className={cx("robot", image.hasBackdrop && "blend-backdrop")}
         src={image.src}
         alt={alt}
         width={image.width}

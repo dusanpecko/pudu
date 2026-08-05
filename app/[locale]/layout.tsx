@@ -66,6 +66,8 @@ export default async function LocaleLayout({
       lang={htmlLang(locale)}
       className={fontVariables}
       data-scroll-behavior="smooth"
+      // Trial of the light palette. Remove the attribute for the dark theme.
+      data-theme="light"
     >
       <body>
         <noscript>

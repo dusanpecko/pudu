@@ -40,7 +40,7 @@ export function buildProductMetadata(locale: Locale, product: Product): Metadata
     route: { type: "product", slug: product.slug },
     title: content.seoTitle,
     description: content.seoDescription,
-    image: product.heroImage,
+    image: product.socialImage ?? product.heroImage,
     imageAlt: content.imageAlt,
   });
 }

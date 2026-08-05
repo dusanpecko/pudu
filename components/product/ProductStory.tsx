@@ -22,7 +22,7 @@ export default function ProductStory({ product, locale }: ProductStoryProps) {
       <div className="wrap story">
         <Reveal className="story-media">
           <Image
-            className={product.heroImage.hasBackdrop ? "blend-screen" : undefined}
+            className={product.heroImage.hasBackdrop ? "blend-backdrop" : undefined}
             src={product.heroImage.src}
             alt={content.imageAlt}
             width={product.heroImage.width}

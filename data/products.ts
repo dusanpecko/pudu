@@ -7,7 +7,10 @@ const IMAGES = {
     height: 1280,
     hasBackdrop: true,
   },
-  t300: { src: "/images/products/pudu-t300.png", width: 5000, height: 3125 },
+  // Blueprint render with alpha, 24 kB — 20x lighter than the PNG twin.
+  t300: { src: "/images/products/pudu-t300.webp", width: 1024, height: 1024 },
+  // Same render as a PNG, kept only for Open Graph previews.
+  t300Social: { src: "/images/products/pudu-t300.png", width: 1024, height: 1024 },
   t300Safety: {
     src: "/images/products/pudu-t300-safety.webp",
     width: 2400,
@@ -214,6 +217,7 @@ export const products: Product[] = [
   {
     slug: "pudu-t300",
     heroImage: IMAGES.t300,
+    socialImage: IMAGES.t300Social,
     galleryImages: [IMAGES.t300Safety],
     payload: "300 kg",
     runtime: "12 h",
