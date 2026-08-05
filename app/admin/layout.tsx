@@ -1,25 +1,23 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
 import "@/app/admin/admin.css";
 
 export const metadata: Metadata = {
   title: "PUDU — content tooling",
-  robots: { index: false, follow: false },
+  robots: { index: false, follow: false, nocache: true },
 };
 
 /**
- * Authoring tools, available only while running `next dev`. In any other
- * environment the whole `/admin` subtree answers 404, so nothing ships to the
- * public site and there is no login to protect.
+ * Content tooling for the people who write the copy. Access is gated by
+ * middleware.ts, which requires a Supabase session for every `/admin` route
+ * except the sign-in page.
  *
- * This segment sits outside `app/[locale]`, which is the site's root layout, so
- * it provides its own document shell.
+ * This segment sits outside `app/[locale]`, the site's root layout, so it
+ * provides its own document shell — and deliberately none of the site's design
+ * tokens, so it reads as a tool rather than as the page it edits.
  */
 export default function AdminLayout({ children }: { children: ReactNode }) {
-  if (process.env.NODE_ENV !== "development") notFound();
-
   return (
     <html lang="sk">
       <body>{children}</body>

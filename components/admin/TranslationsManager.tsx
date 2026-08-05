@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 
+import { signOut } from "@/app/admin/actions";
 import { locales, localeLabels, type Locale } from "@/lib/i18n";
 import {
   applyEdits,
@@ -19,6 +20,8 @@ type Trees = Record<string, StringTree>;
 type TranslationsManagerProps = {
   ui: Trees;
   products: Trees;
+  /** Signed-in editor, shown in the header and used to attribute a publish. */
+  editorEmail: string | null;
 };
 
 type Group = {
@@ -44,7 +47,11 @@ function basename(path: string): string {
   return path.slice(path.lastIndexOf("/") + 1);
 }
 
-export default function TranslationsManager({ ui, products }: TranslationsManagerProps) {
+export default function TranslationsManager({
+  ui,
+  products,
+  editorEmail,
+}: TranslationsManagerProps) {
   const trees: Record<"ui" | "products", Trees> = { ui, products };
 
   const groups = useMemo<Group[]>(() => {
@@ -170,6 +177,9 @@ export default function TranslationsManager({ ui, products }: TranslationsManage
           </p>
         </div>
         <div className="flex items-center gap-3 text-sm">
+          {editorEmail ? (
+            <span className="text-slate-500">{editorEmail}</span>
+          ) : null}
           <span
             className={
               totalChanges > 0
@@ -187,6 +197,14 @@ export default function TranslationsManager({ ui, products }: TranslationsManage
           >
             Discard
           </button>
+          <form action={signOut}>
+            <button
+              type="submit"
+              className="rounded-lg border border-slate-300 px-3 py-1.5 text-slate-700"
+            >
+              Sign out
+            </button>
+          </form>
         </div>
       </header>
 
