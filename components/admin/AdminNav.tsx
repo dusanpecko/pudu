@@ -12,6 +12,7 @@ type AdminNavProps = {
 const LINKS = [
   { href: "/admin", label: "Prehľad" },
   { href: "/admin/translations-manager", label: "Preklady" },
+  { href: "/admin/settings", label: "Nastavenia" },
 ];
 
 /** Shared header for the whole /admin subtree. */
