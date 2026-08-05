@@ -99,6 +99,8 @@
   --scanline: #73f6ff0d;
   --scan-color: var(--cyan);
   --hud-text: #b8fbff;
+  /* Second line of the hero headline: an outline on dark, so no fill. */
+  --headline-fill: transparent;
   --stroke-color: #dffcff;
   --image-glow: #73f6ff33;
   --cursor-glow-inner: #73f6ff1f;
@@ -177,7 +179,6 @@
   --scanline: rgba(74, 44, 140, 0.06);
   --scan-color: #7a52da;
   --hud-text: #3b2a6e;
-  --stroke-color: #b1a0e2;
   --image-glow: rgba(74, 44, 140, 0.18);
   --cursor-glow-inner: rgba(122, 82, 218, 0.12);
   --cursor-glow-outer: rgba(160, 110, 230, 0.06);
@@ -185,9 +186,17 @@
   --shadow-image: rgba(38, 22, 78, 0.3);
   --shadow-panel: rgba(38, 22, 78, 0.18);
 
-  /* The status dot and the outlined headline need more weight on a pale page. */
+  /* The status dot needs more weight on a pale page. */
   --color-accent-lime: #3f9142;
-  --stroke-color: #9280cc;
+
+  /*
+   * A hairline outline all but disappears on a pale page — 3:1 for the stroke
+   * colour alone, and a 1px stroke puts far less ink down than that suggests.
+   * The second headline line is therefore filled with the accent violet
+   * (9.3:1), which keeps the two-tone headline without making it decorative.
+   */
+  --headline-fill: var(--accent-ink);
+  --stroke-color: var(--accent-ink);
 }
 
 /* The film grain reads as dirt on a pale page. */
@@ -785,7 +794,7 @@ h3 {
 
 .hero h1 span {
   display: block;
-  color: transparent;
+  color: var(--headline-fill);
   -webkit-text-stroke: 1px var(--stroke-color);
 }
 
