@@ -190,6 +190,7 @@ const LOCALE_NAMES: Record<Locale, string> = {
   sk: "Slovak",
   cz: "Czech",
   en: "English",
+  de: "German",
 };
 
 /** Rebuilds data/products/translations/<locale>.ts. */
@@ -211,7 +212,7 @@ export function serializeProductTexts(locale: Locale, data: StringTree): string 
   ].join("\n");
 }
 
-/** The six files the manager can regenerate. */
+/** The files the manager can regenerate — one pair per language. */
 export type SourceFile = {
   id: string;
   path: string;
@@ -219,26 +220,28 @@ export type SourceFile = {
   kind: "ui" | "products";
 };
 
-export const sourceFiles: SourceFile[] = [
-  { id: "ui-sk", path: "data/translations/sk.ts", locale: "sk", kind: "ui" },
-  { id: "ui-cz", path: "data/translations/cz.ts", locale: "cz", kind: "ui" },
-  { id: "ui-en", path: "data/translations/en.ts", locale: "en", kind: "ui" },
-  {
-    id: "products-sk",
-    path: "data/products/translations/sk.ts",
-    locale: "sk",
-    kind: "products",
-  },
-  {
-    id: "products-cz",
-    path: "data/products/translations/cz.ts",
-    locale: "cz",
-    kind: "products",
-  },
-  {
-    id: "products-en",
-    path: "data/products/translations/en.ts",
-    locale: "en",
-    kind: "products",
-  },
-];
+/**
+ * The locales are passed in rather than imported, which keeps this module free
+ * of runtime dependencies — it has to be usable from a plain Node script as
+ * well as from the browser.
+ */
+export function buildSourceFiles(locales: readonly Locale[]): SourceFile[] {
+  return [
+    ...locales.map(
+      (locale): SourceFile => ({
+        id: `ui-${locale}`,
+        path: `data/translations/${locale}.ts`,
+        locale,
+        kind: "ui",
+      }),
+    ),
+    ...locales.map(
+      (locale): SourceFile => ({
+        id: `products-${locale}`,
+        path: `data/products/translations/${locale}.ts`,
+        locale,
+        kind: "products",
+      }),
+    ),
+  ];
+}

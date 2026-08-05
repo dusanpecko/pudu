@@ -1,5 +1,5 @@
 import type { Locale } from "@/lib/i18n";
-import { localizedPath, type Route } from "@/lib/routes";
+import { localizedPath, type HreflangCode, type Route } from "@/lib/routes";
 
 /**
  * Canonical origins per market. Slovak and English live on the Slovak domain,
@@ -14,8 +14,9 @@ import { localizedPath, type Route } from "@/lib/routes";
  *     production domain, which is what canonical URLs should point at.
  *  3. `http://localhost:3000` for local development.
  *
- * `NEXT_PUBLIC_SITE_URL_CZ` moves Czech onto its own domain. Leave it unset in
- * development and on previews — everything then stays on a single host.
+ * `NEXT_PUBLIC_SITE_URL_CZ` and `NEXT_PUBLIC_SITE_URL_DE` move those markets
+ * onto their own domains. Leave them unset in development and on previews —
+ * everything then stays on a single host.
  *
  * Only imported from server code (metadata, sitemap, robots), which is why the
  * unprefixed Vercel variable can be used.
@@ -37,14 +38,15 @@ function resolvePrimaryOrigin(): string {
 /** Primary origin — used for the Slovak and English versions. */
 export const siteUrl = resolvePrimaryOrigin();
 
-const czechOrigin = process.env.NEXT_PUBLIC_SITE_URL_CZ
-  ? trimSlashes(process.env.NEXT_PUBLIC_SITE_URL_CZ)
-  : siteUrl;
+function marketOrigin(value: string | undefined): string {
+  return value ? trimSlashes(value) : siteUrl;
+}
 
 const localeOrigins: Record<Locale, string> = {
   sk: siteUrl,
-  cz: czechOrigin,
+  cz: marketOrigin(process.env.NEXT_PUBLIC_SITE_URL_CZ),
   en: siteUrl,
+  de: marketOrigin(process.env.NEXT_PUBLIC_SITE_URL_DE),
 };
 
 /** Canonical origin of one language version. */
@@ -66,11 +68,12 @@ export function localizedUrl(locale: Locale, route: Route): string {
  * Absolute URL of every language version of one route, keyed by the standard
  * language code used in `hreflang` (`cs`, not the `cz` URL segment).
  */
-export function alternateUrls(route: Route): Record<"sk" | "cs" | "en", string> {
+export function alternateUrls(route: Route): Record<HreflangCode, string> {
   return {
     sk: localizedUrl("sk", route),
     cs: localizedUrl("cz", route),
     en: localizedUrl("en", route),
+    de: localizedUrl("de", route),
   };
 }
 

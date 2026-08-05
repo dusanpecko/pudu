@@ -6,14 +6,16 @@ import { signOut } from "@/app/admin/actions";
 import { locales, localeLabels, type Locale } from "@/lib/i18n";
 import {
   applyEdits,
+  buildSourceFiles,
   flattenStrings,
   readPath,
   serializeProductTexts,
   serializeUiTranslations,
-  sourceFiles,
   type SourceFile,
   type StringTree,
 } from "@/lib/translation-source";
+
+const sourceFiles = buildSourceFiles(locales);
 
 type Trees = Record<string, StringTree>;
 
@@ -165,6 +167,10 @@ export default function TranslationsManager({
   if (!activeGroup) return null;
 
   const rows = visibleRows(activeGroup);
+  // One column for the key, then one per language.
+  const columnStyle = {
+    gridTemplateColumns: `minmax(160px, 1fr) repeat(${locales.length}, minmax(0, 2fr))`,
+  };
 
   return (
     <div className="mx-auto flex min-h-screen max-w-[1600px] flex-col gap-6 p-6">
@@ -208,7 +214,7 @@ export default function TranslationsManager({
         </div>
       </header>
 
-      <section className="grid grid-cols-2 gap-2 md:grid-cols-3 lg:grid-cols-6">
+      <section className="grid grid-cols-2 gap-2 md:grid-cols-4 lg:grid-cols-8">
         {sourceFiles.map((file) => {
           const count = changeCount(file.id);
           return (
@@ -298,7 +304,8 @@ export default function TranslationsManager({
           </div>
 
           <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
-            <div className="grid grid-cols-[minmax(180px,1fr)_repeat(3,minmax(0,2fr))] border-b border-slate-200 bg-slate-50 text-xs font-medium uppercase tracking-wider text-slate-500">
+            <div className="grid border-b border-slate-200 bg-slate-50 text-xs font-medium uppercase tracking-wider text-slate-500"
+              style={columnStyle}>
               <div className="px-3 py-2">Key</div>
               {locales.map((locale) => (
                 <div key={locale} className="px-3 py-2">
@@ -323,7 +330,8 @@ export default function TranslationsManager({
               return (
                 <div
                   key={row.path}
-                  className="grid grid-cols-[minmax(180px,1fr)_repeat(3,minmax(0,2fr))] items-start border-b border-slate-100 last:border-b-0"
+                  className="grid items-start border-b border-slate-100 last:border-b-0"
+                  style={columnStyle}
                 >
                   <div className="px-3 py-2">
                     <span className="block break-words font-mono text-xs text-slate-600">

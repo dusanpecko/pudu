@@ -4,14 +4,27 @@ import type { ProductSlug } from "@/types/product";
 
 /** Section anchors on the home page — localized so the URL stays readable. */
 export const sectionIds = {
-  products: { sk: "produkty", cz: "produkty", en: "products" },
-  technology: { sk: "technologia", cz: "technologie", en: "technology" },
-  solutions: { sk: "riesenia", cz: "reseni", en: "solutions" },
-  contact: { sk: "kontakt", cz: "kontakt", en: "contact" },
-  specs: { sk: "parametre", cz: "parametry", en: "specifications" },
+  products: { sk: "produkty", cz: "produkty", en: "products", de: "produkte" },
+  technology: {
+    sk: "technologia",
+    cz: "technologie",
+    en: "technology",
+    de: "technologie",
+  },
+  solutions: { sk: "riesenia", cz: "reseni", en: "solutions", de: "loesungen" },
+  contact: { sk: "kontakt", cz: "kontakt", en: "contact", de: "kontakt" },
+  specs: {
+    sk: "parametre",
+    cz: "parametry",
+    en: "specifications",
+    de: "technische-daten",
+  },
 } as const satisfies Record<string, Record<Locale, string>>;
 
 export type SectionKey = keyof typeof sectionIds;
+
+/** Standard language codes used in `hreflang` — `cs`, not the `cz` URL segment. */
+export type HreflangCode = "sk" | "cs" | "en" | "de";
 
 export function sectionId(locale: Locale, section: SectionKey): string {
   return sectionIds[section][locale];
@@ -25,9 +38,16 @@ export type Route =
   | { type: "home" }
   | { type: "product"; slug: ProductSlug };
 
-/** `products` in English, `produkty` in Slovak and Czech. */
+/** The path segment each market uses for a product page. */
+const productSegments: Record<Locale, string> = {
+  sk: "produkty",
+  cz: "produkty",
+  en: "products",
+  de: "produkte",
+};
+
 export function productSegment(locale: Locale): string {
-  return locale === "en" ? "products" : "produkty";
+  return productSegments[locale];
 }
 
 export function localizedPath(
@@ -71,10 +91,11 @@ export function parsePath(pathname: string): { locale: Locale; route: Route } | 
 }
 
 /** Absolute-path map of every language version of one route, for `hreflang`. */
-export function alternatePaths(route: Route): Record<"sk" | "cs" | "en", string> {
+export function alternatePaths(route: Route): Record<HreflangCode, string> {
   return {
     sk: localizedPath("sk", route),
     cs: localizedPath("cz", route),
     en: localizedPath("en", route),
+    de: localizedPath("de", route),
   };
 }
