@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from "react";
 
-import { signOut } from "@/app/admin/actions";
 import { locales, localeLabels, type Locale } from "@/lib/i18n";
 import {
   applyEdits,
@@ -22,8 +21,6 @@ type Trees = Record<string, StringTree>;
 type TranslationsManagerProps = {
   ui: Trees;
   products: Trees;
-  /** Signed-in editor, shown in the header and used to attribute a publish. */
-  editorEmail: string | null;
 };
 
 type Group = {
@@ -52,7 +49,6 @@ function basename(path: string): string {
 export default function TranslationsManager({
   ui,
   products,
-  editorEmail,
 }: TranslationsManagerProps) {
   const trees: Record<"ui" | "products", Trees> = { ui, products };
 
@@ -173,7 +169,7 @@ export default function TranslationsManager({
   };
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-[1600px] flex-col gap-6 p-6">
+    <div className="mx-auto flex max-w-[1600px] flex-col gap-6 p-6">
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Translations manager</h1>
@@ -183,9 +179,6 @@ export default function TranslationsManager({
           </p>
         </div>
         <div className="flex items-center gap-3 text-sm">
-          {editorEmail ? (
-            <span className="text-slate-500">{editorEmail}</span>
-          ) : null}
           <span
             className={
               totalChanges > 0
@@ -203,14 +196,6 @@ export default function TranslationsManager({
           >
             Discard
           </button>
-          <form action={signOut}>
-            <button
-              type="submit"
-              className="rounded-lg border border-slate-300 px-3 py-1.5 text-slate-700"
-            >
-              Sign out
-            </button>
-          </form>
         </div>
       </header>
 

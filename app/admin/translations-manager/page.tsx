@@ -12,7 +12,7 @@ import type { StringTree } from "@/lib/translation-source";
  * Edit every translated string side by side. The repository stays the single
  * source of truth: the editor regenerates the data files, which are either
  * downloaded or committed by the publish action. Access requires a Supabase
- * session, enforced by middleware.ts.
+ * session, enforced by proxy.ts.
  */
 export default async function TranslationsManagerPage() {
   const editor = await getEditor();
@@ -27,11 +27,5 @@ export default async function TranslationsManagerPage() {
     locales.map((locale) => [locale, productTexts[locale] as unknown as StringTree]),
   );
 
-  return (
-    <TranslationsManager
-      ui={ui}
-      products={products}
-      editorEmail={editor?.email ?? null}
-    />
-  );
+  return <TranslationsManager ui={ui} products={products} />;
 }

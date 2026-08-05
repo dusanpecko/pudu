@@ -13,10 +13,13 @@ const NO_ACCESS_PATH = "/admin/no-access";
 
 /**
  * Refreshes the Supabase session and gates the editing tools. Scoped to
- * `/admin` by the matcher below, so the public site keeps running without any
- * middleware in front of it.
+ * `/admin` by the matcher below, so the public site keeps running with nothing
+ * in front of it.
+ *
+ * Named `proxy` in a `proxy.ts` file: Next 16 deprecated the `middleware`
+ * convention and renamed it.
  */
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const response = NextResponse.next({ request });
 
   if (!supabaseConfigured) {
@@ -60,7 +63,7 @@ export async function middleware(request: NextRequest) {
   }
 
   if (user && pathname === LOGIN_PATH) {
-    return NextResponse.redirect(new URL("/admin/translations-manager", request.url));
+    return NextResponse.redirect(new URL("/admin", request.url));
   }
 
   return response;

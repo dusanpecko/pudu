@@ -76,7 +76,7 @@ data/
 └── translations/{sk,cz,en,de}.ts            interface copy
 lib/            i18n, routes, products, metadata, fonts, motion, site,
                 translation-source, supabase/
-middleware.ts   session gate, scoped to /admin
+proxy.ts        session gate, scoped to /admin
 types/          product.ts, translation.ts
 ```
 
@@ -129,6 +129,25 @@ the shared `sitemap.xml` contains URLs for both hosts, verify both domains in
 Search Console and submit the sitemap for each — `robots.txt` already advertises
 both sitemap URLs.
 
+## The admin zone
+
+`/admin` holds the tooling for the people who run the site, behind the sign-in
+described below. It has its own document shell and deliberately none of the
+site's design tokens, so it reads as a tool rather than as the page it edits.
+
+| Page | What it does |
+| --- | --- |
+| `/admin` | Traffic overview from Umami: headline figures with a comparison against the previous period, pageviews and visitors over time, top pages, referrers and countries. One range filter (7/30/90 days) scopes everything. |
+| `/admin/translations-manager` | Every translated string, one column per language |
+
+The Umami API key is read server side only — `UMAMI_API_KEY` deliberately has no
+`NEXT_PUBLIC_` prefix, because it can read every website in the account. The
+browser receives numbers, never the key. Responses are reused for five minutes.
+
+The chart plots whole days only. A partial current day would plot as a plunge to
+the floor and read as a collapse in traffic; today is counted in the headline
+figures instead, where it cannot mislead.
+
 ## Editing the content
 
 `/admin/translations-manager` shows every translated string with one column per
@@ -140,7 +159,7 @@ changed. The serializer lives in
 
 Access needs a Supabase account **and** an e-mail listed in `ADMIN_EMAILS`. The
 allowlist is a server-only variable, checked in
-[middleware.ts](middleware.ts) and again in the page — a session alone is not
+[proxy.ts](proxy.ts) and again in the page — a session alone is not
 enough, because a project with sign-ups enabled would otherwise let anybody in.
 An empty list denies everyone. Accounts are created in the Supabase dashboard;
 there is no sign-up form.

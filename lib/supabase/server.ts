@@ -6,7 +6,7 @@ import { supabasePublishableKey, supabaseUrl } from "@/lib/supabase/env";
 /**
  * Supabase client for server components and server actions. Writing cookies is
  * only possible in actions and route handlers, so the setter tolerates the
- * read-only case — the session is refreshed by middleware instead.
+ * read-only case — the session is refreshed by the proxy instead.
  */
 export async function createSupabaseServerClient() {
   const cookieStore = await cookies();
@@ -22,7 +22,7 @@ export async function createSupabaseServerClient() {
             cookieStore.set(name, value, options);
           }
         } catch {
-          // Called from a server component — middleware already refreshed it.
+          // Called from a server component — the proxy already refreshed it.
         }
       },
     },
