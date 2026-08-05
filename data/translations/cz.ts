@@ -6,9 +6,9 @@ export const cz: Translation = {
     homeTitle: "PUDU Industrial | Autonomní logistika a průmyslové roboty",
     homeDescription:
       "Autonomní mobilní roboty PUDU T150, T300 a T600 pro výrobu, sklady a intralogistiku. Přesná navigace, bezpečný pohyb a nasazení, které roste s vámi.",
-    keywordsLabel: "autonomní roboty, AMR, intralogistika, průmyslová automatizace",
+    keywordsLabel:
+      "autonomní roboty, AMR, intralogistika, průmyslová automatizace",
   },
-
   a11y: {
     skipToContent: "Přeskočit na obsah",
     mainNavigation: "Hlavní navigace",
@@ -21,7 +21,6 @@ export const cz: Translation = {
     decorative: "Dekorativní prvek",
     currentPage: "Aktuální stránka",
   },
-
   navigation: {
     home: "Domů",
     products: "Produkty",
@@ -34,7 +33,6 @@ export const cz: Translation = {
     closeMenu: "Zavřít menu",
     requestDemo: "Požádat o ukázku",
   },
-
   units: {
     kg: "kg",
     hours: "hodin",
@@ -46,7 +44,6 @@ export const cz: Translation = {
     upTo: "do",
     chargingTemplate: "{hours} h na {percent} %",
   },
-
   specs: {
     payload: "Nosnost",
     runtime: "Výdrž",
@@ -60,7 +57,6 @@ export const cz: Translation = {
     lift: "Zdvih",
     navigation: "Navigace",
   },
-
   home: {
     hero: {
       eyebrow: "Průmyslová robotika nové generace",
@@ -128,7 +124,6 @@ export const cz: Translation = {
       ],
     },
   },
-
   product: {
     payload: "Nosnost",
     runtime: "Výdrž",
@@ -180,7 +175,6 @@ export const cz: Translation = {
       },
     ],
   },
-
   contact: {
     eyebrow: "Budoucnost začíná první trasou",
     title: "Pojďme automatizovat váš provoz.",
@@ -198,7 +192,8 @@ export const cz: Translation = {
     optional: "nepovinné",
     required: "povinné",
     generalInquiry: "Obecný dotaz",
-    note: "Formulář je v této verzi demonstrační — údaje se neodesílají na server.",
+    note:
+      "Formulář je v této verzi demonstrační — údaje se neodesílají na server.",
     placeholders: {
       name: "Jméno a příjmení",
       company: "Název firmy",
@@ -214,12 +209,10 @@ export const cz: Translation = {
       summary: "Zkontrolujte prosím vyznačená pole.",
     },
   },
-
   footer: {
     copyright: "© 2026 PUDU Industrial — koncept webové prezentace",
     tagline: "Autonomní logistika · Inteligentní výroba · Budoucnost pohybu",
   },
-
   notFound: {
     title: "Stránka nebyla nalezena",
     description:

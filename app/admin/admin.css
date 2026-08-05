@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+/* The admin tooling deliberately does not share the site's design tokens — it
+   should look like a tool, not like the page it edits. */
+body {
+  margin: 0;
+  background: #f6f7fb;
+  color: #17182b;
+  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+textarea,
+input,
+select,
+button {
+  font: inherit;
+}

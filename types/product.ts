@@ -1,5 +1,3 @@
-import type { Locale } from "@/lib/i18n";
-
 export type ProductSlug =
   | "pudu-t150"
   | "pudu-t300"
@@ -85,5 +83,4 @@ export type Product = {
   charging?: string;
   /** Full parameter table; labels and units are localized at render time. */
   specifications: SpecEntry[];
-  translations: Record<Locale, LocalizedProductContent>;
 };

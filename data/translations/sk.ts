@@ -34,9 +34,9 @@ export const sk = {
     homeTitle: "PUDU Industrial | Autonómna logistika a priemyselné roboty",
     homeDescription:
       "Autonómne mobilné roboty PUDU T150, T300 a T600 pre výrobu, sklady a intralogistiku. Presná navigácia, bezpečný pohyb a nasadenie, ktoré rastie s vami.",
-    keywordsLabel: "autonómne roboty, AMR, intralogistika, priemyselná automatizácia",
+    keywordsLabel:
+      "autonómne roboty, AMR, intralogistika, priemyselná automatizácia",
   },
-
   a11y: {
     skipToContent: "Preskočiť na obsah",
     mainNavigation: "Hlavná navigácia",
@@ -49,7 +49,6 @@ export const sk = {
     decorative: "Dekoratívny prvok",
     currentPage: "Aktuálna stránka",
   },
-
   navigation: {
     home: "Domov",
     products: "Produkty",
@@ -62,10 +61,8 @@ export const sk = {
     closeMenu: "Zatvoriť menu",
     requestDemo: "Požiadať o ukážku",
   },
-
   units,
   specs,
-
   home: {
     hero: {
       eyebrow: "Priemyselná robotika novej generácie",
@@ -133,7 +130,6 @@ export const sk = {
       ],
     },
   },
-
   product: {
     payload: "Nosnosť",
     runtime: "Výdrž",
@@ -185,7 +181,6 @@ export const sk = {
       },
     ],
   },
-
   contact: {
     eyebrow: "Budúcnosť začína prvou trasou",
     title: "Poďme automatizovať vašu prevádzku.",
@@ -198,13 +193,13 @@ export const sk = {
     message: "Správa",
     submit: "Odoslať dopyt",
     success: "Ďakujeme. Váš dopyt bol zaznamenaný.",
-    successDetail:
-      "Ozveme sa vám s návrhom ukážky a pilotnej trasy.",
+    successDetail: "Ozveme sa vám s návrhom ukážky a pilotnej trasy.",
     reset: "Odoslať ďalší dopyt",
     optional: "nepovinné",
     required: "povinné",
     generalInquiry: "Všeobecný dopyt",
-    note: "Formulár je v tejto verzii demonštračný — údaje sa neodosielajú na server.",
+    note:
+      "Formulár je v tejto verzii demonštračný — údaje sa neodosielajú na server.",
     placeholders: {
       name: "Meno a priezvisko",
       company: "Názov firmy",
@@ -220,12 +215,10 @@ export const sk = {
       summary: "Skontrolujte prosím vyznačené polia.",
     },
   },
-
   footer: {
     copyright: "© 2026 PUDU Industrial Slovensko — koncept webovej prezentácie",
     tagline: "Autonómna logistika · Inteligentná výroba · Budúcnosť pohybu",
   },
-
   notFound: {
     title: "Stránka sa nenašla",
     description:

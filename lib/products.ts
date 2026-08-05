@@ -1,4 +1,5 @@
 import { homeProductOrder, products } from "@/data/products";
+import { productTexts } from "@/data/products/translations";
 import { getTranslations } from "@/data/translations";
 import { decimalSeparators, type Locale } from "@/lib/i18n";
 import type {
@@ -30,7 +31,7 @@ export function getProductContent(
   product: Product,
   locale: Locale,
 ): LocalizedProductContent {
-  return product.translations[locale];
+  return productTexts[locale][product.slug];
 }
 
 /** Products in the order used by the home page grid. */

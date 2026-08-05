@@ -9,7 +9,6 @@ export const en: Translation = {
     keywordsLabel:
       "autonomous mobile robots, AMR, intralogistics, industrial automation",
   },
-
   a11y: {
     skipToContent: "Skip to content",
     mainNavigation: "Main navigation",
@@ -22,7 +21,6 @@ export const en: Translation = {
     decorative: "Decorative element",
     currentPage: "Current page",
   },
-
   navigation: {
     home: "Home",
     products: "Products",
@@ -35,7 +33,6 @@ export const en: Translation = {
     closeMenu: "Close menu",
     requestDemo: "Request a demo",
   },
-
   units: {
     kg: "kg",
     hours: "hours",
@@ -47,7 +44,6 @@ export const en: Translation = {
     upTo: "up to",
     chargingTemplate: "{hours} h to {percent}%",
   },
-
   specs: {
     payload: "Payload",
     runtime: "Runtime",
@@ -61,7 +57,6 @@ export const en: Translation = {
     lift: "Lift",
     navigation: "Navigation",
   },
-
   home: {
     hero: {
       eyebrow: "Next-generation industrial robotics",
@@ -129,7 +124,6 @@ export const en: Translation = {
       ],
     },
   },
-
   product: {
     payload: "Payload",
     runtime: "Runtime",
@@ -181,7 +175,6 @@ export const en: Translation = {
       },
     ],
   },
-
   contact: {
     eyebrow: "The future starts with the first route",
     title: "Let's automate your operation.",
@@ -194,12 +187,14 @@ export const en: Translation = {
     message: "Message",
     submit: "Send enquiry",
     success: "Thank you. Your enquiry has been recorded.",
-    successDetail: "We will get back to you with a demo and pilot-route proposal.",
+    successDetail:
+      "We will get back to you with a demo and pilot-route proposal.",
     reset: "Send another enquiry",
     optional: "optional",
     required: "required",
     generalInquiry: "General enquiry",
-    note: "In this version the form is a demonstration — no data is sent to a server.",
+    note:
+      "In this version the form is a demonstration — no data is sent to a server.",
     placeholders: {
       name: "Full name",
       company: "Company name",
@@ -215,13 +210,11 @@ export const en: Translation = {
       summary: "Please check the highlighted fields.",
     },
   },
-
   footer: {
     copyright: "© 2026 PUDU Industrial — website presentation concept",
     tagline:
       "Autonomous logistics · Intelligent manufacturing · The future of movement",
   },
-
   notFound: {
     title: "Page not found",
     description:
