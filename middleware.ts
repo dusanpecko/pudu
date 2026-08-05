@@ -1,9 +1,15 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-import { supabaseConfigured, supabasePublishableKey, supabaseUrl } from "@/lib/supabase/env";
+import { isEditor } from "@/lib/supabase/editors";
+import {
+  supabaseConfigured,
+  supabasePublishableKey,
+  supabaseUrl,
+} from "@/lib/supabase/env";
 
 const LOGIN_PATH = "/admin/login";
+const NO_ACCESS_PATH = "/admin/no-access";
 
 /**
  * Refreshes the Supabase session and gates the editing tools. Scoped to
@@ -44,6 +50,13 @@ export async function middleware(request: NextRequest) {
     const target = new URL(LOGIN_PATH, request.url);
     target.searchParams.set("next", pathname);
     return NextResponse.redirect(target);
+  }
+
+  // A session proves who somebody is, not that they are allowed in. Sign-ups
+  // can be enabled on the Supabase project, so the allowlist decides.
+  if (user && !isEditor(user.email)) {
+    if (pathname === NO_ACCESS_PATH) return response;
+    return NextResponse.rewrite(new URL(NO_ACCESS_PATH, request.url));
   }
 
   if (user && pathname === LOGIN_PATH) {
