@@ -334,7 +334,7 @@ export default function TranslationsManager({
                   style={columnStyle}
                 >
                   <div className="px-3 py-2">
-                    <span className="block break-words font-mono text-xs text-slate-600">
+                    <span className="block wrap-break-word font-mono text-xs text-slate-600">
                       {row.label}
                     </span>
                   </div>
