@@ -1,9 +1,8 @@
 import Image from "next/image";
 
 import Reveal from "@/components/effects/Reveal";
-import { getTranslations } from "@/data/translations";
 import type { Locale } from "@/lib/i18n";
-import { getProductContent } from "@/lib/products";
+import { getProductContent, getTranslations } from "@/lib/translations";
 import type { Product } from "@/types/product";
 
 type ProductGalleryProps = {
@@ -14,9 +13,9 @@ type ProductGalleryProps = {
 /**
  * Wide scan visual, rendered only for models that ship a gallery image.
  */
-export default function ProductGallery({ product, locale }: ProductGalleryProps) {
-  const t = getTranslations(locale);
-  const content = getProductContent(product, locale);
+export default async function ProductGallery({ product, locale }: ProductGalleryProps) {
+  const t = await getTranslations(locale);
+  const content = await getProductContent(product, locale);
   const image = product.galleryImages?.[0];
 
   if (!image) return null;

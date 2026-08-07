@@ -3,10 +3,9 @@ import Link from "next/link";
 import GridFloor from "@/components/effects/GridFloor";
 import HologramPanel from "@/components/effects/HologramPanel";
 import { LinkButton } from "@/components/ui/Button";
-import { getTranslations } from "@/data/translations";
 import type { Locale } from "@/lib/i18n";
-import { getProductContent } from "@/lib/products";
 import { homeSectionPath, sectionId } from "@/lib/routes";
+import { getProductContent, getTranslations } from "@/lib/translations";
 import type { Product } from "@/types/product";
 
 type ProductHeroProps = {
@@ -14,9 +13,9 @@ type ProductHeroProps = {
   locale: Locale;
 };
 
-export default function ProductHero({ product, locale }: ProductHeroProps) {
-  const t = getTranslations(locale);
-  const content = getProductContent(product, locale);
+export default async function ProductHero({ product, locale }: ProductHeroProps) {
+  const t = await getTranslations(locale);
+  const content = await getProductContent(product, locale);
   const [firstWord, ...restWords] = content.name.split(" ");
 
   return (

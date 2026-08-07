@@ -7,10 +7,10 @@ import HomeHero from "@/components/home/HomeHero";
 import ProductGrid from "@/components/home/ProductGrid";
 import TechnologySection from "@/components/home/TechnologySection";
 import TickerBand from "@/components/home/TickerBand";
-import { getTranslations } from "@/data/translations";
 import { isLocale, locales } from "@/lib/i18n";
 import { buildPageMetadata } from "@/lib/metadata";
-import { getProduct, getProductContent } from "@/lib/products";
+import { getProduct } from "@/lib/products";
+import { getProductContent, getTranslations } from "@/lib/translations";
 
 type PageParams = { params: Promise<{ locale: string }> };
 
@@ -22,8 +22,9 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
   const { locale } = await params;
   if (!isLocale(locale)) return {};
 
-  const t = getTranslations(locale);
+  const t = await getTranslations(locale);
   const hero = getProduct("pudu-t300");
+  const heroContent = await getProductContent(hero, locale);
 
   return buildPageMetadata({
     locale,
@@ -31,7 +32,7 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
     title: t.meta.homeTitle,
     description: t.meta.homeDescription,
     image: hero.socialImage ?? hero.heroImage,
-    imageAlt: getProductContent(hero, locale).imageAlt,
+    imageAlt: heroContent.imageAlt,
   });
 }
 

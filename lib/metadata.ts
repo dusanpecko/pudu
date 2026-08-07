@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 
-import { getTranslations } from "@/data/translations";
 import { htmlLang, ogLocale, type Locale } from "@/lib/i18n";
 import type { Route } from "@/lib/routes";
 import {
@@ -9,6 +8,7 @@ import {
   localeOrigin,
   localizedUrl,
 } from "@/lib/site";
+import { getTranslations } from "@/lib/translations";
 import type { ProductImage } from "@/types/product";
 
 type PageMetadataInput = {
@@ -25,15 +25,15 @@ type PageMetadataInput = {
  * own domain, `hreflang` alternates across all three languages (and both
  * domains) and Open Graph tags.
  */
-export function buildPageMetadata({
+export async function buildPageMetadata({
   locale,
   route,
   title,
   description,
   image,
   imageAlt,
-}: PageMetadataInput): Metadata {
-  const t = getTranslations(locale);
+}: PageMetadataInput): Promise<Metadata> {
+  const t = await getTranslations(locale);
   const canonical = localizedUrl(locale, route);
   const languages = alternateUrls(route);
   const imageUrl = image ? localeAssetUrl(locale, image.src) : undefined;

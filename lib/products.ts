@@ -1,14 +1,17 @@
 import { products } from "@/data/products";
-import { productTexts } from "@/data/products/translations";
-import { getTranslations } from "@/data/translations";
 import { decimalSeparators, type Locale } from "@/lib/i18n";
-import type {
-  LocalizedProductContent,
-  Product,
-  ProductSlug,
-  SpecEntry,
-  SpecValue,
-} from "@/types/product";
+import type { Product, ProductSlug, SpecEntry, SpecValue } from "@/types/product";
+import type { Translation } from "@/types/translation";
+
+/**
+ * The fleet, and the pure helpers that read it.
+ *
+ * Nothing here reaches for translations on its own: the copy now lives behind
+ * an async, database-backed lookup (lib/translations.ts, which is server only),
+ * and this module is on the import path of lib/routes.ts, which client
+ * components use. The formatters therefore take the resolved translation the
+ * caller already has.
+ */
 
 export const productSlugs: ProductSlug[] = products.map((product) => product.slug);
 
@@ -25,13 +28,6 @@ export function getProduct(slug: ProductSlug): Product {
 
 export function findProduct(slug: string): Product | undefined {
   return isProductSlug(slug) ? getProduct(slug) : undefined;
-}
-
-export function getProductContent(
-  product: Product,
-  locale: Locale,
-): LocalizedProductContent {
-  return productTexts[locale][product.slug];
 }
 
 /**
@@ -58,9 +54,11 @@ function formatNumber(value: number, locale: Locale): string {
 }
 
 /** Renders a language neutral technical value with localized units. */
-export function formatSpecValue(value: SpecValue, locale: Locale): string {
-  const { units } = getTranslations(locale);
-
+export function formatSpecValue(
+  value: SpecValue,
+  locale: Locale,
+  { units }: Translation,
+): string {
   switch (value.kind) {
     case "text":
       return value.text;
@@ -77,17 +75,15 @@ export function formatSpecValue(value: SpecValue, locale: Locale): string {
   }
 }
 
-export function specLabel(entry: SpecEntry, locale: Locale): string {
-  return getTranslations(locale).specs[entry.key];
+export function specLabel(entry: SpecEntry, { specs }: Translation): string {
+  return specs[entry.key];
 }
 
 /** The four headline values shown in the strip under the product hero. */
 export function getSpecHighlights(
   product: Product,
-  locale: Locale,
+  { specs }: Translation,
 ): { label: string; value: string }[] {
-  const { specs } = getTranslations(locale);
-
   return [
     { label: specs.payload, value: product.payload },
     { label: specs.runtime, value: product.runtime },

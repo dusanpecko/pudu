@@ -1,10 +1,10 @@
 import Link from "next/link";
 
 import Reveal from "@/components/effects/Reveal";
-import { getTranslations } from "@/data/translations";
 import type { Locale } from "@/lib/i18n";
-import { getProductContent, getProductNeighbours } from "@/lib/products";
+import { getProductNeighbours } from "@/lib/products";
 import { localizedPath } from "@/lib/routes";
+import { getProductTexts, getTranslations } from "@/lib/translations";
 import type { ProductSlug } from "@/types/product";
 
 type ProductNavigationProps = {
@@ -13,8 +13,12 @@ type ProductNavigationProps = {
 };
 
 /** Previous / next model links at the end of a product page. */
-export default function ProductNavigation({ slug, locale }: ProductNavigationProps) {
-  const t = getTranslations(locale);
+export default async function ProductNavigation({
+  slug,
+  locale,
+}: ProductNavigationProps) {
+  const t = await getTranslations(locale);
+  const texts = await getProductTexts(locale);
   const { previous, next } = getProductNeighbours(slug);
 
   return (
@@ -24,14 +28,14 @@ export default function ProductNavigation({ slug, locale }: ProductNavigationPro
         <Reveal className="pager">
           <Link href={localizedPath(locale, { type: "product", slug: previous.slug })}>
             <small>{t.product.previousModel}</small>
-            <span>{getProductContent(previous, locale).name}</span>
+            <span>{texts[previous.slug].name}</span>
           </Link>
           <Link
             className="next"
             href={localizedPath(locale, { type: "product", slug: next.slug })}
           >
             <small>{t.product.nextModel}</small>
-            <span>{getProductContent(next, locale).name}</span>
+            <span>{texts[next.slug].name}</span>
           </Link>
         </Reveal>
       </div>

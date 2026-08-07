@@ -1,18 +1,18 @@
 import Image from "next/image";
 
 import Reveal from "@/components/effects/Reveal";
-import { getTranslations } from "@/data/translations";
 import type { Locale } from "@/lib/i18n";
 import { getProduct } from "@/lib/products";
 import { sectionId } from "@/lib/routes";
+import { getTranslations } from "@/lib/translations";
 
 type FutureSectionProps = {
   locale: Locale;
 };
 
 /** "From one robot to a fleet" — the scaling story with a framed visual. */
-export default function FutureSection({ locale }: FutureSectionProps) {
-  const { solutions } = getTranslations(locale).home;
+export default async function FutureSection({ locale }: FutureSectionProps) {
+  const { solutions } = (await getTranslations(locale)).home;
   const product = getProduct("pudu-t600-underride");
 
   return (

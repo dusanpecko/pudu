@@ -2,10 +2,10 @@ import Link from "next/link";
 
 import NoiseOverlay from "@/components/effects/NoiseOverlay";
 import NotFoundContent from "@/components/layout/NotFoundContent";
-import { getTranslations } from "@/data/translations";
 import { fontVariables } from "@/lib/fonts";
 import { defaultLocale, htmlLang } from "@/lib/i18n";
 import { localizedPath } from "@/lib/routes";
+import { getNotFoundCopy, getTranslations } from "@/lib/translations";
 
 import "@/app/globals.css";
 
@@ -17,8 +17,9 @@ import "@/app/globals.css";
  * Every real page lives inside the locale layout, which is why this file has to
  * provide its own document shell.
  */
-export default function GlobalNotFound() {
-  const t = getTranslations(defaultLocale);
+export default async function GlobalNotFound() {
+  const t = await getTranslations(defaultLocale);
+  const copy = await getNotFoundCopy();
   const home = localizedPath(defaultLocale, { type: "home" });
 
   return (
@@ -42,7 +43,7 @@ export default function GlobalNotFound() {
 
         <main className="error-page">
           <div className="gridfloor" aria-hidden="true" />
-          <NotFoundContent locale={defaultLocale} />
+          <NotFoundContent copy={copy} locale={defaultLocale} />
         </main>
 
         <NoiseOverlay />

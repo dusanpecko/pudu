@@ -1,8 +1,7 @@
 import Reveal from "@/components/effects/Reveal";
 import SectionHeading from "@/components/ui/SectionHeading";
-import { getTranslations } from "@/data/translations";
 import type { Locale } from "@/lib/i18n";
-import { getProductContent } from "@/lib/products";
+import { getProductContent, getTranslations } from "@/lib/translations";
 import type { Product } from "@/types/product";
 
 type ProductApplicationsProps = {
@@ -11,12 +10,12 @@ type ProductApplicationsProps = {
 };
 
 /** Where the model is typically deployed. */
-export default function ProductApplications({
+export default async function ProductApplications({
   product,
   locale,
 }: ProductApplicationsProps) {
-  const t = getTranslations(locale);
-  const content = getProductContent(product, locale);
+  const t = await getTranslations(locale);
+  const content = await getProductContent(product, locale);
 
   return (
     <section className="section">

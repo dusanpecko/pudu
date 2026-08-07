@@ -1,14 +1,14 @@
 import Reveal from "@/components/effects/Reveal";
-import { getTranslations } from "@/data/translations";
 import type { Locale } from "@/lib/i18n";
+import { getTranslations } from "@/lib/translations";
 
 type ProductFeaturesProps = {
   locale: Locale;
 };
 
 /** Safety, uptime and scaling — the three guarantees shared by every model. */
-export default function ProductFeatures({ locale }: ProductFeaturesProps) {
-  const t = getTranslations(locale);
+export default async function ProductFeatures({ locale }: ProductFeaturesProps) {
+  const t = await getTranslations(locale);
 
   return (
     <section className="section">

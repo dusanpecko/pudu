@@ -1,17 +1,17 @@
 import Link from "next/link";
 
 import { products } from "@/data/products";
-import { getTranslations } from "@/data/translations";
 import type { Locale } from "@/lib/i18n";
-import { getProductContent } from "@/lib/products";
 import { homeSectionPath, localizedPath } from "@/lib/routes";
+import { getProductTexts, getTranslations } from "@/lib/translations";
 
 type FooterProps = {
   locale: Locale;
 };
 
-export default function Footer({ locale }: FooterProps) {
-  const t = getTranslations(locale);
+export default async function Footer({ locale }: FooterProps) {
+  const t = await getTranslations(locale);
+  const texts = await getProductTexts(locale);
 
   return (
     <footer className="footer">
@@ -31,7 +31,7 @@ export default function Footer({ locale }: FooterProps) {
                     slug: product.slug,
                   })}
                 >
-                  {getProductContent(product, locale).name}
+                  {texts[product.slug].name}
                 </Link>
               </li>
             ))}

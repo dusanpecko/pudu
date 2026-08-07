@@ -1,6 +1,7 @@
 import Reveal from "@/components/effects/Reveal";
 import type { Locale } from "@/lib/i18n";
 import { getSpecHighlights } from "@/lib/products";
+import { getTranslations } from "@/lib/translations";
 import type { Product } from "@/types/product";
 
 type ProductSpecsProps = {
@@ -9,8 +10,8 @@ type ProductSpecsProps = {
 };
 
 /** Four headline values directly below the product hero. */
-export default function ProductSpecs({ product, locale }: ProductSpecsProps) {
-  const highlights = getSpecHighlights(product, locale);
+export default async function ProductSpecs({ product, locale }: ProductSpecsProps) {
+  const highlights = getSpecHighlights(product, await getTranslations(locale));
 
   return (
     <section className="section tight">

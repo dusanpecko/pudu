@@ -8,10 +8,10 @@ import NoiseOverlay from "@/components/effects/NoiseOverlay";
 import Footer from "@/components/layout/Footer";
 import Navigation from "@/components/layout/Navigation";
 import { buildNavContent } from "@/components/layout/nav-content";
-import { getTranslations } from "@/data/translations";
 import { fontVariables } from "@/lib/fonts";
 import { htmlLang, isLocale, locales } from "@/lib/i18n";
 import { siteUrl } from "@/lib/site";
+import { getTranslations } from "@/lib/translations";
 
 import "@/app/globals.css";
 
@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: LayoutParams): Promise<Metada
   const { locale } = await params;
   if (!isLocale(locale)) return {};
 
-  const t = getTranslations(locale);
+  const t = await getTranslations(locale);
 
   return {
     metadataBase: new URL(siteUrl),
@@ -56,8 +56,8 @@ export default async function LocaleLayout({
   const { locale } = await params;
   if (!isLocale(locale)) notFound();
 
-  const t = getTranslations(locale);
-  const navContent = buildNavContent(locale);
+  const t = await getTranslations(locale);
+  const navContent = await buildNavContent(locale);
 
   return (
     // `data-scroll-behavior` lets the router turn off the smooth scrolling from

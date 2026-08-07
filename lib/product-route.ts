@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 
 import { isLocale, type Locale } from "@/lib/i18n";
 import { buildPageMetadata } from "@/lib/metadata";
-import { findProduct, getProductContent, productSlugs } from "@/lib/products";
+import { findProduct, productSlugs } from "@/lib/products";
+import { getProductContent } from "@/lib/translations";
 import type { Product } from "@/types/product";
 
 /**
@@ -32,8 +33,11 @@ export function buildProductStaticParams(
   );
 }
 
-export function buildProductMetadata(locale: Locale, product: Product): Metadata {
-  const content = getProductContent(product, locale);
+export async function buildProductMetadata(
+  locale: Locale,
+  product: Product,
+): Promise<Metadata> {
+  const content = await getProductContent(product, locale);
 
   return buildPageMetadata({
     locale,

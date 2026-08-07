@@ -1,10 +1,10 @@
 import Image from "next/image";
 
 import Reveal from "@/components/effects/Reveal";
-import { getTranslations } from "@/data/translations";
 import type { Locale } from "@/lib/i18n";
-import { formatSpecValue, getProductContent, specLabel } from "@/lib/products";
+import { formatSpecValue, specLabel } from "@/lib/products";
 import { sectionId } from "@/lib/routes";
+import { getProductContent, getTranslations } from "@/lib/translations";
 import type { Product } from "@/types/product";
 
 type ProductStoryProps = {
@@ -13,9 +13,9 @@ type ProductStoryProps = {
 };
 
 /** Framed product visual next to the description and the parameter table. */
-export default function ProductStory({ product, locale }: ProductStoryProps) {
-  const t = getTranslations(locale);
-  const content = getProductContent(product, locale);
+export default async function ProductStory({ product, locale }: ProductStoryProps) {
+  const t = await getTranslations(locale);
+  const content = await getProductContent(product, locale);
 
   return (
     <section className="section">
@@ -40,9 +40,9 @@ export default function ProductStory({ product, locale }: ProductStoryProps) {
           <dl className="list" id={sectionId(locale, "specs")}>
             {product.specifications.map((entry) => (
               <div key={entry.key}>
-                <dt>{specLabel(entry, locale)}</dt>
+                <dt>{specLabel(entry, t)}</dt>
                 <dd>
-                  <small>{formatSpecValue(entry.value, locale)}</small>
+                  <small>{formatSpecValue(entry.value, locale, t)}</small>
                 </dd>
               </div>
             ))}

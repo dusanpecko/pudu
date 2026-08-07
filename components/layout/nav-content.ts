@@ -1,8 +1,7 @@
 import { products } from "@/data/products";
-import { getTranslations } from "@/data/translations";
 import type { Locale } from "@/lib/i18n";
-import { getProductContent } from "@/lib/products";
 import { homeSectionPath, localizedPath, sectionId } from "@/lib/routes";
+import { getProductTexts, getTranslations } from "@/lib/translations";
 import type { ProductSlug } from "@/types/product";
 
 export type NavProductLink = {
@@ -48,8 +47,9 @@ export type NavContent = {
   };
 };
 
-export function buildNavContent(locale: Locale): NavContent {
-  const t = getTranslations(locale);
+export async function buildNavContent(locale: Locale): Promise<NavContent> {
+  const t = await getTranslations(locale);
+  const texts = await getProductTexts(locale);
 
   return {
     brand: "PUDU INDUSTRIAL",
@@ -59,7 +59,7 @@ export function buildNavContent(locale: Locale): NavContent {
       allLabel: t.navigation.allProducts,
       allHref: homeSectionPath(locale, "products"),
       items: products.map((product) => {
-        const content = getProductContent(product, locale);
+        const content = texts[product.slug];
         return {
           slug: product.slug,
           name: content.name,

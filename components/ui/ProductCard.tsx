@@ -4,8 +4,8 @@ import Link from "next/link";
 import Reveal from "@/components/effects/Reveal";
 import { cx } from "@/lib/cx";
 import type { Locale } from "@/lib/i18n";
-import { getProductContent } from "@/lib/products";
 import { localizedPath } from "@/lib/routes";
+import { getProductContent } from "@/lib/translations";
 import type { Product } from "@/types/product";
 
 type ProductCardProps = {
@@ -18,14 +18,14 @@ type ProductCardProps = {
 };
 
 /** Product tile used in the fleet grid on the home page. */
-export default function ProductCard({
+export default async function ProductCard({
   product,
   locale,
   payloadLabel,
   runtimeLabel,
   featuredLabel,
 }: ProductCardProps) {
-  const content = getProductContent(product, locale);
+  const content = await getProductContent(product, locale);
   const featured = Boolean(product.featured && featuredLabel);
 
   return (

@@ -2,10 +2,10 @@ import CountUp from "@/components/effects/CountUp";
 import GridFloor from "@/components/effects/GridFloor";
 import HologramPanel from "@/components/effects/HologramPanel";
 import { LinkButton } from "@/components/ui/Button";
-import { getTranslations } from "@/data/translations";
 import type { Locale } from "@/lib/i18n";
-import { getProduct, getProductContent } from "@/lib/products";
+import { getProduct } from "@/lib/products";
 import { homeSectionPath } from "@/lib/routes";
+import { getProductContent, getTranslations } from "@/lib/translations";
 
 type HomeHeroProps = {
   locale: Locale;
@@ -15,11 +15,11 @@ type HomeHeroProps = {
 const PAYLOAD_RANGE = "150–600 kg";
 const UPTIME = "24/7";
 
-export default function HomeHero({ locale }: HomeHeroProps) {
-  const t = getTranslations(locale);
+export default async function HomeHero({ locale }: HomeHeroProps) {
+  const t = await getTranslations(locale);
   const { hero } = t.home;
   const heroProduct = getProduct("pudu-t300");
-  const heroContent = getProductContent(heroProduct, locale);
+  const heroContent = await getProductContent(heroProduct, locale);
   const modelCount = 4;
 
   return (

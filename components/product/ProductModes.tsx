@@ -1,8 +1,7 @@
 import Reveal from "@/components/effects/Reveal";
 import SectionHeading from "@/components/ui/SectionHeading";
-import { getTranslations } from "@/data/translations";
 import type { Locale } from "@/lib/i18n";
-import { getProductContent } from "@/lib/products";
+import { getProductContent, getTranslations } from "@/lib/translations";
 import type { Product } from "@/types/product";
 
 type ProductModesProps = {
@@ -11,9 +10,9 @@ type ProductModesProps = {
 };
 
 /** Three product specific capabilities — "three layers of intelligence". */
-export default function ProductModes({ product, locale }: ProductModesProps) {
-  const t = getTranslations(locale);
-  const content = getProductContent(product, locale);
+export default async function ProductModes({ product, locale }: ProductModesProps) {
+  const t = await getTranslations(locale);
+  const content = await getProductContent(product, locale);
 
   return (
     <section className="section">

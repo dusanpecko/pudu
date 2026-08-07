@@ -1,17 +1,17 @@
 import SectionHeading from "@/components/ui/SectionHeading";
 import ProductCard from "@/components/ui/ProductCard";
-import { getTranslations } from "@/data/translations";
 import type { Locale } from "@/lib/i18n";
 import { getHomeProducts } from "@/lib/products";
 import { sectionId } from "@/lib/routes";
+import { getTranslations } from "@/lib/translations";
 
 type ProductGridProps = {
   locale: Locale;
 };
 
 /** The fleet: four product tiles in the order used by the original design. */
-export default function ProductGrid({ locale }: ProductGridProps) {
-  const t = getTranslations(locale);
+export default async function ProductGrid({ locale }: ProductGridProps) {
+  const t = await getTranslations(locale);
   const products = getHomeProducts();
 
   return (

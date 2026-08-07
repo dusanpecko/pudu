@@ -3,10 +3,9 @@ import ContactForm, {
 } from "@/components/contact/ContactForm";
 import Reveal from "@/components/effects/Reveal";
 import { products } from "@/data/products";
-import { getTranslations } from "@/data/translations";
 import type { Locale } from "@/lib/i18n";
-import { getProductContent } from "@/lib/products";
 import { sectionId } from "@/lib/routes";
+import { getProductTexts, getTranslations } from "@/lib/translations";
 import type { ProductSlug } from "@/types/product";
 
 type ContactSectionProps = {
@@ -19,18 +18,19 @@ type ContactSectionProps = {
   defaultProduct?: ProductSlug;
 };
 
-export default function ContactSection({
+export default async function ContactSection({
   locale,
   eyebrow,
   title,
   description,
   defaultProduct,
 }: ContactSectionProps) {
-  const t = getTranslations(locale);
+  const t = await getTranslations(locale);
+  const texts = await getProductTexts(locale);
 
   const productOptions: ContactProductOption[] = products.map((product) => ({
     value: product.slug,
-    label: getProductContent(product, locale).name,
+    label: texts[product.slug].name,
   }));
 
   return (

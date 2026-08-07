@@ -7,9 +7,8 @@ import ProductModes from "@/components/product/ProductModes";
 import ProductNavigation from "@/components/product/ProductNavigation";
 import ProductSpecs from "@/components/product/ProductSpecs";
 import ProductStory from "@/components/product/ProductStory";
-import { getTranslations } from "@/data/translations";
 import type { Locale } from "@/lib/i18n";
-import { getProductContent } from "@/lib/products";
+import { getProductContent, getTranslations } from "@/lib/translations";
 import type { Product } from "@/types/product";
 
 type ProductPageTemplateProps = {
@@ -21,12 +20,12 @@ type ProductPageTemplateProps = {
  * One template for all four models in all three languages — only the data
  * changes.
  */
-export default function ProductPageTemplate({
+export default async function ProductPageTemplate({
   product,
   locale,
 }: ProductPageTemplateProps) {
-  const t = getTranslations(locale);
-  const content = getProductContent(product, locale);
+  const t = await getTranslations(locale);
+  const content = await getProductContent(product, locale);
 
   return (
     <>

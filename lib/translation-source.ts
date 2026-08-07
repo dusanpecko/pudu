@@ -212,12 +212,33 @@ export function serializeProductTexts(locale: Locale, data: StringTree): string 
   ].join("\n");
 }
 
+/** Which set of files a value belongs to. */
+export type OverrideKind = "ui" | "products";
+
+/** Dotted path → value, the shape {@link applyEdits} consumes. */
+export type OverrideMap = Record<string, string>;
+
+/**
+ * Overrides grouped by file. Defined here rather than next to the database code
+ * because the manager runs in the browser, and lib/translation-overrides.ts is
+ * server only.
+ */
+export type OverrideSet = Record<OverrideKind, Partial<Record<Locale, OverrideMap>>>;
+
+/** One cell the editor changed. `value: null` resets it to the file default. */
+export type DraftEdit = {
+  kind: OverrideKind;
+  locale: Locale;
+  path: string;
+  value: string | null;
+};
+
 /** The files the manager can regenerate — one pair per language. */
 export type SourceFile = {
   id: string;
   path: string;
   locale: Locale;
-  kind: "ui" | "products";
+  kind: OverrideKind;
 };
 
 /**
