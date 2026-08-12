@@ -9,14 +9,15 @@ export const productTextsDe: Record<
   LocalizedProductContent
 > = {
   "pudu-t150": {
-    name: "PUDU T150",
-    category: "Leichte Intralogistik",
-    headline: "Leichte Last. Maximaler Fluss.",
+    name: "AMR T 150",
+    category:
+      "Autonomer mobiler Lieferroboter für den Leichttransport von Materialien bis zu 150 kg.",
+    headline: "Tragfähigkeit bis zu 150 kg. Höchste Laufruhe.",
     shortDescription:
-      "Ein kompakter Industrieroboter für Teile, Bauteile und wiederkehrende Logistikrunden.",
+      "Ein kompakter, benutzerfreundlicher industrieller AMR-Roboter für den schnellen Materialtransport.",
     description:
-      "Ein kompakter Industrieroboter für Teile, Bauteile und wiederkehrende Logistikrunden. Autonome Navigation, mehrschichtige Sicherheit und offene Integration lassen ihn sich an Ihre bestehende Umgebung anpassen — statt den Betrieb zum Roboter zu zwingen.",
-    imageAlt: "Industrieroboter PUDU T150 mit transportierter Last",
+      "Der kompakte Industrie-Roboter AMR 150 ist für die Warenzustellung innerhalb regulärer Logistik-Kreisläufe konzipiert. Dank autonomer Navigation und Integrationsfähigkeit passt er sich an die bestehende Umgebung an, ohne andere Abläufe zu beeinträchtigen.",
+    imageAlt: "Industrieroboter PUDU AMR T150 mit transportierter Last",
     features: [
       {
         title: "Schnelle Inbetriebnahme",
@@ -31,7 +32,7 @@ export const productTextsDe: Record<
       {
         title: "Betrieb rund um die Uhr",
         description:
-          "Batteriewechsel sowie automatisches und Kabelladen tragen eine unterbrechungsfreie Logistik.",
+          "Simple batteriewechsel sowie automatisches und Kabelladen tragen eine unterbrechungsfreie Logistik.",
       },
     ],
     applications: [
@@ -46,9 +47,9 @@ export const productTextsDe: Record<
           "Wiederkehrende Runden zwischen Lager, Materialbereitstellung und Produktion.",
       },
       {
-        title: "Elektronik und Präzisionsfertigung",
-        description:
-          "Schonender Transport empfindlicher Teile durch enge und reine Bereiche.",
+        title:
+          "Montage, Produktion, Lagerhaltung, Versorgung, Vertrieb, Intralogistik usw.",
+        description: "Sicherer Materialtransport auf engem Raum.",
       },
       {
         title: "Krankenhäuser und Labore",
@@ -56,25 +57,27 @@ export const productTextsDe: Record<
           "Diskreter Transport von Proben, Material und Verbrauchsgütern.",
       },
     ],
-    seoTitle: "PUDU T150 | Leichte Intralogistik | PUDU Industrial",
+    seoTitle: "AMR T150 | Leichte Intralogistik | PUDU Industrial",
     seoDescription:
-      "PUDU T150 — kompakter autonomer Roboter mit 150 kg Traglast für Teile, Bauteile und wiederkehrende Logistikrunden. Technische Daten, Funktionen und Einsatzbereiche.",
+      "AMR T150 — kompakter autonomer Roboter mit 150 kg Traglast für Teile, Bauteile und wiederkehrende Logistikrunden. Technische Daten, Funktionen und Einsatzbereiche.",
   },
   "pudu-t300": {
-    name: "PUDU T300",
-    category: "Universeller AMR",
-    headline: "Bewegung, die sich der Produktion anpasst.",
+    name: "AMR T 300 (order 2 person)",
+    category:
+      "Der Bestseller AMR T 300 Industrieller autonomer mobiler Roboter für den Materialtransport zu 300 kg.",
+    headline: "Transport, die sich der Produktion anpasst.",
     shortDescription:
       "Flexibler autonomer Transport für Produktion, Lager und Linienversorgung.",
     description:
-      "Flexibler autonomer Transport für Produktion, Lager und Linienversorgung. Autonome Navigation, mehrschichtige Sicherheit und offene Integration lassen ihn sich an Ihre bestehende Umgebung anpassen — statt den Betrieb zum Roboter zu zwingen.",
-    imageAlt: "Industrieroboter PUDU T300 mit Kartonlast",
-    galleryAlt: "PUDU T300 scannt seine Umgebung in einer Lagerhalle",
+      "Flexibler, autonomer Transport für die Materialversorgung von Produktionsbereichen oder Lagern sowie für allgemeine Versorgungsaufgaben. Dank autonomer Navigation, Sicherheitsschnittstellen und Integrationsfähigkeit fügt sich das System nahtlos in die bestehende Umgebung ein.",
+    imageAlt:
+      "Industrieroboter AMR T 300 mit variabler Tragfähigkeit, ausgestattet mit Optionen für Fördertechnik und Plattformzug.",
+    galleryAlt: "AMR T 300 scannt seine Umgebung in einer Lagerhalle",
     features: [
       {
         title: "Autonomer Transport",
         description:
-          "Liefert Material selbstständig an den gewählten Ort und reagiert dynamisch auf Routenänderungen.",
+          "Es transportiert Material autonom an den gewählten Ort und reagiert sicher und reibungslos auf Routenänderungen.",
       },
       {
         title: "Folgemodus",
@@ -109,24 +112,26 @@ export const productTextsDe: Record<
           "Folgemodus und elektrische Unterstützung für den manuellen Teil der Arbeit.",
       },
     ],
-    seoTitle: "PUDU T300 | Universeller AMR | PUDU Industrial",
+    seoTitle: "AMR T 300 | Universeller AMR | PUDU Industrial",
     seoDescription:
-      "PUDU T300 — universeller autonomer Roboter mit 300 kg Traglast für Produktion, Lager und Linienversorgung. Technische Daten, Funktionen und Einsatzbereiche.",
+      "AMR T 300 — universeller autonomer Roboter mit 300 kg Traglast für Produktion, Lager und Linienversorgung. Technische Daten, Funktionen und Einsatzbereiche.",
   },
   "pudu-t600-upright": {
-    name: "PUDU T600 Upright",
-    category: "Autonomer Schwerlasttransport",
-    headline: "Schwere Arbeit. Intelligent gelöst.",
+    name: "AMR T 600 (Order 2 Person)",
+    category:
+      "AMR T 600 – ein autonomer Industrieroboter für den Transport schwerer Materialien mit einem Gewicht von bis zu 600 kg.",
+    headline:
+      "Es bewältigt selbst hohe Lasten, ohne dass die Leistung beeinträchtigt wird.",
     shortDescription:
-      "Eine Plattform mit hoher Kapazität und ergonomischem Griff für den sicheren Transport schwerer Lasten.",
+      "Hochleistungsplattform mit ergonomischem Griff für den sicheren Transport schwerer Lasten, ausgestattet mit Zug- und Hebefunktionen.",
     description:
-      "Eine Plattform mit hoher Kapazität und ergonomischem Griff für den sicheren Transport schwerer Lasten. Autonome Navigation, mehrschichtige Sicherheit und offene Integration lassen sie sich an Ihre bestehende Umgebung anpassen — statt den Betrieb zum Roboter zu zwingen.",
-    imageAlt: "Industrieroboter PUDU T600 Upright mit ergonomischem Griff",
+      "Der Roboter-Transportwagen T 600 ist darauf ausgelegt, schwere Lasten mühelos zu bewältigen. Seine verstärkte Plattform mit hoher Tragfähigkeit – ausgestattet mit einem ergonomischen Griff und einem intelligenten Farbdisplay – ermöglicht die Kommunikation für den sicheren Transport schwerer Lasten. Dank autonomer Navigation und einer Sicherheitsschnittstelle passt er sich seiner Umgebung an und liefert Waren an den gewünschten Ort.",
+    imageAlt: "Industrieroboter AMR T 600 mit ergonomischem Griff und Display.",
     features: [
       {
         title: "Schwerlasttransport",
         description:
-          "600 kg Traglast bringen Automatisierung zu Paletten, Wagen und sperrigen Produktionslasten.",
+          "Bis zu 600 kg Nutzlast bringen Automatisierung zu Paletten, Wagen und sperrigen Produktionslasten.",
       },
       {
         title: "Unterstützung der Bedienung",
@@ -141,16 +146,17 @@ export const productTextsDe: Record<
     ],
     applications: [
       {
-        title: "Schwere Produktionslasten",
+        title: "Schwere Lasten für einen reibungslosen Transport",
         description:
-          "Verschieben von Paletten, Wagen und sperrigen Teilen im gesamten Betrieb.",
+          "Transport von Paletten, mobilen Plattformen und größeren Lasten im gesamten Betriebsgelände.",
       },
       {
         title: "Zwischenbetriebliche Logistik",
-        description: "Automatisierung längerer Routen mit hohem Lastgewicht.",
+        description: "Automatisierte Materialhandhabung für schwere Lasten.",
       },
       {
-        title: "Automotive und Maschinenbau",
+        title:
+          "Automobil- und Maschinenbau, Rüstungsindustrie, Fertigung, Montagearbeitsplätze, Intralogistik, Einzelhandel usw.",
         description:
           "Wiederkehrender Transport schwerer Bauteile zwischen Arbeitsplätzen und Linien.",
       },
@@ -160,23 +166,23 @@ export const productTextsDe: Record<
           "Einsatz in Umgebungen mit VDA5050-Protokoll und lokaler Flottensteuerung.",
       },
     ],
-    seoTitle:
-      "PUDU T600 Upright | Autonomer Schwerlasttransport | PUDU Industrial",
+    seoTitle: "AMR T600 | Autonomer Schwerlasttransport | PUDU Industrial",
     seoDescription:
-      "PUDU T600 Upright — autonome Plattform mit 600 kg Traglast und ergonomischem Griff für den sicheren Transport schwerer Lasten. Technische Daten und Einsatzbereiche.",
+      "AMR T600 — autonome Plattform mit 600 kg Traglast und ergonomischem Griff für den sicheren Transport schwerer Lasten. Technische Daten und Einsatzbereiche.",
   },
   "pudu-t600-underride": {
-    name: "PUDU T600 Underride",
-    category: "Flacher Hub-AMR",
+    name: "PUDU T 600 Underride",
+    category:
+      "Flaches, robotergestütztes Unterfahrfahrzeug mit einer Hubhöhe von bis zu 60 mm und einer Tragfähigkeit von bis zu 600 kg",
     headline: "Unter der Last. Über den Erwartungen.",
     shortDescription:
-      "Ein flacher autonomer Unterfahr-Roboter, der unter ein Regal fährt, es anhebt und verfährt.",
+      "Der autonome Unterfahrroboter 600 ist eine zuverlässige Plug-and-Play-Lösung, die sich durch Einfachheit, Ergonomie und hochwertiges Design auszeichnet. Es handelt sich um ein technisches System, das für maximale Leistung sorgt.",
     description:
-      "Ein flacher autonomer Unterfahr-Roboter, der unter ein Regal fährt, es anhebt und verfährt. Autonome Navigation, mehrschichtige Sicherheit und offene Integration lassen ihn sich an Ihre bestehende Umgebung anpassen — statt den Betrieb zum Roboter zu zwingen.",
-    imageAlt: "Flacher Unterfahr-Roboter PUDU T600 Underride",
+      "Ein flacher, autonomer AMR, der unter ein Regal fährt, dieses anhebt und transportiert. Dank autonomer Navigation und Sicherheitsschnittstellen bietet er Integrationsmöglichkeiten, die eine Anpassung an die bestehende Umgebung ohne Unterbrechung der Produktion ermöglichen.",
+    imageAlt: "Flacher mobiler Roboter AMR 600 Unterfahr",
     features: [
       {
-        title: "Unterfahren des Regals",
+        title: "Unterfahren des platforma, regals",
         description:
           "Das flache Profil erlaubt die autonome Einfahrt unter ein kompatibles Regal oder einen Wagen.",
       },
@@ -193,12 +199,13 @@ export const productTextsDe: Record<
     ],
     applications: [
       {
-        title: "Verfahren von Regalen und Wagen",
+        title:
+          "Verlagerung von Paletten, Regalsystemen und Transportwagen sowie von stationären oder mobilen Gestellen.",
         description:
           "Autonomes Unterfahren, Anheben und Umsetzen einer kompletten Transporteinheit.",
       },
       {
-        title: "Lagerautomatisierung",
+        title: "Lagerautomatisierung Anwendungsbereiche: Logistik, Fertigung",
         description:
           "Materialflüsse neu ordnen, ohne die bestehende Infrastruktur anzutasten.",
       },
@@ -213,8 +220,8 @@ export const productTextsDe: Record<
           "Koordination mehrerer Roboter und Regalgruppen auf einer Fläche.",
       },
     ],
-    seoTitle: "PUDU T600 Underride | Flacher Hub-AMR | PUDU Industrial",
+    seoTitle: "AMR 600 Underride | Flacher Hub-AMR | PUDU Industrial",
     seoDescription:
-      "PUDU T600 Underride — flacher autonomer Roboter mit 600 kg Traglast, der unter ein Regal fährt, es anhebt und verfährt. Technische Daten und Einsatzbereiche.",
+      "AMR 600 Underride — flacher autonomer Roboter mit 600 kg Traglast, der unter ein Regal fährt, es anhebt und verfährt. Technische Daten und Einsatzbereiche.",
   },
 };

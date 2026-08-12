@@ -9,14 +9,15 @@ export const productTextsSk: Record<
   LocalizedProductContent
 > = {
   "pudu-t150": {
-    name: "PUDU T150",
-    category: "Ľahká intralogistika",
-    headline: "Ľahký náklad. Maximálna plynulosť.",
+    name: "AMR T 150",
+    category:
+      "Autonómny mobilný doručovací robot pre ľahkú prepravu materiálu do 150 kg.",
+    headline: "Nosnosť nákladu do 150kg. Maximálna plynulosť pohybu.",
     shortDescription:
-      "Kompaktný priemyselný robot pre diely, komponenty a pravidelné logistické okruhy.",
+      "Kompaktný, uživateľksky inteligentný priemyselný AMR robot pre rýchle doručenie materiálu.",
     description:
-      "Kompaktný priemyselný robot pre diely, komponenty a pravidelné logistické okruhy. Vďaka autonómnej navigácii, bezpečnostným vrstvám a možnosti integrácie sa prispôsobí existujúcemu prostrediu bez toho, aby výrobu nútil prispôsobiť sa robotu.",
-    imageAlt: "Priemyselný robot PUDU T150 s prepravovaným nákladom",
+      "Kompaktný priemyselný AMR robot 150 pre doručenie tovaru pravidelných logistických okruhov. Vďaka autonómnej navigácii, a možnosti integrácie sa prispôsobí existujúcemu prostrediu bez toho, aby obmedzoval iných úlohy.",
+    imageAlt: "Priemyselný AMR robot PUDU T150 s prepravovaným nákladom",
     features: [
       {
         title: "Rýchle nasadenie",
@@ -31,50 +32,52 @@ export const productTextsSk: Record<
       {
         title: "Prevádzka 24/7",
         description:
-          "Výmena batérie, automatické aj káblové nabíjanie podporujú nepretržitú logistiku.",
+          "Jednoduchá výmena batérie, automatické aj káblové nabíjanie podporujú nepretržitú logistiku.",
       },
     ],
     applications: [
       {
         title: "Zásobovanie výrobných liniek",
         description:
-          "Pravidelné doručovanie dielov a komponentov na montážne pracoviská.",
+          "Pravidelné doručovanie dielov, boxov, komponentov na montážne pracoviská alebo stanice.",
       },
       {
-        title: "Interná preprava komponentov",
+        title: "Interná preprava",
         description:
-          "Opakované okruhy medzi skladom, prípravou materiálu a výrobou.",
+          "Opakované okruhy medzi skladom, prípravou materiálu alebo výrobou.",
       },
       {
-        title: "Elektronika a presná výroba",
-        description:
-          "Šetrný transport citlivých dielov v úzkych a čistých priestoroch.",
+        title:
+          "Montáž, výroba, sklady, zásobovanie, obchod, intralogistika, etc.",
+        description: "Bezpečný transport materiálu v úzkych priestoroch.",
       },
       {
-        title: "Nemocnice a laboratóriá",
+        title: "Nemocnice, laboratóriá, školy",
         description:
-          "Diskrétny prevoz vzoriek, materiálu a spotrebného tovaru.",
+          "Diskrétna preprava vzoriek, materiálu a spotrebného tovaru.",
       },
     ],
-    seoTitle: "PUDU T150 | Ľahká intralogistika | PUDU Industrial",
+    seoTitle: "AMR T150 | Ľahká intralogistika | PUDU Industrial",
     seoDescription:
-      "PUDU T150 — kompaktný autonómny robot s nosnosťou 150 kg pre diely, komponenty a pravidelné logistické okruhy. Technické parametre, funkcie a oblasti využitia.",
+      "AMR T150 — kompaktný autonómny robot s nosnosťou do 150 kg pre diely, komponenty a pravidelné logistické okruhy. Technické parametre, funkcie a oblasti využitia.",
   },
   "pudu-t300": {
-    name: "PUDU T300",
-    category: "Univerzálny AMR",
-    headline: "Pohyb, ktorý sa prispôsobí výrobe.",
+    name: "AMR T 300 (order 2 person)",
+    category:
+      "Najpredávanejší AMR T 300 Priemyselný autonómny mobilný robot na prepravu materiálu do 300 kg.",
+    headline: "Transport, ktorý sa prispôsobí výrobe.",
     shortDescription:
-      "Flexibilný autonómny transport pre výrobu, sklady a zásobovanie liniek.",
+      "Flexibilný autonómny mobilný vozík pre výrobu, sklady a doručovanie materiálu. Autonómny vozík T 300 zvládne širokú škálu prepravovaného bremena a zásobovanie liniek.",
     description:
-      "Flexibilný autonómny transport pre výrobu, sklady a zásobovanie liniek. Vďaka autonómnej navigácii, bezpečnostným vrstvám a možnosti integrácie sa prispôsobí existujúcemu prostrediu bez toho, aby výrobu nútil prispôsobiť sa robotu.",
-    imageAlt: "Priemyselný robot PUDU T300 s kartónovým nákladom",
-    galleryAlt: "PUDU T300 skenuje okolie v skladovej hale",
+      "Flexibilný autonómny transport pre doručenie materiálu do výroby, skladov alebo ak ide o celkové zásobovanie. Vďaka autonómnej navigácii, bezpečnostným rozhraniam a možnosti integrácie sa prispôsobí existujúcemu prostrediu bez obmedzení.",
+    imageAlt:
+      "Priemyselný robot AMR T 300 s variabilným nákladom s opciou dopravníka a ťahania platformy",
+    galleryAlt: "AMR T 300 skenuje okolie v skladovej hale",
     features: [
       {
         title: "Autonómna preprava",
         description:
-          "Samostatne doručí materiál na zvolené miesto a dynamicky reaguje na zmeny trasy.",
+          "Samostatne doručí materiál na zvolené miesto a dynamicky reaguje na zmeny trasy, bezpečne a plynulo.",
       },
       {
         title: "Režim nasledovania",
@@ -101,7 +104,7 @@ export const productTextsSk: Record<
       {
         title: "Automotive a elektronika",
         description:
-          "Stabilný tok komponentov v prostredí s vysokou vyťaženosťou trás.",
+          "Stabilný tok materiálu v prostredí s vysokou vyťaženosťou trás.",
       },
       {
         title: "Zmiešaná prevádzka s ľuďmi",
@@ -109,24 +112,26 @@ export const productTextsSk: Record<
           "Režim nasledovania a elektrická asistencia pri manuálnych úlohách.",
       },
     ],
-    seoTitle: "PUDU T300 | Univerzálny AMR | PUDU Industrial",
+    seoTitle: "AMR T 300 | Univerzálny AMR | PUDU Industrial",
     seoDescription:
-      "PUDU T300 — univerzálny autonómny robot s nosnosťou 300 kg pre výrobu, sklady a zásobovanie liniek. Technické parametre, funkcie a oblasti využitia.",
+      "AMR T 300 — univerzálny autonómny robot s nosnosťou do 300 kg pre výrobu, sklady a zásobovanie liniek. Technické parametre, funkcie a oblasti využitia.",
   },
   "pudu-t600-upright": {
-    name: "PUDU T600 Upright",
-    category: "Ťažký autonómny transport",
-    headline: "Ťažká práca. Inteligentne.",
+    name: "AMR T 600 (Order 2 Person)",
+    category:
+      "AMR T 600 Priemyselný autonómny mobilný robot na prepravu ťažšieho materiálu do 600 kg.",
+    headline: "Zvládne i ťažkú váhu bez obmedzenia na výkon.",
     shortDescription:
-      "Vysokokapacitná platforma s ergonomickou rukoväťou pre bezpečný presun ťažkých nákladov.",
+      "Vysokokapacitná platforma s možnosťou prepravy paliet, krabíc, ťažkých bremien s ergonomickou rukoväťou pre bezpečný presun ťažkých nákladov s možnosťou ťahu za vozíkom a zdvihom.",
     description:
-      "Vysokokapacitná platforma s ergonomickou rukoväťou pre bezpečný presun ťažkých nákladov. Vďaka autonómnej navigácii, bezpečnostným vrstvám a možnosti integrácie sa prispôsobí existujúcemu prostrediu bez toho, aby výrobu nútil prispôsobiť sa robotu.",
-    imageAlt: "Priemyselný robot PUDU T600 Upright s ergonomickou rukoväťou",
+      "Robotický vozík T 600 je stavaný pre ťažký náklad s ktorým si hravo poradí. Jeho vysokokapacitná zosilnená platforma s ergonomickou rukoväťou a farebným inteligentným displejom umožňuje komunikáciu pre bezpečný presun ťažkých nákladov. Vďaka autonómnej navigácii, bezpečnostnému rozhranie sa prispôsobí svojmu okoliu a doručí tovar na požadované miesto.",
+    imageAlt:
+      "Priemyselný robot AMR T 600 s ergonomickou rukoväťou a farebným displejom.",
     features: [
       {
         title: "Ťažký transport",
         description:
-          "Nosnosť 600 kg prináša automatizáciu paliet, vozíkov a objemných výrobných nákladov.",
+          "Nosnosť do 600 kg prináša automatizáciu paliet, vozíkov a objemných výrobných nákladov.",
       },
       {
         title: "Asistencia obsluhe",
@@ -141,17 +146,18 @@ export const productTextsSk: Record<
     ],
     applications: [
       {
-        title: "Ťažké výrobné náklady",
+        title: "Ťažké náklady pre plynulú prepravu",
         description:
-          "Presun paliet, vozíkov a objemných dielov v rámci celej prevádzky.",
+          "Presun paliet, mobilých platforiem a väčších bremien v rámci celej prevádzky.",
       },
       {
         title: "Medzioperačná logistika",
         description:
-          "Automatizácia dlhších trás s vysokou hmotnosťou prepravovaného nákladu.",
+          "Automatizovaný presun materiálu s vysokou hmotnosťou prepravovaného nákladu.",
       },
       {
-        title: "Automotive a strojárstvo",
+        title:
+          "Automotive a strojárstvo, zbrojársky priemysel, výroba, montážne pracoviská, intralogistika, obchody, etc.",
         description:
           "Opakovaný transport ťažkých komponentov medzi pracoviskami a linkami.",
       },
@@ -161,24 +167,26 @@ export const productTextsSk: Record<
           "Nasadenie v prostredí s protokolom VDA5050 a lokálnym riadením flotily.",
       },
     ],
-    seoTitle: "PUDU T600 Upright | Ťažký autonómny transport | PUDU Industrial",
+    seoTitle: "AMR T600 | Ťažký autonómny transport | PUDU Industrial",
     seoDescription:
-      "PUDU T600 Upright — autonómna platforma s nosnosťou 600 kg a ergonomickou rukoväťou pre bezpečný presun ťažkých nákladov. Technické parametre a oblasti využitia.",
+      "AMR T600 — autonómna platforma s nosnosťou do 600 kg a ergonomickou rukoväťou pre bezpečný presun ťažkých nákladov. Technické parametre a oblasti využitia.",
   },
   "pudu-t600-underride": {
-    name: "PUDU T600 Underride",
-    category: "Nízky zdvíhací AMR",
-    headline: "Pod nákladom. Nad očakávaniami.",
+    name: "AMR T 600 Podjazdový",
+    category:
+      "Nízky zdvíhací podjazdový robotický vozík s výškou zdvihu do 60mm a nosnosťou do 600kg",
+    headline:
+      "Bezkonkurenčný podjazdový vozík s ergonomickou výškou len 250mm vo svojej kategórii.",
     shortDescription:
-      "Nízky autonómny podjazdový robot, ktorý sa zasunie pod regál, zdvihne ho a premiestni.",
+      "Autonómny robotický vozík AMR 600 typu podjazdový, predstavuje jednoduché a spoľahlivé riešenie Plug and Play, ktoré sa vyznačuje rýchlym zavedením do prevádzky. Ide o systémové riešenie navrhnuté tak, aby vám poskytlo maximálny výkon.",
     description:
-      "Nízky autonómny podjazdový robot, ktorý sa zasunie pod regál, zdvihne ho a premiestni. Vďaka autonómnej navigácii, bezpečnostným vrstvám a možnosti integrácie sa prispôsobí existujúcemu prostrediu bez toho, aby výrobu nútil prispôsobiť sa robotu.",
-    imageAlt: "Nízky podjazdový robot PUDU T600 Underride",
+      "Nízky autonómny podjazdový AMR robot, ktorý sa zasunie pod regál, zdvihne ho a premiestni. Vďaka autonómnej navigácii, bezpečnostným rizhraním má možnosti integrácie kde sa prispôsobí existujúcemu prostrediu bez toho, aby obmedzil výrobu.",
+    imageAlt: "Nízky robotický vozík AMR 600 podjazdový",
     features: [
       {
-        title: "Podjazd pod regál",
+        title: "Podjazd pod platformu, regál, a iné konštrukcie",
         description:
-          "Nízky profil umožňuje autonómny vjazd pod kompatibilný regál alebo vozík.",
+          "Nízky profil umožňuje autonómny vjazd pod kompatibilný regál alebo rám.",
       },
       {
         title: "Zdvih a transport",
@@ -186,19 +194,20 @@ export const productTextsSk: Record<
           "Integrovaný zdvih 60 mm bezpečne prevezme náklad a presunie ho na určené miesto.",
       },
       {
-        title: "Flotilová logistika",
+        title: "Aplikačná logistika",
         description:
           "Rozpoznávanie skupín regálov a koordinácia trás podporujú škálovateľnú automatizáciu skladu.",
       },
     ],
     applications: [
       {
-        title: "Presun regálov a vozíkov",
+        title:
+          "Presun paliet, regálov a vozíkov, statických či mobilných rámov.",
         description:
           "Autonómny podjazd, zdvih a premiestnenie celej prepravnej jednotky.",
       },
       {
-        title: "Skladová automatizácia",
+        title: "Skladová automatizácia Aplikačná logistika, výroba",
         description:
           "Zmena tokov materiálu bez zásahu do existujúcej infraštruktúry.",
       },
@@ -213,8 +222,8 @@ export const productTextsSk: Record<
           "Koordinácia viacerých robotov a skupín regálov na jednej ploche.",
       },
     ],
-    seoTitle: "PUDU T600 Underride | Nízky zdvíhací AMR | PUDU Industrial",
+    seoTitle: "AMR 600 Podbehové | Nízky zdvíhací AMR | PUDU Industrial",
     seoDescription:
-      "PUDU T600 Underride — nízky autonómny robot s nosnosťou 600 kg, ktorý podjazdí regál, zdvihne ho a premiestni. Technické parametre a oblasti využitia.",
+      "AMR 600 Podbehové — nízky autonómny robot s nosnosťou do 600 kg, ktorý podbere rám s paletou, zdvihne ho a premiestni. Technické parametre a oblasti využitia.",
   },
 };

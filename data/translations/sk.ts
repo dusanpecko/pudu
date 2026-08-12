@@ -2,16 +2,16 @@ import type { SpecKey, UnitKey } from "@/types/product";
 
 /** Labels of technical parameters. */
 const specs: Record<SpecKey | "clearanceShort", string> = {
-  payload: "Nosnosť",
-  runtime: "Výdrž",
-  runtimeEmpty: "Výdrž bez nákladu",
-  runtimeLoaded: "Výdrž s plným nákladom",
-  clearance: "Minimálny priechod",
-  clearanceShort: "Priechod",
-  speed: "Rýchlosť",
+  payload: "Max. nosnosť do",
+  runtime: "Celková výdrž",
+  runtimeEmpty: "Výdrž batérie bez nákladu",
+  runtimeLoaded: "Výdrž batérie s plným nákladom",
+  clearance: "Minimálny priechod uličky",
+  clearanceShort: "Priechod uličky",
+  speed: "Max. rýchlosť",
   dimensions: "Rozmery",
   charging: "Nabíjanie",
-  lift: "Zdvih",
+  lift: "Max. výška zdvihu",
   navigation: "Navigácia",
 };
 
@@ -30,12 +30,13 @@ const units: Record<UnitKey, string> & { upTo: string; chargingTemplate: string 
 
 export const sk = {
   meta: {
-    siteName: "PUDU Industrial",
-    homeTitle: "PUDU Industrial | Autonómna logistika a priemyselné roboty",
+    siteName: "4IGV | PUDU Industrial",
+    homeTitle:
+      "Robotické vozíky AMR | Autonómna logistika a priemyselné roboty v praxi.",
     homeDescription:
-      "Autonómne mobilné roboty PUDU T150, T300 a T600 pre výrobu, sklady a intralogistiku. Presná navigácia, bezpečný pohyb a nasadenie, ktoré rastie s vami.",
+      "Autonómne robotické vozíky rady O2P, T-series, AMR T150, T300, T600 a MP2000 pre vaše potreby transportu materiálu. Presná navigácia, bezpečná preprava a nasadenie s cieľom plánovať a riadiť tok vašej logistiky ktorá rastie s vami.",
     keywordsLabel:
-      "autonómne roboty, AMR, intralogistika, priemyselná automatizácia",
+      "robotické vozíkyAMR, intralogistika, priemyselná a logistická automatizácia.",
   },
   a11y: {
     skipToContent: "Preskočiť na obsah",
@@ -66,35 +67,35 @@ export const sk = {
   home: {
     hero: {
       eyebrow: "Priemyselná robotika novej generácie",
-      titleLine1: "Logistika,",
-      titleLine2: "ktorá myslí.",
+      titleLine1: "Maximalizujte,",
+      titleLine2: "svoj logistický výkon.",
       description:
-        "Autonómne mobilné roboty PUDU premieňajú pohyb materiálu na presný, bezpečný a nepretržitý tok. Od ľahkých komponentov až po 600-kilogramové náklady.",
-      exploreProducts: "Objaviť flotilu",
-      contactUs: "Navrhnúť riešenie",
-      statModels: "modely v ponuke",
-      statPayload: "rozsah nosnosti",
+        "Priemyselné autonómne mobilné roboty AMR T-series (Order 2 Person) pre automatizáciu intralogistiky menia pohyb materiálu na presný, bezpečný a nepretržitý tok z miesta pôvodu do miesta spotreby tak, aby bola dosiahnutá maximálna efektivita.",
+      exploreProducts: "Objavte našu flotilu",
+      contactUs: "Požiadať o konzultáciu",
+      statModels: "modely AMR T-Series",
+      statPayload: "nosnosť",
       statUptime: "pripravené na prevádzku",
       hudStatus: "SYSTÉM ONLINE",
       hudRoute: "AUTONÓMNA TRASA / 04",
     },
     ticker: [
-      "AUTONÓMNA NAVIGÁCIA",
+      "AUTONÓMNA NAVIGÁCIA SLAM",
       "BEZPEČNÝ POHYB",
-      "INTELIGENTNÁ FLOTA",
+      "INTELIGENTNÁ FLOTILA",
       "NEPRETRŽITÁ PREVÁDZKA",
     ],
     products: {
       titleLine1: "Jedna flotila.",
-      titleLine2: "Štyri schopnosti.",
+      titleLine2: "Rozličné aplikácie.",
       description:
-        "Vyberte robot podľa hmotnosti, spôsobu manipulácie a priestoru. Všetky modely sú navrhnuté pre reálnu priemyselnú prevádzku a jednoduché škálovanie.",
+        "Zvoľte si model autonómneho mobilného robota AMR podľa vašej predstavy. Všetky modely sú navrhnuté pre reálnu priemyselnú prevádzku a jednoduché škálovanie.",
     },
     technology: {
-      titleLine1: "Technológia,",
-      titleLine2: "ktorá neprekáža.",
+      titleLine1: "Byť flexibilný,",
+      titleLine2: "je garancia úspechu.",
       description:
-        "Roboty vnímajú priestor, vyhýbajú sa prekážkam, komunikujú so systémami budovy a prirodzene spolupracujú s ľuďmi.",
+        "Priemyselné autonómne mobilné roboty AMR sú uživateľsky priateľské pre okamžité naištalovanie trasy a na přepravu materiálu. Majú vlastnosti vyhýbať sa nažiadúcim prekážkam a dostať materiál do potrebného miesta destinácie. Náš farebný display znázorňuje a komunikuje všetky požiadavky operátora na spôsob hlasových pokynov alebo zvuku.",
       items: [
         {
           label: "01 / NAVIGÁCIA",
@@ -104,15 +105,15 @@ export const sk = {
         },
         {
           label: "02 / BEZPEČNOSŤ",
-          title: "360° vnímanie",
+          title: "360° rozhranie",
           description:
-            "Senzory, kamery, ochrana proti kolízii a núdzové zastavenie vytvárajú bezpečný priestor pre ľudí aj stroje.",
+            "Senzory, kamery, ochrana proti kolízii a núdzové zastavenie vytvárajú bezpečný priestor pre ľudí aj zariadenia.",
         },
         {
           label: "03 / INTEGRÁCIA",
           title: "Prepojená výroba",
           description:
-            "Výťahy, automatické brány, pagery, PUDU Link a podnikové rozhrania spájajú roboty s celým logistickým tokom.",
+            "Výťahy, automatické brány, periférne zariadenia a podnikový ERP systém spájajú autonómne mobilné roboty AMR s celým logistickým tokom a prispôsobujú sa požiadavkám zákazníka.",
         },
       ],
     },
@@ -120,13 +121,13 @@ export const sk = {
       eyebrow: "Od jedného robota po celú flotilu",
       title: "Automatizácia, ktorá rastie s vami.",
       description:
-        "Začnite jednou trasou, jedným typom nákladu a jedným robotom. Následne pridávajte ďalšie úlohy, regály, výrobné linky a zariadenia bez zmeny celej koncepcie.",
-      imageAlt: "PUDU T600 Underride v holografickom paneli",
+        "Začnite jednou trasou, jedným typom nákladu s jedným robotom. Následne pridávajte ďalšie úlohy, ďalšie trasy, ďalšie roboty nebo ťahače. Naplánujte nové trasy, prejazdy do hál, k výrobným linkám a zariadeniam bez obmedzení výroby. Naše roboty sa prispôsobia vaším požiadavkám. Vaša invistícia, vaša rýchla návratnosť.",
+      imageAlt: "AMR T600 podbehový robot v holografickom paneli",
       items: [
-        "Výroba a zásobovanie liniek",
-        "Sklady a distribučné centrá",
+        "Výroba a zásobovanie liniek, preprava materiálu",
+        "Sklady, distribučné centrá, obchody",
         "Automotive a elektronika",
-        "Nemocnice a laboratóriá",
+        "Nemocnice, laboratóriá, zdravotnícky priemysel",
       ],
     },
   },
@@ -143,49 +144,50 @@ export const sk = {
     applications: "Oblasti využitia",
     storyEyebrow: "Navrhnutý pre skutočnú prevádzku",
     featuresTitleLine1: "Tri vrstvy",
-    featuresTitleLine2: "inteligencie.",
+    featuresTitleLine2: "inteligencia.",
     featuresDescription:
       "Každá funkcia je navrhnutá tak, aby zjednodušila každodennú manipuláciu a vytvorila predvídateľný logistický tok.",
     applicationsTitle: "Oblasti využitia.",
     applicationsDescription:
-      "Typické scenáre, v ktorých model prináša najväčší prínos.",
+      "Typické scenáre, v ktorých AMR prináša najväčší prínos.",
     galleryTitle: "Vnímanie priestoru v reálnej prevádzke",
     galleryDescription:
-      "Skenovanie okolia v reálnom čase udržiava robot v bezpečnej vzdialenosti od ľudí, regálov aj vozíkov.",
+      "Skenovanie prostredia v priestore udržiava mobilný robot v bezpečnej vzdialenosti od ľudí a periférnych zariadení tak aby zaistil maximálny bezpečnosť prepravy materiálu.",
     hudStatus: "AMR ONLINE",
     backToProducts: "Späť na všetky produkty",
     previousModel: "Predchádzajúci model",
     nextModel: "Ďalší model",
     otherModels: "Ďalšie modely",
-    ctaTitle: "Uvidieť robota je lepšie než o ňom čítať.",
+    ctaTitle: "Lepšie raz vidieť ako stokrát počuť.",
     ctaDescription:
-      "Dohodnite si ukážku a návrh pilotnej trasy vo vašej prevádzke.",
-    ctaButton: "Dohodnúť ukážku",
+      "Dohodnite si s nami ukážku a návrh Vašej pilotnej trasy vo vašich priestoroch firmy.",
+    ctaButton: "Dohodnite sa ukážku",
     sharedFeatures: [
       {
         label: "BEZPEČNOSŤ",
         title: "Vníma okolie",
         description:
-          "Viacúrovňová detekcia prekážok pomáha robotu bezpečne pracovať v spoločnom priestore s ľuďmi.",
+          "Viacúrovňová detekcia prekážok pomáha robotu bezpečne pracovať v spoločnom priestore s ľuďmi a okolím.",
       },
       {
         label: "PREVÁDZKA",
         title: "Pracuje nepretržite",
         description:
-          "Automatické nabíjanie a premyslený energetický manažment podporujú celodenné logistické scenáre.",
+          "Automatické nabíjanie a premyslený energetický manažment podporujú celodenné logistické výkony.",
       },
       {
         label: "ŠKÁLOVANIE",
         title: "Rastie do flotily",
         description:
-          "Od jednej trasy po koordinované nasadenie viacerých robotov, pracovísk a podnikových systémov.",
+          "Od jednej trasy po koordinované nasadenie viacerých AMR robotov, pracovísk a podnikových systémov.",
       },
     ],
   },
   contact: {
     eyebrow: "Budúcnosť začína prvou trasou",
-    title: "Poďme automatizovať vašu prevádzku.",
-    description: "Ukážka robota · Analýza prevádzky · Návrh nasadenia",
+    title:
+      "Navrhneme vašu prevádzku pre prepravu materilálu s našimi autonómnymi robotmi AMR O2P.",
+    description: "Ukážka robota · Analýza prevádzky · Návrh pre nasadenie",
     name: "Meno",
     company: "Firma",
     email: "E-mail",
@@ -194,7 +196,7 @@ export const sk = {
     message: "Správa",
     submit: "Odoslať dopyt",
     success: "Ďakujeme. Váš dopyt bol zaznamenaný.",
-    successDetail: "Ozveme sa vám s návrhom ukážky a pilotnej trasy.",
+    successDetail: "Ozveme sa vám s návrhom pre ukážku AMR.",
     reset: "Odoslať ďalší dopyt",
     optional: "nepovinné",
     required: "povinné",
@@ -218,7 +220,7 @@ export const sk = {
   },
   footer: {
     copyright: "© 2026 PUDU Industrial Slovensko — koncept webovej prezentácie",
-    tagline: "Autonómna logistika · Inteligentná výroba · Budúcnosť pohybu",
+    tagline: "Autonómna logistika · Inteligentná preprava · Budúcnosť pohybu",
   },
   notFound: {
     title: "Stránka sa nenašla",

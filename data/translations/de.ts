@@ -2,7 +2,7 @@ import type { Translation } from "@/types/translation";
 
 export const de: Translation = {
   meta: {
-    siteName: "PUDU Industrial",
+    siteName: "4IGV | PUDU Industrial",
     homeTitle: "PUDU Industrial | Autonome Logistik und Industrieroboter",
     homeDescription:
       "Autonome mobile Roboter PUDU T150, T300 und T600 für Produktion, Lager und Intralogistik. Präzise Navigation, sichere Bewegung und ein Einsatz, der mit Ihnen wächst.",
@@ -45,50 +45,50 @@ export const de: Translation = {
     chargingTemplate: "{hours} h auf {percent} %",
   },
   specs: {
-    payload: "Traglast",
-    runtime: "Laufzeit",
+    payload: "Max. praglast",
+    runtime: "Total laufzeit",
     runtimeEmpty: "Laufzeit ohne Last",
     runtimeLoaded: "Laufzeit bei voller Last",
     clearance: "Mindestdurchfahrtsbreite",
     clearanceShort: "Durchfahrt",
-    speed: "Geschwindigkeit",
+    speed: "Max. geschwindigkeit",
     dimensions: "Abmessungen",
     charging: "Ladezeit",
-    lift: "Hubhöhe",
+    lift: "Max. hubhöhe",
     navigation: "Navigation",
   },
   home: {
     hero: {
       eyebrow: "Industrierobotik der neuen Generation",
-      titleLine1: "Logistik,",
-      titleLine2: "die denkt.",
+      titleLine1: "Maximieren,",
+      titleLine2: "Sie Ihre Logistikleistung.",
       description:
-        "Autonome mobile Roboter von PUDU verwandeln den Materialfluss in einen präzisen, sicheren und unterbrechungsfreien Ablauf — von leichten Bauteilen bis zu Lasten von 600 Kilogramm.",
-      exploreProducts: "Flotte entdecken",
-      contactUs: "Lösung entwerfen",
-      statModels: "Modelle im Programm",
+        "Die autonomen mobilen Industrieroboter AMR T-Series (Order 2 Person) für die Automatisierung der Intralogistik verwandeln den Materialtransport in einen präzisen, sicheren und unterbrechungsfreien Fluss vom Ursprungs- zum Verbrauchsort und gewährleisten so maximale effizienz.",
+      exploreProducts: "Entdecken Sie unsere Flotte",
+      contactUs: "Beratung anfordern",
+      statModels: "AMR T-Series Modelle",
       statPayload: "Traglastbereich",
       statUptime: "bereit für den Dauerbetrieb",
       hudStatus: "SYSTEM ONLINE",
       hudRoute: "AUTONOME ROUTE / 04",
     },
     ticker: [
-      "AUTONOME NAVIGATION",
+      "AUTONOME SLAM NAVIGATION",
       "SICHERE BEWEGUNG",
       "INTELLIGENTE FLOTTE",
       "DAUERBETRIEB",
     ],
     products: {
       titleLine1: "Eine Flotte.",
-      titleLine2: "Vier Fähigkeiten.",
+      titleLine2: "Verschiedene Optionen.",
       description:
-        "Wählen Sie den Roboter nach Lastgewicht, Handhabung und verfügbarem Platz. Jedes Modell ist für den realen Industriebetrieb und einfache Skalierung ausgelegt.",
+        "Wählen Sie das AMR-Modell, das am besten zu Ihren Anforderungen passt. Alle Modelle sind für den industriellen Praxiseinsatz und eine einfache Skalierbarkeit ausgelegt.",
     },
     technology: {
-      titleLine1: "Technologie,",
-      titleLine2: "die nicht im Weg steht.",
+      titleLine1: "Flexibilität ist",
+      titleLine2: "ein Erfolgsgarant.",
       description:
-        "Die Roboter erfassen ihre Umgebung, weichen Hindernissen aus, kommunizieren mit der Gebäudetechnik und arbeiten selbstverständlich mit Menschen zusammen.",
+        "Die autonomen mobilen Industrieroboter der AMR-Reihe zeichnen sich durch Benutzerfreundlichkeit aus und ermöglichen die sofortige Routeneinrichtung sowie den Materialtransport. Sie können Hindernissen ausweichen und Materialien an den gewünschten Zielort befördern. Ein Farbdisplay visualisiert Informationen, während das System Anweisungen des Bedieners über Sprachansagen oder Musik kommuniziert.",
       items: [
         {
           label: "01 / NAVIGATION",
@@ -98,7 +98,7 @@ export const de: Translation = {
         },
         {
           label: "02 / SICHERHEIT",
-          title: "360°-Wahrnehmung",
+          title: "360°- Reichweite",
           description:
             "Sensoren, Kameras, Kollisionsschutz und Nothalt halten den gemeinsamen Raum für Menschen und Maschinen sicher.",
         },
@@ -106,7 +106,7 @@ export const de: Translation = {
           label: "03 / INTEGRATION",
           title: "Vernetzte Produktion",
           description:
-            "Aufzüge, automatische Tore, Pager, PUDU Link und Unternehmensschnittstellen verbinden die Roboter mit Ihrem gesamten Logistikfluss.",
+            "Aufzüge, automatische Tore, Peripheriegeräte und das ERP-System des Unternehmens integrieren autonome mobile Roboter (AMRs) in den gesamten Logistikfluss und passen sich an die Kundenanforderungen an.",
         },
       ],
     },
@@ -114,13 +114,13 @@ export const de: Translation = {
       eyebrow: "Von einem Roboter zur ganzen Flotte",
       title: "Automatisierung, die mit Ihnen wächst.",
       description:
-        "Beginnen Sie mit einer Route, einer Lastart und einem Roboter. Danach kommen weitere Aufgaben, Regale, Produktionslinien und Anlagen hinzu — ohne das gesamte Konzept zu ändern.",
-      imageAlt: "PUDU T600 Underride im holografischen Panel",
+        "Beginnen Sie mit einer einzigen Route, einer Lastart und einem Roboter. Ergänzen Sie anschließend weitere Aufgaben, Routen, Roboter oder Schlepper. Planen Sie neue Routen und Wege zu Hallen, Fertigungslinien und Anlagen, ohne die Produktion zu unterbrechen. Unsere Roboter passen sich Ihren Anforderungen an. Ihre Investition, Ihre schnelle Amortisation.",
+      imageAlt: "AMR T600 Underride im holografischen Panel",
       items: [
-        "Produktion und Linienversorgung",
-        "Lager und Distributionszentren",
+        "Versorgung von Fertigungs- und Produktionslinien, Materialhandling und Transport",
+        "Lager- und Verteilzentren, Einzelhandel",
         "Automotive und Elektronik",
-        "Krankenhäuser und Labore",
+        "Krankenhäuser, Labore, Gesundheitsbranche",
       ],
     },
   },
@@ -142,18 +142,18 @@ export const de: Translation = {
       "Jede Funktion ist darauf ausgelegt, die tägliche Handhabung zu vereinfachen und einen vorhersehbaren Logistikfluss zu schaffen.",
     applicationsTitle: "Einsatzbereiche.",
     applicationsDescription:
-      "Typische Szenarien, in denen dieses Modell den größten Nutzen bringt.",
+      "Typische Szenarien, in denen dieses AMR den größten Nutzen bringt.",
     galleryTitle: "Raumwahrnehmung im realen Betrieb",
     galleryDescription:
-      "Das Scannen der Umgebung in Echtzeit hält den Roboter auf sicherem Abstand zu Menschen, Regalen und Wagen.",
+      "Das Abtasten der Umgebung hält den mobilen Roboter auf sicherem Abstand zu Personen und Peripheriegeräten und gewährleistet so maximale Sicherheit beim Materialtransport.",
     hudStatus: "AMR ONLINE",
     backToProducts: "Zurück zu allen Produkten",
     previousModel: "Vorheriges Modell",
     nextModel: "Nächstes Modell",
     otherModels: "Weitere Modelle",
-    ctaTitle: "Den Roboter zu sehen ist besser, als über ihn zu lesen.",
+    ctaTitle: "Lieber einmal sehen als hundertmal hören.",
     ctaDescription:
-      "Vereinbaren Sie eine Demo und einen Vorschlag für eine Pilotroute in Ihrem Betrieb.",
+      "Vereinbaren Sie mit uns einen Termin für eine Vorführung und die Erstellung eines Angebots für Ihre Pilotstrecke direkt bei Ihnen im Unternehmen.",
     ctaButton: "Demo vereinbaren",
     sharedFeatures: [
       {
@@ -172,7 +172,7 @@ export const de: Translation = {
         label: "SKALIERUNG",
         title: "Wächst zur Flotte",
         description:
-          "Von einer einzelnen Route bis zum koordinierten Einsatz mehrerer Roboter, Arbeitsplätze und Unternehmenssysteme.",
+          "Von einer einzelnen Route bis zum koordinierten Einsatz mehrerer AMR roboter, Arbeitsplätze und Unternehmenssysteme.",
       },
     ],
   },

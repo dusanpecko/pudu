@@ -2,12 +2,13 @@ import type { Translation } from "@/types/translation";
 
 export const cz: Translation = {
   meta: {
-    siteName: "PUDU Industrial",
-    homeTitle: "PUDU Industrial | Autonomní logistika a průmyslové roboty",
+    siteName: "4IGV | PUDU Industrial",
+    homeTitle:
+      "Robotické vozíky | Autonomní logistika a průmyslové roboty v praxi.",
     homeDescription:
-      "Autonomní mobilní roboty PUDU T150, T300 a T600 pro výrobu, sklady a intralogistiku. Přesná navigace, bezpečný pohyb a nasazení, které roste s vámi.",
+      "Autonomní robotické vozíky řady O2P, T-series, AMR T150, T300, T600 a MP2000 pro vaše potřeby převozu materiálu. Přesná navigace, bezpečná přeprava a nasazení s cílem plánovat a řídit tok vaší logistiky která roste s vámi.",
     keywordsLabel:
-      "autonomní roboty, AMR, intralogistika, průmyslová automatizace",
+      "robotické vozíkyAMR, intralogistika, průmyslová a logistická automatizace.",
   },
   a11y: {
     skipToContent: "Přeskočit na obsah",
@@ -45,50 +46,50 @@ export const cz: Translation = {
     chargingTemplate: "{hours} h na {percent} %",
   },
   specs: {
-    payload: "Nosnost",
-    runtime: "Výdrž",
-    runtimeEmpty: "Výdrž bez nákladu",
-    runtimeLoaded: "Výdrž s plným nákladem",
-    clearance: "Minimální průchod",
-    clearanceShort: "Průchod",
-    speed: "Rychlost",
+    payload: "Max. nosnost do",
+    runtime: "Celková výdrž",
+    runtimeEmpty: "Výdrž baterie bez nákladu",
+    runtimeLoaded: "Výdrž baterie s plným nákladem",
+    clearance: "Minimální průchod uličky",
+    clearanceShort: "Průchod uličky",
+    speed: "Max. rychlost",
     dimensions: "Rozměry",
     charging: "Nabíjení",
-    lift: "Zdvih",
+    lift: "Max. výška zdvihu",
     navigation: "Navigace",
   },
   home: {
     hero: {
       eyebrow: "Průmyslová robotika nové generace",
-      titleLine1: "Logistika,",
-      titleLine2: "která myslí.",
+      titleLine1: "Maximalizujte,",
+      titleLine2: "svůj logistický výkon.",
       description:
-        "Autonomní mobilní roboty PUDU mění pohyb materiálu na přesný, bezpečný a nepřerušovaný tok. Od lehkých komponentů až po 600kilogramové náklady.",
-      exploreProducts: "Objevit flotilu",
-      contactUs: "Navrhnout řešení",
-      statModels: "modely v nabídce",
-      statPayload: "rozsah nosnosti",
+        "Průmyslové autonomní mobilní roboty AMR T-Series (Order 2 Person) pro automatizaci intralogistiky mění pohyb materiálů na přesný, bezpečný a nepřerušovaný tok z místa původu do místa spotřeby tak, aby bylo dosaženo maximální efektivity.",
+      exploreProducts: "Objevte naši flotilu",
+      contactUs: "Požádat o konzultaci",
+      statModels: "modely AMR T-Series",
+      statPayload: "nosnost",
       statUptime: "připraveno k provozu",
       hudStatus: "SYSTÉM ONLINE",
       hudRoute: "AUTONOMNÍ TRASA / 04",
     },
     ticker: [
-      "AUTONOMNÍ NAVIGACE",
+      "AUTONOMNÍ NAVIGACE SLAM",
       "BEZPEČNÝ POHYB",
       "INTELIGENTNÍ FLOTILA",
       "NEPŘETRŽITÝ PROVOZ",
     ],
     products: {
       titleLine1: "Jedna flotila.",
-      titleLine2: "Čtyři schopnosti.",
+      titleLine2: "Rozliční aplikace.",
       description:
-        "Vyberte robota podle hmotnosti nákladu, způsobu manipulace a dostupného prostoru. Všechny modely jsou navržené pro reálný průmyslový provoz a snadné škálování.",
+        "Vyberte si model autonómního mobilního robota AMR, který nejlépe vyhovuje vašim potřebám. Všechny modely jsou navrženy pro reálné průmyslové přepravy a jednoduchou škálovatelnost.",
     },
     technology: {
-      titleLine1: "Technologie,",
-      titleLine2: "která nepřekáží.",
+      titleLine1: "Být flexibilní,",
+      titleLine2: "je garance úspěchu.",
       description:
-        "Roboty vnímají prostor, vyhýbají se překážkám, komunikují se systémy budovy a přirozeně spolupracují s lidmi.",
+        "Průmyslové autonomní mobilní roboty AMR jsou uživatelsky přátelské pro okamžité nainstalování trasy a pro přepravu materiálu. Mají vlastnosti vyhýbat se nažádoucím překážkám a dostat materiál do potřebného místa destinace. Náš barevný display znázorňuje a komunikuje všechny požadavky operátora na způsob hlasových pokynů nebo zvuku.",
       items: [
         {
           label: "01 / NAVIGACE",
@@ -98,15 +99,15 @@ export const cz: Translation = {
         },
         {
           label: "02 / BEZPEČNOST",
-          title: "360° vnímání",
+          title: "360° rozhraní",
           description:
-            "Senzory, kamery, ochrana proti kolizi a nouzové zastavení vytvářejí bezpečný prostor pro lidi i stroje.",
+            "Senzory, kamery, ochrana proti kolizi a nouzové zastavení vytvářejí bezpečný prostor pro lidi i zařízení.",
         },
         {
           label: "03 / INTEGRACE",
           title: "Propojená výroba",
           description:
-            "Výtahy, automatické brány, pagery, PUDU Link a podniková rozhraní spojují roboty s celým logistickým tokem.",
+            "Výtahy, automatická vrata, periferní zařízení a podnikový ERP systém spojují autonomní mobilní roboty AMR s celým logistickým tokem a přizpůsobují se požadavkům zákazníka.",
         },
       ],
     },
@@ -114,13 +115,13 @@ export const cz: Translation = {
       eyebrow: "Od jednoho robota k celé flotile",
       title: "Automatizace, která roste s vámi.",
       description:
-        "Začněte jednou trasou, jedním typem nákladu a jedním robotem. Postupně přidávejte další úlohy, regály, výrobní linky a zařízení bez změny celé koncepce.",
-      imageAlt: "PUDU T600 Underride v holografickém panelu",
+        "Začněte jednou trasou, jedním typem nákladu s jedním robotem. Následně přidávejte další úkoly, další trasy, další roboty nebo tahače. Naplánujte nové trasy, přejezdy do hal, k výrobním linkám a zařízením bez omezení výroby. Naše roboty se přizpůsobí vašim požadavkům. Vaše invistice, vaše rychlá návratnost.",
+      imageAlt: "AMR T600 Podběhový robot v holografickém panelu",
       items: [
-        "Výroba a zásobování linek",
-        "Sklady a distribuční centra",
+        "Výroba a zásobování linek, přeprava materiálu",
+        "Sklady, distribuční centra a obchody",
         "Automotive a elektronika",
-        "Nemocnice a laboratoře",
+        "Nemocnice, laboratoře, zdravotnický průmysl",
       ],
     },
   },
@@ -142,44 +143,45 @@ export const cz: Translation = {
       "Každá funkce je navržená tak, aby zjednodušila každodenní manipulaci a vytvořila předvídatelný logistický tok.",
     applicationsTitle: "Oblasti využití.",
     applicationsDescription:
-      "Typické scénáře, ve kterých model přináší největší přínos.",
-    galleryTitle: "Vnímání prostoru v reálném provozu",
+      "Typické scénáře, ve kterých AMR přináší největší přínos.",
+    galleryTitle: "Vnímání prostoru v reálním provozu",
     galleryDescription:
-      "Skenování okolí v reálném čase udržuje robota v bezpečné vzdálenosti od lidí, regálů i vozíků.",
+      "Skenování prostředí v prostoru udržuje mobilní robot v bezpečné vzdálenosti od lidí a periferních zařízení tak, aby zajistil maximální bezpečnost přepravy materiálu.",
     hudStatus: "AMR ONLINE",
     backToProducts: "Zpět na všechny produkty",
     previousModel: "Předchozí model",
     nextModel: "Další model",
     otherModels: "Další modely",
-    ctaTitle: "Vidět robota je lepší než o něm číst.",
+    ctaTitle: "Lépe jednou vidět než stokrát slyšet.",
     ctaDescription:
-      "Sjednejte si ukázku a návrh pilotní trasy ve vašem provozu.",
-    ctaButton: "Sjednat ukázku",
+      "Sjednejte si s námi ukázku a návrh Vaší pilotní trasy ve vašich prostorách firmy.",
+    ctaButton: "Sjednat si ukázku",
     sharedFeatures: [
       {
         label: "BEZPEČNOST",
         title: "Vnímá okolí",
         description:
-          "Víceúrovňová detekce překážek pomáhá robotu bezpečně pracovat ve společném prostoru s lidmi.",
+          "Víceúrovňová detekce překážek pomáhá robotu bezpečně pracovat ve společném prostoru s lidmi i okolím.",
       },
       {
         label: "PROVOZ",
         title: "Pracuje nepřetržitě",
         description:
-          "Automatické nabíjení a promyšlený energetický management podporují celodenní logistické scénáře.",
+          "Automatické nabíjení a promyšlený energetický management podporují celodenní logistické výkony.",
       },
       {
         label: "ŠKÁLOVÁNÍ",
         title: "Roste do flotily",
         description:
-          "Od jedné trasy ke koordinovanému nasazení více robotů, pracovišť a podnikových systémů.",
+          "Od jedné trasy ke koordinovanému nasazení více AMR robotů, pracovišť a podnikových systémů.",
       },
     ],
   },
   contact: {
     eyebrow: "Budoucnost začíná první trasou",
-    title: "Pojďme automatizovat váš provoz.",
-    description: "Ukázka robota · Analýza provozu · Návrh nasazení",
+    title:
+      "Navrhneme váš provoz pro přepravu materiálu s našimi autonomními roboty AMR O2P.",
+    description: "Ukázka robota · Analýza provozu · Návrh pro nasazení",
     name: "Jméno",
     company: "Firma",
     email: "E-mail",
@@ -188,7 +190,7 @@ export const cz: Translation = {
     message: "Zpráva",
     submit: "Odeslat dotaz",
     success: "Děkujeme. Váš dotaz byl zaznamenán.",
-    successDetail: "Ozveme se vám s návrhem ukázky a pilotní trasy.",
+    successDetail: "Ozveme se vám s návrhem ukázky našeho robota AMR.",
     reset: "Odeslat další dotaz",
     optional: "nepovinné",
     required: "povinné",
@@ -212,7 +214,7 @@ export const cz: Translation = {
   },
   footer: {
     copyright: "© 2026 PUDU Industrial — koncept webové prezentace",
-    tagline: "Autonomní logistika · Inteligentní výroba · Budoucnost pohybu",
+    tagline: "Autonomní logistika · Inteligentní přeprava · Budoucnost pohybu",
   },
   notFound: {
     title: "Stránka nebyla nalezena",

@@ -9,14 +9,15 @@ export const productTextsEn: Record<
   LocalizedProductContent
 > = {
   "pudu-t150": {
-    name: "PUDU T150",
-    category: "Light intralogistics",
-    headline: "Light loads. Maximum flow.",
+    name: "AMR T 150",
+    category:
+      "Autonomous mobile delivery robot for the light transport of materials up to 150 kg.",
+    headline: "Load capacity up to 150 kg. Maximum smoothness of movement.",
     shortDescription:
-      "A compact industrial robot for parts, components and recurring logistics loops.",
+      "A compact, user-friendly industrial AMR robot for rapid material delivery.",
     description:
-      "A compact industrial robot for parts, components and recurring logistics loops. Autonomous navigation, layered safety and open integration let it adapt to your existing environment instead of forcing your operation to adapt to the robot.",
-    imageAlt: "PUDU T150 industrial robot carrying a load",
+      "The compact industrial AMR 150 robot is designed for goods delivery within regular logistics loops. Thanks to autonomous navigation and integration capabilities, it adapts to the existing environment without interfering with other tasks.",
+    imageAlt: "PUDU T150 industrial AMR robot carrying a load",
     features: [
       {
         title: "Fast deployment",
@@ -31,50 +32,52 @@ export const productTextsEn: Record<
       {
         title: "24/7 operation",
         description:
-          "Battery swap plus automatic and cable charging support uninterrupted logistics.",
+          "Simple battery swap plus automatic and cable charging support uninterrupted logistics.",
       },
     ],
     applications: [
       {
         title: "Production line supply",
         description:
-          "Regular delivery of parts and components to assembly workstations.",
+          "Regular delivery of parts and components to assembly workstations or other delivery stations.",
       },
       {
-        title: "Internal component transport",
+        title: "Internal transport",
         description:
           "Repeating loops between the warehouse, material preparation and production.",
       },
       {
-        title: "Electronics and precision manufacturing",
-        description:
-          "Gentle transport of sensitive parts through narrow and clean spaces.",
+        title:
+          "Assembly, production, warehousing, supply, sales, intralogistics, etc.",
+        description: "Safe material transport in narrow spaces.",
       },
       {
-        title: "Hospitals and laboratories",
+        title: "Hospitals, laboratories, schools",
         description:
           "Discreet transport of samples, materials and consumables.",
       },
     ],
-    seoTitle: "PUDU T150 | Light intralogistics | PUDU Industrial",
+    seoTitle: "AMR T150 | Light intralogistics | PUDU Industrial",
     seoDescription:
-      "PUDU T150 — a compact autonomous robot with a 150 kg payload for parts, components and recurring logistics loops. Specifications, features and applications.",
+      "AMR T150 — a compact autonomous robot up to 150 kg payload for parts, components and recurring logistics loops. Specifications, features and applications.",
   },
   "pudu-t300": {
-    name: "PUDU T300",
-    category: "Versatile AMR",
-    headline: "Movement that adapts to production.",
+    name: "AMR T 300 (order 2 person)",
+    category:
+      "Best-selling AMR T 300 Industrial autonomous mobile robot for material transport up to 300 kg.",
+    headline: "Transport that adapts to production.",
     shortDescription:
       "Flexible autonomous transport for manufacturing, warehouses and line supply.",
     description:
-      "Flexible autonomous transport for manufacturing, warehouses and line supply. Autonomous navigation, layered safety and open integration let it adapt to your existing environment instead of forcing your operation to adapt to the robot.",
-    imageAlt: "PUDU T300 industrial robot carrying a cardboard load",
-    galleryAlt: "PUDU T300 scanning its surroundings inside a warehouse",
+      "Flexible autonomous transport for delivering materials to production areas or warehouses, or for general supply operations. Thanks to autonomous navigation, safety interfaces, and integration capabilities, it adapts seamlessly to the existing environment.",
+    imageAlt:
+      "AMR T 300 industrial robot with variable load capacity, featuring conveyor and platform-towing options.",
+    galleryAlt: "AMR T 300 scanning its surroundings inside a warehouse",
     features: [
       {
         title: "Autonomous transport",
         description:
-          "Delivers material to the chosen location on its own and reacts dynamically to route changes.",
+          "Delivers material to the chosen location on its own and reacts dynamically to route changes, safely and smoothly.",
       },
       {
         title: "Follow mode",
@@ -101,7 +104,7 @@ export const productTextsEn: Record<
       {
         title: "Automotive and electronics",
         description:
-          "A stable flow of components in environments with heavily used routes.",
+          "A stable flow of materials in environments with heavily used routes.",
       },
       {
         title: "Shared operation with people",
@@ -109,24 +112,26 @@ export const productTextsEn: Record<
           "Follow mode and powered assistance for the manual part of the job.",
       },
     ],
-    seoTitle: "PUDU T300 | Versatile AMR | PUDU Industrial",
+    seoTitle: "AMR T 300 | Versatile AMR | PUDU Industrial",
     seoDescription:
-      "PUDU T300 — a versatile autonomous robot with a 300 kg payload for manufacturing, warehouses and line supply. Specifications, features and applications.",
+      "AMR T 300 — a versatile autonomous robot up to 300 kg payload for manufacturing, warehouses and line supply. Specifications, features and applications.",
   },
   "pudu-t600-upright": {
-    name: "PUDU T600 Upright",
-    category: "Heavy-duty AMR",
-    headline: "Heavy work, handled intelligently.",
+    name: "AMR T 600 (Order 2 Person)",
+    category:
+      "AMR T 600 – an industrial autonomous robot for transporting heavy materials weighing up to 600 kg.",
+    headline: "It handles even heavy loads without compromising performance.",
     shortDescription:
-      "A high-capacity platform with an ergonomic handle for moving heavy loads safely.",
+      "High-capacity platform with an ergonomic handle for the safe transport of heavy loads, pallets featuring towing and lifting capabilities.",
     description:
-      "A high-capacity platform with an ergonomic handle for moving heavy loads safely. Autonomous navigation, layered safety and open integration let it adapt to your existing environment instead of forcing your operation to adapt to the robot.",
-    imageAlt: "PUDU T600 Upright industrial robot with an ergonomic handle",
+      "The T 600 robotic cart is built to handle heavy loads with ease. Its high-capacity, reinforced platform—featuring an ergonomic handle and a smart color display—facilitates communication for the safe transport of heavy loads. Thanks to autonomous navigation and a safety interface, it adapts to its surroundings and delivers goods to the desired location.",
+    imageAlt:
+      "AMR T 600 industrial robot with an ergonomic handle and a display.",
     features: [
       {
         title: "Heavy transport",
         description:
-          "A 600 kg payload brings automation to pallets, trolleys and bulky production loads.",
+          "Up to 600 kg payload brings automation to pallets, trolleys and bulky production loads.",
       },
       {
         title: "Operator assistance",
@@ -141,16 +146,17 @@ export const productTextsEn: Record<
     ],
     applications: [
       {
-        title: "Heavy production loads",
+        title: "Heavy loads for smooth transport",
         description:
-          "Moving pallets, trolleys and bulky parts across the whole operation.",
+          "Moving pallets, mobile platforms, and larger loads throughout the entire facility.",
       },
       {
         title: "Inter-process logistics",
-        description: "Automating longer routes that carry a high load weight.",
+        description: "Automated material handling for heavy loads.",
       },
       {
-        title: "Automotive and mechanical engineering",
+        title:
+          "Automotive and mechanical engineering, defense industry, manufacturing, assembly workstations, intralogistics, retail, etc.",
         description:
           "Repeated transport of heavy components between workplaces and lines.",
       },
@@ -160,23 +166,24 @@ export const productTextsEn: Record<
           "Deployment in environments with the VDA5050 protocol and local fleet control.",
       },
     ],
-    seoTitle:
-      "PUDU T600 Upright | Heavy-duty autonomous transport | PUDU Industrial",
+    seoTitle: "AMR T600 | Heavy-duty autonomous transport | PUDU Industrial",
     seoDescription:
-      "PUDU T600 Upright — an autonomous platform with a 600 kg payload and an ergonomic handle for moving heavy loads safely. Specifications and applications.",
+      "AMR T600 — an autonomous platform up to 600 kg payload and an ergonomic handle for moving heavy loads safely. Specifications and applications.",
   },
   "pudu-t600-underride": {
-    name: "PUDU T600 Underride",
-    category: "Low-profile lifting AMR",
-    headline: "Under the load. Above expectations.",
+    name: "AMR T 600 Underride",
+    category:
+      "Low-profile robotic under-ride vehicle with a lifting height of up to 60 mm and a load capacity of up to 600 kg",
+    headline:
+      "The best underride AMR robot with an ergonomic height of just 250 mm.",
     shortDescription:
-      "A low-profile autonomous robot that drives under a rack, lifts it and moves it.",
+      "Autonomous under-ride robot 600 is simple reliable for plug and play solution and designed to be simple, ergonomic and high quality design. It is solution engineering system which gives you maximum performace.",
     description:
-      "A low-profile autonomous robot that drives under a rack, lifts it and moves it. Autonomous navigation, layered safety and open integration let it adapt to your existing environment instead of forcing your operation to adapt to the robot.",
-    imageAlt: "PUDU T600 Underride low-profile autonomous robot",
+      "A low-profile, autonomous AMR that slides under a rack, lifts it, and moves it. Thanks to autonomous navigation and safety interfaces, it offers integration capabilities that allow it to adapt to the existing environment without disrupting production.",
+    imageAlt: "AMR 600 Underride autonomous robot",
     features: [
       {
-        title: "Drives under the rack",
+        title: "Drives under the platform, rucks",
         description:
           "The low profile allows autonomous entry underneath a compatible rack or trolley.",
       },
@@ -193,12 +200,13 @@ export const productTextsEn: Record<
     ],
     applications: [
       {
-        title: "Moving racks and trolleys",
+        title:
+          "Relocation of pallets, shelving units, and trolleys, as well as static or mobile frames.",
         description:
           "Autonomous entry, lift and relocation of a complete transport unit.",
       },
       {
-        title: "Warehouse automation",
+        title: "Warehouse Automation Application Logistics, Manufacturing",
         description:
           "Reshaping material flows without touching the existing infrastructure.",
       },
@@ -213,8 +221,8 @@ export const productTextsEn: Record<
           "Coordinating several robots and rack groups across a single floor.",
       },
     ],
-    seoTitle: "PUDU T600 Underride | Low-profile lifting AMR | PUDU Industrial",
+    seoTitle: "AMR 600 Underride | Low-profile lifting AMR | PUDU Industrial",
     seoDescription:
-      "PUDU T600 Underride — a low-profile autonomous robot with a 600 kg payload that drives under a rack, lifts it and moves it. Specifications and applications.",
+      "AMR 600 Underride — a low-profile autonomous robot up to 600 kg payload that drives under a rack, lifts it and moves it. Specifications and applications.",
   },
 };
