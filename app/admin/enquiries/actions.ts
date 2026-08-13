@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import {
   deleteEnquiry,
   purgeExpiredEnquiries,
-  RETENTION_MONTHS,
+  retentionLabel,
   setHandled,
 } from "@/lib/enquiries";
 import { isEditor } from "@/lib/supabase/editors";
@@ -81,7 +81,7 @@ export async function purgeOldEnquiries(): Promise<EnquiryActionState> {
     status: "ok",
     message:
       removed === 0
-        ? `Nič staršie ako ${RETENTION_MONTHS} mesiacov tu nie je.`
-        : `Zmazaných ${removed} dopytov starších ako ${RETENTION_MONTHS} mesiacov.`,
+        ? `Nič staršie ako ${retentionLabel()} tu nie je.`
+        : `Zmazaných ${removed} dopytov starších ako ${retentionLabel()}.`,
   };
 }

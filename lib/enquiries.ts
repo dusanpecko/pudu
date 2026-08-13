@@ -22,13 +22,27 @@ import { adminClientConfigured, createSupabaseAdminClient } from "@/lib/supabase
 /**
  * How long an enquiry is kept.
  *
- * **This number has to match what the privacy notice says.** Keeping data longer
- * than the notice promises is the breach; keeping it shorter throws away a lead
- * the sales side still expected. Two years is a defensible default for a B2B
- * enquiry, but it is a default, not a decision — reconcile it with the notice
- * once that exists.
+ * **This has to match what the privacy notice says.** Keeping data longer than
+ * the notice promises is the breach; keeping it shorter throws away a lead the
+ * sales side still expected.
  */
-export const RETENTION_MONTHS = 24;
+// Annotated as `number` rather than left as the literal 5, so the plural below
+// stays a general rule instead of dead branches the compiler rejects.
+export const RETENTION_YEARS: number = 5;
+
+/** Months are what the arithmetic needs; years are what people say. */
+const RETENTION_MONTHS = RETENTION_YEARS * 12;
+
+/**
+ * "5 rokov". Slovak counts in three forms, and a label reading "5 rok" in the
+ * administration would look like a bug in the very screen that explains a legal
+ * obligation.
+ */
+export function retentionLabel(): string {
+  const unit =
+    RETENTION_YEARS === 1 ? "rok" : RETENTION_YEARS < 5 ? "roky" : "rokov";
+  return `${RETENTION_YEARS} ${unit}`;
+}
 
 /** Enquiries created before this moment are past their retention period. */
 export function retentionCutoff(): Date {

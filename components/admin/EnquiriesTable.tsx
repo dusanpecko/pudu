@@ -16,7 +16,8 @@ type EnquiriesTableProps = {
   productNames: Record<string, string>;
   /** How many rows are past the retention period. */
   expiredCount: number;
-  retentionMonths: number;
+  /** Already worded, e.g. "5 rokov". */
+  retention: string;
 };
 
 function when(value: string): string {
@@ -37,7 +38,7 @@ export default function EnquiriesTable({
   enquiries,
   productNames,
   expiredCount,
-  retentionMonths,
+  retention,
 }: EnquiriesTableProps) {
   const router = useRouter();
 
@@ -71,7 +72,7 @@ export default function EnquiriesTable({
   const purge = async () => {
     if (
       !window.confirm(
-        `Zmazať ${expiredCount} dopytov starších ako ${retentionMonths} mesiacov? Nedá sa vrátiť.`,
+        `Zmazať ${expiredCount} dopytov starších ako ${retention}? Nedá sa vrátiť.`,
       )
     ) {
       return;
@@ -102,9 +103,9 @@ export default function EnquiriesTable({
           <p className="mt-1 max-w-2xl text-sm text-slate-500">
             Každý dopyt sa zapíše ešte pred odoslaním e-mailu, takže sa nestratí ani
             keď pošta zlyhá. Obsahuje osobné údaje — zaobchádzajte s ním podľa
-            zásad, na ktoré formulár odkazuje. Dopyty staršie ako{" "}
-            {retentionMonths} mesiacov sa mažú; jednotlivý dopyt zmažete tlačidlom,
-            keď o to zákazník požiada.
+            zásad, na ktoré formulár odkazuje. Dopyty staršie ako {retention} sa
+            mažú automaticky; jednotlivý dopyt zmažete tlačidlom, keď o to
+            zákazník požiada.
           </p>
         </div>
 
@@ -144,7 +145,7 @@ export default function EnquiriesTable({
           <span>
             <strong>{expiredCount}</strong>{" "}
             {expiredCount === 1 ? "dopyt je" : "dopytov je"} starších ako{" "}
-            {retentionMonths} mesiacov, teda za dobou uchovávania.
+            {retention}, teda za dobou uchovávania.
           </span>
           <button
             type="button"

@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import EnquiriesTable from "@/components/admin/EnquiriesTable";
 import { products } from "@/data/products";
-import { countExpired, loadEnquiries, RETENTION_MONTHS } from "@/lib/enquiries";
+import { countExpired, loadEnquiries, retentionLabel } from "@/lib/enquiries";
 import { isEditor } from "@/lib/supabase/editors";
 import { getEditor } from "@/lib/supabase/server";
 
@@ -33,7 +33,7 @@ export default async function EnquiriesPage() {
       enquiries={await loadEnquiries()}
       productNames={productNames}
       expiredCount={await countExpired()}
-      retentionMonths={RETENTION_MONTHS}
+      retention={retentionLabel()}
     />
   );
 }
