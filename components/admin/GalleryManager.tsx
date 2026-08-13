@@ -341,7 +341,7 @@ export default function GalleryManager({
   };
 
   return (
-    <div className="mx-auto flex max-w-[1600px] flex-col gap-6 p-6">
+    <div className="mx-auto flex max-w-400 flex-col gap-6 p-6">
       <header>
         <h1 className="text-2xl font-semibold tracking-tight">Galéria</h1>
         <p className="mt-1 max-w-3xl text-sm text-slate-500">
@@ -611,7 +611,7 @@ function GalleryRow({
           alt={image.alt[defaultLocale] ?? ""}
           width={160}
           height={90}
-          className="h-[90px] w-[160px] shrink-0 rounded-lg object-cover"
+          className="h-22.5 w-40 shrink-0 rounded-lg object-cover"
         />
 
         <div className="min-w-0 flex-1">

@@ -22,7 +22,7 @@ export default function AdminNav({ editorEmail }: AdminNavProps) {
 
   return (
     <header className="border-b border-slate-200 bg-white">
-      <div className="mx-auto flex max-w-[1600px] flex-wrap items-center justify-between gap-3 px-6 py-3">
+      <div className="mx-auto flex max-w-400 flex-wrap items-center justify-between gap-3 px-6 py-3">
         <div className="flex items-center gap-1">
           <span className="mr-3 text-sm font-semibold tracking-tight">PUDU obsah</span>
           {LINKS.map((link) => {

@@ -49,12 +49,16 @@ export default async function PhotoGallery({
     caption: textFor(image.caption, locale),
   }));
 
+  const heading = `${titleLine1 ?? copy.titleLine1} ${
+    titleLine2 ?? copy.titleLine2
+  }`.trim();
+
   // ImageGallery structured data: this is what a crawler reads to understand
   // the images as content rather than decoration.
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "ImageGallery",
-    name: `${titleLine1 ?? copy.titleLine1} ${titleLine2 ?? copy.titleLine2}`.trim(),
+    name: heading,
     image: images.map((image) => ({
       "@type": "ImageObject",
       contentUrl: image.url,
@@ -82,6 +86,9 @@ export default async function PhotoGallery({
             previous: t.a11y.galleryPrevious,
             next: t.a11y.galleryNext,
             counter: t.a11y.galleryCounter,
+            // The section's own heading names the strip, so the scroll
+            // container needs no translation key of its own.
+            track: heading,
           }}
         />
       </div>

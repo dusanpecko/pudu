@@ -25,7 +25,7 @@ export default async function AdminDashboardPage({ searchParams }: DashboardPage
   const data = await getDashboardData(range);
 
   return (
-    <main className="mx-auto max-w-[1600px] space-y-6 p-6">
+    <main className="mx-auto max-w-400 space-y-6 p-6">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Prehľad návštevnosti</h1>

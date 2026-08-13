@@ -1393,18 +1393,63 @@ h3 {
   margin: 0;
 }
 
-/* Photo gallery — deployment shots uploaded in /admin/gallery */
-.gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 22px;
+/* Photo gallery — deployment shots uploaded in /admin/gallery.
+   One row that scrolls sideways: scroll-snap does the work, so dragging and the
+   arrow keys keep functioning whether or not the buttons have their script. */
+.gallery-slider {
   margin-top: 46px;
 }
 
-.gallery-item {
+.gallery-controls {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.gallery-arrow {
   display: grid;
-  /* The caption is pinned to the bottom of the cell, so two items side by side
-     stay aligned even when one has no title. */
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--fg-strong);
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.gallery-arrow:hover:not(:disabled) {
+  background: var(--accent-solid);
+  color: var(--on-accent);
+}
+
+.gallery-arrow:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.gallery-track {
+  display: flex;
+  gap: 22px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  /* Room for the hover lift and the focus ring, which a scroll container would
+     otherwise clip. */
+  padding: 4px;
+  margin: -4px;
+  scrollbar-width: thin;
+}
+
+.gallery-item {
+  /* Two cards plus a sliver of the third on a wide screen, so it is visible
+     that the row continues. */
+  flex: 0 0 clamp(260px, 46%, 600px);
+  scroll-snap-align: start;
+  display: grid;
+  /* The caption is pinned to the bottom, so cards side by side stay aligned
+     even when one has no title. */
   grid-template-rows: auto 1fr;
   gap: 14px;
   margin: 0;
@@ -1451,6 +1496,10 @@ h3 {
   width: min(1500px, 94vw);
   max-width: none;
   max-height: 94vh;
+  /* Tailwind's preflight zeroes the margin on every element, which takes the
+     `dialog { margin: auto }` the browser relies on to centre a modal with it —
+     without this the lightbox sits against the top edge. */
+  margin: auto;
   padding: 0;
   border: 0;
   background: none;
@@ -2076,9 +2125,13 @@ h3 {
   .modes,
   .specs,
   .applications,
-  .gallery-grid,
   .pager {
     grid-template-columns: 1fr;
+  }
+
+  /* One card at a time, with a sliver of the next one showing. */
+  .gallery-item {
+    flex-basis: 86%;
   }
 
   .spec {
