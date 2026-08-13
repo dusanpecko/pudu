@@ -3,10 +3,11 @@
 import { useActionState, useState, useTransition } from "react";
 
 import { saveSettings, sendTest, type ActionState } from "@/app/admin/settings/actions";
+import { defaultLocale, localeLabels, locales, type Locale } from "@/lib/i18n";
 import type { SmtpSettingsView } from "@/lib/smtp-settings";
 
 type SmtpSettingsFormProps = {
-  settings: SmtpSettingsView;
+  settings: Record<Locale, SmtpSettingsView>;
 };
 
 const INITIAL: ActionState = { status: "idle", message: "" };
@@ -38,21 +39,57 @@ export default function SmtpSettingsForm({ settings }: SmtpSettingsFormProps) {
   const [state, formAction, pending] = useActionState(saveSettings, INITIAL);
   const [testState, setTestState] = useState<ActionState>(INITIAL);
   const [testing, startTest] = useTransition();
+  const [locale, setLocale] = useState<Locale>(defaultLocale);
+
+  const view = settings[locale];
 
   const runTest = () => {
     startTest(async () => {
-      setTestState(await sendTest());
+      setTestState(await sendTest(locale));
     });
   };
 
   return (
     <div className="space-y-4">
-      <form action={formAction} className="space-y-5">
+      <div className="flex flex-wrap items-center gap-1">
+        {locales.map((candidate) => {
+          const own = !settings[candidate].inherited;
+          return (
+            <button
+              key={candidate}
+              type="button"
+              onClick={() => setLocale(candidate)}
+              className={`rounded-lg px-3 py-1.5 text-sm ${
+                candidate === locale
+                  ? "bg-slate-900 text-white"
+                  : "text-slate-600 hover:bg-slate-100"
+              }`}
+            >
+              {localeLabels[candidate]}
+              {/* A dot marks a language that has no configuration of its own. */}
+              {own ? "" : " ·"}
+            </button>
+          );
+        })}
+      </div>
+
+      {view.inherited ? (
+        <p className="rounded-lg border border-amber-300 bg-amber-50 px-3 py-2 text-sm text-amber-900">
+          {localeLabels[locale]} nemá vlastné nastavenie — dopyty z tohto trhu
+          odchádzajú konfiguráciou pre {localeLabels[defaultLocale]}. Polia nižšie
+          zobrazujú práve ju; uložením vytvoríte samostatné nastavenie.
+        </p>
+      ) : null}
+
+      {/* Remounted per language: the fields use defaultValue, so switching tabs
+          has to rebuild them rather than leave the previous market's values. */}
+      <form key={locale} action={formAction} className="space-y-5">
+        <input type="hidden" name="locale" value={locale} />
         <label className="flex items-start gap-3 rounded-xl border border-slate-200 bg-white p-4">
           <input
             type="checkbox"
             name="enabled"
-            defaultChecked={settings.enabled}
+            defaultChecked={view.enabled}
             className="mt-0.5"
           />
           <span>
@@ -75,7 +112,7 @@ export default function SmtpSettingsForm({ settings }: SmtpSettingsFormProps) {
               <span className={LABEL}>Server (SMTP host)</span>
               <input
                 name="host"
-                defaultValue={settings.host}
+                defaultValue={view.host}
                 placeholder="smtp.firma.sk"
                 className={FIELD}
               />
@@ -87,7 +124,7 @@ export default function SmtpSettingsForm({ settings }: SmtpSettingsFormProps) {
                 type="number"
                 min={1}
                 max={65535}
-                defaultValue={settings.port}
+                defaultValue={view.port}
                 className={FIELD}
               />
             </label>
@@ -97,7 +134,7 @@ export default function SmtpSettingsForm({ settings }: SmtpSettingsFormProps) {
             <input
               type="checkbox"
               name="secure"
-              defaultChecked={settings.secure}
+              defaultChecked={view.secure}
               className="mt-0.5"
             />
             <span className="text-sm text-slate-700">
@@ -114,7 +151,7 @@ export default function SmtpSettingsForm({ settings }: SmtpSettingsFormProps) {
               <span className={LABEL}>Prihlasovacie meno</span>
               <input
                 name="username"
-                defaultValue={settings.username}
+                defaultValue={view.username}
                 autoComplete="off"
                 className={FIELD}
               />
@@ -126,12 +163,12 @@ export default function SmtpSettingsForm({ settings }: SmtpSettingsFormProps) {
                 type="password"
                 autoComplete="new-password"
                 placeholder={
-                  settings.hasPassword ? "uložené — nechajte prázdne" : "zadajte heslo"
+                  view.hasPassword ? "uložené — nechajte prázdne" : "zadajte heslo"
                 }
                 className={FIELD}
               />
               <span className="block text-xs text-slate-500">
-                {settings.hasPassword
+                {view.hasPassword
                   ? "Uložené heslo sa nikdy nezobrazuje. Prázdne pole ho ponechá."
                   : "Heslo ešte nie je uložené."}
               </span>
@@ -149,7 +186,7 @@ export default function SmtpSettingsForm({ settings }: SmtpSettingsFormProps) {
               <span className={LABEL}>Meno odosielateľa</span>
               <input
                 name="fromName"
-                defaultValue={settings.fromName}
+                defaultValue={view.fromName}
                 placeholder="PUDU Industrial"
                 className={FIELD}
               />
@@ -159,7 +196,7 @@ export default function SmtpSettingsForm({ settings }: SmtpSettingsFormProps) {
               <input
                 name="fromEmail"
                 type="email"
-                defaultValue={settings.fromEmail}
+                defaultValue={view.fromEmail}
                 placeholder="web@firma.sk"
                 className={FIELD}
               />
@@ -171,7 +208,7 @@ export default function SmtpSettingsForm({ settings }: SmtpSettingsFormProps) {
             <input
               name="replyTo"
               type="email"
-              defaultValue={settings.replyTo}
+              defaultValue={view.replyTo}
               className={FIELD}
             />
           </label>
@@ -180,7 +217,7 @@ export default function SmtpSettingsForm({ settings }: SmtpSettingsFormProps) {
             <span className={LABEL}>Príjemcovia dopytov</span>
             <input
               name="recipients"
-              defaultValue={settings.recipients}
+              defaultValue={view.recipients}
               placeholder="obchod@firma.sk, druhy@firma.sk"
               className={FIELD}
             />
@@ -198,17 +235,17 @@ export default function SmtpSettingsForm({ settings }: SmtpSettingsFormProps) {
             disabled={pending}
             className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white disabled:opacity-50"
           >
-            {pending ? "Ukládám…" : "Uložiť nastavenia"}
+            {pending ? "Ukládám…" : `Uložiť nastavenia ${localeLabels[locale]}`}
           </button>
 
-          {settings.updatedAt ? (
+          {view.updatedAt ? (
             <span className="text-xs text-slate-500">
               Naposledy zmenené{" "}
-              {new Date(settings.updatedAt).toLocaleString("sk-SK", {
+              {new Date(view.updatedAt).toLocaleString("sk-SK", {
                 dateStyle: "medium",
                 timeStyle: "short",
               })}
-              {settings.updatedBy ? ` — ${settings.updatedBy}` : ""}
+              {view.updatedBy ? ` — ${view.updatedBy}` : ""}
             </span>
           ) : null}
         </div>
@@ -218,8 +255,9 @@ export default function SmtpSettingsForm({ settings }: SmtpSettingsFormProps) {
         <div>
           <h2 className="text-sm font-semibold text-slate-900">Overiť nastavenie</h2>
           <p className="mt-1 text-xs text-slate-500">
-            Odošle testovací e-mail na adresu, s ktorou ste prihlásený. Uložte
-            nastavenia predtým, než test spustíte.
+            Odošle testovací e-mail na adresu, s ktorou ste prihlásený, a to
+            konfiguráciou pre {localeLabels[locale]}. Uložte nastavenia predtým,
+            než test spustíte.
           </p>
         </div>
 
@@ -231,7 +269,7 @@ export default function SmtpSettingsForm({ settings }: SmtpSettingsFormProps) {
           disabled={testing}
           className="rounded-lg border border-slate-300 px-4 py-2 text-sm text-slate-700 disabled:opacity-50"
         >
-          {testing ? "Odosielam…" : "Odoslať testovací e-mail"}
+          {testing ? "Odosielam…" : `Odoslať testovací e-mail (${localeLabels[locale]})`}
         </button>
       </div>
     </div>

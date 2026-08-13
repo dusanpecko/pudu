@@ -2,6 +2,7 @@ import "server-only";
 
 import nodemailer from "nodemailer";
 
+import { defaultLocale, type Locale } from "@/lib/i18n";
 import { loadSmtpSettings, type SmtpSettings } from "@/lib/smtp-settings";
 
 export type SendResult = { ok: true } | { ok: false; message: string };
@@ -48,11 +49,17 @@ type Message = {
 };
 
 /**
- * Sends a message with the stored configuration. Reports failures instead of
- * throwing, so a broken mail server never takes a page down with it.
+ * Sends a message with the configuration stored for one language, falling back to
+ * the primary market's when that language has none.
+ *
+ * Reports failures instead of throwing, so a broken mail server never takes a
+ * page down with it.
  */
-export async function sendMail(message: Message): Promise<SendResult> {
-  const settings = await loadSmtpSettings();
+export async function sendMail(
+  message: Message,
+  locale: Locale = defaultLocale,
+): Promise<SendResult> {
+  const settings = await loadSmtpSettings(locale);
   if (!settings.ok) return { ok: false, message: settings.message };
   if (!settings.data.enabled) {
     return { ok: false, message: "Odosielanie e-mailov je vypnuté v nastaveniach." };
@@ -84,16 +91,20 @@ export async function sendMail(message: Message): Promise<SendResult> {
 }
 
 /**
- * Verifies the configuration by sending to one address. Used by the admin form,
- * so a wrong password is discovered on the spot rather than by a visitor whose
- * enquiry silently vanishes.
+ * Verifies one language's configuration by sending to a single address. Used by
+ * the admin form, so a wrong password is discovered on the spot rather than by a
+ * visitor whose enquiry silently vanishes.
  */
-export async function sendTestMail(to: string): Promise<SendResult> {
-  return sendMail({
-    to: [to],
-    subject: "PUDU — testovací e-mail",
-    text:
-      "Toto je testovací e-mail z administrácie webu PUDU Industrial.\n" +
-      "Ak ste ho dostali, nastavenie SMTP funguje.",
-  });
+export async function sendTestMail(to: string, locale: Locale): Promise<SendResult> {
+  return sendMail(
+    {
+      to: [to],
+      subject: `PUDU — testovací e-mail (${locale.toUpperCase()})`,
+      text:
+        "Toto je testovací e-mail z administrácie webu PUDU Industrial.\n" +
+        `Odoslaný nastavením pre jazyk ${locale.toUpperCase()}.\n` +
+        "Ak ste ho dostali, nastavenie SMTP funguje.",
+    },
+    locale,
+  );
 }
