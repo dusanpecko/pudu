@@ -96,7 +96,7 @@ sa rovno kliknúť), dátum a text. Dlhší text sa zbalí, rozbalíte ho odkazo
 | štítok | čo znamená |
 | --- | --- |
 | **neodoslané** | dopyt sa nepodarilo poslať e-mailom. Zákazník o tom nevie — text máte tu, ale skontrolujte nastavenie pošty. |
-| **bez kópie** | dopyt firme odišel, potvrdzovacia kópia zákazníkovi nie. |
+| **bez kópie** | dopyt firme odišiel, potvrdzovacia kópia zákazníkovi nie. |
 
 ### Doba uchovávania
 

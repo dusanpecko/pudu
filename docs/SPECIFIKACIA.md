@@ -293,7 +293,7 @@ skúsiť ďalej.
 
 | ukazovateľ | hodnota |
 | --- | --- |
-| Zdrojový kód | **150 súborov, 17 143 riadkov** |
+| Vlastný kód | **135 súborov, 16 307 riadkov** |
 | React komponenty | 48 súborov, 5 634 riadkov |
 | Stránky a serverové akcie | 28 súborov, 1 755 riadkov |
 | Aplikačná logika | 28 súborov, 3 427 riadkov |
@@ -304,8 +304,8 @@ skúsiť ďalej.
 | Predgenerované obsahové stránky | 20 |
 | Jazyky | 4 |
 | Prekladové reťazce | 980 (245 × 4 jazyky) |
-| Produktové modely | 4 |
-| Odovzdané balíky prác | 24 |
+| Produktové modely | 4, každý so 6 technickými parametrami |
+| Odovzdané balíky prác | 25 |
 
 ### Odovzdané balíky
 
@@ -335,6 +335,7 @@ skúsiť ďalej.
 | 1.22 | Prepínač svetlého a tmavého režimu |
 | 1.23 | Meno odosielateľa dopytu podľa produktu |
 | 1.24 | Návod na obsluhu webu |
+| 1.25 | Technická špecifikácia a odovzdávací protokol |
 
 Prácnosť a cena sú predmetom samostatného dokumentu *Cena diela*.
 

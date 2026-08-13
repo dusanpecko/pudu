@@ -206,7 +206,7 @@ export default function EnquiriesTable({
                   ) : null}
                   {entry.mailSent && !entry.copySent ? (
                     <span
-                      title="Dopyt firme odišel, kópia zákazníkovi nie."
+                      title="Dopyt firme odišiel, kópia zákazníkovi nie."
                       className="rounded bg-amber-100 px-1.5 py-0.5 text-xs text-amber-900"
                     >
                       bez kópie
