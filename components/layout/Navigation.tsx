@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher";
+import ThemeToggle from "@/components/layout/ThemeToggle";
 import MobileNavigation from "@/components/layout/MobileNavigation";
 import type { NavContent } from "@/components/layout/nav-content";
 import type { Locale } from "@/lib/i18n";
@@ -152,6 +153,8 @@ export default function Navigation({ locale, content }: NavigationProps) {
             <Link href={content.technology.href}>{content.technology.label}</Link>
             <Link href={content.solutions.href}>{content.solutions.label}</Link>
             <Link href={contactHref}>{content.contact.label}</Link>
+
+            <ThemeToggle label={content.labels.themeToggle} />
 
             <LanguageSwitcher
               locale={locale}

@@ -26,6 +26,7 @@ export const de: Translation = {
     galleryNext: "Nächstes Bild",
     galleryCounter: "{index} von {total}",
     socialLinks: "Soziale Netzwerke",
+    themeToggle: "Darstellung wechseln",
   },
   navigation: {
     home: "Startseite",

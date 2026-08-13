@@ -8,6 +8,7 @@ import NoiseOverlay from "@/components/effects/NoiseOverlay";
 import Footer from "@/components/layout/Footer";
 import Navigation from "@/components/layout/Navigation";
 import { buildNavContent } from "@/components/layout/nav-content";
+import ThemeScript from "@/components/layout/ThemeScript";
 import { fontVariables } from "@/lib/fonts";
 import { htmlLang, isLocale, locales } from "@/lib/i18n";
 import { siteUrl } from "@/lib/site";
@@ -16,8 +17,15 @@ import { getTranslations } from "@/lib/translations";
 import "@/app/globals.css";
 
 export const viewport: Viewport = {
-  themeColor: "#06090b",
-  colorScheme: "dark",
+  // The browser chrome cannot follow the toggle — it is resolved before any
+  // script runs — so it follows the system preference instead, which is what an
+  // untouched toggle does too.
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f4f1fc" },
+    { media: "(prefers-color-scheme: dark)", color: "#06090b" },
+  ],
+  // Both, so form controls and scrollbars adapt with the palette.
+  colorScheme: "light dark",
 };
 
 export function generateStaticParams() {
@@ -67,9 +75,14 @@ export default async function LocaleLayout({
       lang={htmlLang(locale)}
       className={fontVariables}
       data-scroll-behavior="smooth"
-      // Trial of the light palette. Remove the attribute for the dark theme.
+      /* The starting point, and what a visitor without JavaScript keeps.
+         ThemeScript replaces it before the first paint with the stored choice or
+         the system preference. */
       data-theme="light"
     >
+      <head>
+        <ThemeScript />
+      </head>
       <body>
         <noscript>
           {/* Scroll animations never run without JavaScript — show everything. */}

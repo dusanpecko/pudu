@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import NoiseOverlay from "@/components/effects/NoiseOverlay";
 import NotFoundContent from "@/components/layout/NotFoundContent";
+import ThemeScript from "@/components/layout/ThemeScript";
 import { fontVariables } from "@/lib/fonts";
 import { defaultLocale, htmlLang } from "@/lib/i18n";
 import { localizedPath } from "@/lib/routes";
@@ -27,7 +28,11 @@ export default async function GlobalNotFound() {
       lang={htmlLang(defaultLocale)}
       className={fontVariables}
       data-scroll-behavior="smooth"
+      data-theme="light"
     >
+      <head>
+        <ThemeScript />
+      </head>
       <body>
         <header className="nav">
           <div className="wrap navin">

@@ -27,6 +27,7 @@ export const cz: Translation = {
     galleryNext: "Následující obrázek",
     galleryCounter: "{index} z {total}",
     socialLinks: "Sociální sítě",
+    themeToggle: "Přepnout vzhled",
   },
   navigation: {
     home: "Domů",

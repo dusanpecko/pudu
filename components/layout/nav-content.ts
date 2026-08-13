@@ -44,6 +44,7 @@ export type NavContent = {
     currentLanguage: string;
     switchTo: string;
     productsSubmenu: string;
+    themeToggle: string;
   };
 };
 
@@ -94,6 +95,7 @@ export async function buildNavContent(locale: Locale): Promise<NavContent> {
       currentLanguage: t.a11y.currentLanguage,
       switchTo: t.a11y.switchTo,
       productsSubmenu: t.a11y.productsSubmenu,
+      themeToggle: t.a11y.themeToggle,
     },
   };
 }

@@ -56,6 +56,7 @@ export const sk = {
     /** "{index} z {total}" — the counter in the lightbox. */
     galleryCounter: "{index} z {total}",
     socialLinks: "Sociálne siete",
+    themeToggle: "Prepnúť vzhľad",
   },
   navigation: {
     home: "Domov",
