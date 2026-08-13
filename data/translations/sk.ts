@@ -55,6 +55,7 @@ export const sk = {
     galleryNext: "Nasledujúci obrázok",
     /** "{index} z {total}" — the counter in the lightbox. */
     galleryCounter: "{index} z {total}",
+    socialLinks: "Sociálne siete",
   },
   navigation: {
     home: "Domov",

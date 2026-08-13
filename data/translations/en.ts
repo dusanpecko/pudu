@@ -25,6 +25,7 @@ export const en: Translation = {
     galleryPrevious: "Previous image",
     galleryNext: "Next image",
     galleryCounter: "{index} of {total}",
+    socialLinks: "Social networks",
   },
   navigation: {
     home: "Home",

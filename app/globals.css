@@ -1890,6 +1890,77 @@ h3 {
   font-size: 13px;
 }
 
+/* Contact details, one set per language from /admin/contacts */
+.footcompany {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 26px 34px;
+  padding-bottom: 30px;
+  border-top: 1px solid var(--line);
+  padding-top: 30px;
+}
+
+.footblock {
+  display: grid;
+  align-content: start;
+  gap: 6px;
+  line-height: 1.7;
+}
+
+.footblock strong {
+  color: var(--fg-strong);
+  font-weight: 600;
+}
+
+.footblock address {
+  display: grid;
+  gap: 2px;
+  font-style: normal;
+}
+
+.footblock a {
+  width: fit-content;
+}
+
+.footblock a:hover {
+  color: var(--accent-ink);
+}
+
+.footids {
+  display: grid;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The label is the quiet half — the number is what a reader is looking for. */
+.footids span {
+  color: var(--muted);
+}
+
+.footsocial {
+  display: flex;
+  align-items: start;
+  gap: 12px;
+}
+
+.footsocial a {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  transition: 0.25s;
+}
+
+.footsocial a:hover {
+  background: var(--accent-solid);
+  color: var(--on-accent);
+  border-color: transparent;
+}
+
 .footin {
   border-top: 1px solid var(--line);
   padding-top: 30px;
