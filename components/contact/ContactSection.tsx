@@ -44,6 +44,7 @@ export default async function ContactSection({
 
             <ContactForm
               content={t.contact}
+              locale={locale}
               productOptions={productOptions}
               defaultProduct={defaultProduct}
             />

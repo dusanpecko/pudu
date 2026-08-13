@@ -206,8 +206,6 @@ export const en: Translation = {
     optional: "optional",
     required: "required",
     generalInquiry: "General enquiry",
-    note:
-      "In this version the form is a demonstration — no data is sent to a server.",
     placeholders: {
       name: "Full name",
       company: "Company name",

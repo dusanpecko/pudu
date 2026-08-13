@@ -207,8 +207,6 @@ export const cz: Translation = {
     optional: "nepovinné",
     required: "povinné",
     generalInquiry: "Obecný dotaz",
-    note:
-      "Formulář je v této verzi demonstrační — údaje se neodesílají na server.",
     placeholders: {
       name: "Jméno a příjmení",
       company: "Název firmy",

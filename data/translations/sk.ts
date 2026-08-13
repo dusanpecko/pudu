@@ -214,8 +214,6 @@ export const sk = {
     optional: "nepovinné",
     required: "povinné",
     generalInquiry: "Všeobecný dopyt",
-    note:
-      "Formulár je v tejto verzii demonštračný — údaje sa neodosielajú na server.",
     placeholders: {
       name: "Meno a priezvisko",
       company: "Názov firmy",

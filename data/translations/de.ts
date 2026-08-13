@@ -206,8 +206,6 @@ export const de: Translation = {
     optional: "optional",
     required: "erforderlich",
     generalInquiry: "Allgemeine Anfrage",
-    note:
-      "In dieser Version ist das Formular eine Demonstration — es werden keine Daten an einen Server gesendet.",
     placeholders: {
       name: "Vor- und Nachname",
       company: "Firmenname",

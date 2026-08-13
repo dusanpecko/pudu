@@ -1,8 +1,10 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useActionState, useId, useState } from "react";
 
+import { sendEnquiry, type EnquiryState } from "@/app/[locale]/contact-actions";
 import { SubmitButton } from "@/components/ui/Button";
+import type { Locale } from "@/lib/i18n";
 import type { Translation } from "@/types/translation";
 
 export type ContactProductOption = {
@@ -15,6 +17,8 @@ type ContactFormProps = {
   productOptions: ContactProductOption[];
   /** Preselected product, used on product pages. */
   defaultProduct?: string;
+  /** Decides which company's mailbox the enquiry reaches. */
+  locale: Locale;
 };
 
 type FieldName = "name" | "email" | "message";
@@ -22,18 +26,24 @@ type Errors = Partial<Record<FieldName, string>>;
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
+const INITIAL: EnquiryState = { status: "idle", message: "" };
+
 /**
- * Enquiry form. Validation and confirmation happen entirely in the browser —
- * nothing is submitted to a server in this version.
+ * Enquiry form.
+ *
+ * Validated twice on purpose: in the browser so a mistake is pointed at
+ * immediately and the field takes focus, and again on the server, which is the
+ * check that counts — a request need not come from this form at all.
  */
 export default function ContactForm({
   content,
   productOptions,
   defaultProduct = "",
+  locale,
 }: ContactFormProps) {
   const id = useId();
   const [errors, setErrors] = useState<Errors>({});
-  const [sent, setSent] = useState(false);
+  const [state, formAction, pending] = useActionState(sendEnquiry, INITIAL);
 
   const fieldId = (field: string) => `${id}-${field}`;
   const errorId = (field: FieldName) => `${id}-${field}-error`;
@@ -52,24 +62,23 @@ export default function ContactForm({
     return next;
   };
 
+  /**
+   * Runs before the action. Returning early on a client-side error keeps the
+   * round trip for requests that have a chance of succeeding.
+   */
   const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const form = event.currentTarget;
-    const found = validate(new FormData(form));
+    const found = validate(new FormData(event.currentTarget));
     setErrors(found);
 
     const firstError = Object.keys(found)[0] as FieldName | undefined;
     if (firstError) {
+      event.preventDefault();
       // getElementById avoids escaping the generated id inside a CSS selector.
       document.getElementById(fieldId(firstError))?.focus();
-      return;
     }
-
-    form.reset();
-    setSent(true);
   };
 
-  if (sent) {
+  if (state.status === "sent") {
     return (
       <div className="form-status" role="status" aria-live="polite">
         <span className="check" aria-hidden="true">
@@ -77,7 +86,13 @@ export default function ContactForm({
         </span>
         <strong>{content.success}</strong>
         <p>{content.successDetail}</p>
-        <button type="button" className="btn ghost" onClick={() => setSent(false)}>
+        {/* Reloads the section rather than resetting state, so the form comes
+            back genuinely empty and the action's result is cleared with it. */}
+        <button
+          type="button"
+          className="btn ghost"
+          onClick={() => window.location.reload()}
+        >
           {content.reset}
         </button>
       </div>
@@ -85,7 +100,20 @@ export default function ContactForm({
   }
 
   return (
-    <form className="form" onSubmit={onSubmit} noValidate>
+    <form className="form" action={formAction} onSubmit={onSubmit} noValidate>
+      <input type="hidden" name="locale" value={locale} />
+      {/* Honeypot: hidden from sight and from assistive technology, and left out
+          of the tab order. A person never reaches it; a naive bot fills it. */}
+      <div className="sr-only" aria-hidden="true">
+        <label htmlFor={fieldId("website")}>Website</label>
+        <input
+          id={fieldId("website")}
+          name="website"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+        />
+      </div>
       <div className="form-grid">
         <div className="field">
           <label htmlFor={fieldId("name")}>{content.name}</label>
@@ -185,9 +213,14 @@ export default function ContactForm({
         </div>
       </div>
 
+      {state.status === "error" ? (
+        <p className="field-error" role="alert">
+          {state.message}
+        </p>
+      ) : null}
+
       <div className="form-foot">
-        <p className="form-note">{content.note}</p>
-        <SubmitButton>{content.submit}</SubmitButton>
+        <SubmitButton disabled={pending}>{content.submit}</SubmitButton>
       </div>
     </form>
   );
