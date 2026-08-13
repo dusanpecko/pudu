@@ -14,9 +14,10 @@ import { localizedPath, type HreflangCode, type Route } from "@/lib/routes";
  *     production domain, which is what canonical URLs should point at.
  *  3. `http://localhost:3000` for local development.
  *
- * `NEXT_PUBLIC_SITE_URL_CZ` and `NEXT_PUBLIC_SITE_URL_DE` move those markets
- * onto their own domains. Leave them unset in development and on previews —
- * everything then stays on a single host.
+ * `NEXT_PUBLIC_SITE_URL_CZ`, `NEXT_PUBLIC_SITE_URL_EN` and
+ * `NEXT_PUBLIC_SITE_URL_DE` move those markets onto their own domains. Leave
+ * them unset in development and on previews — everything then stays on a single
+ * host.
  *
  * Only imported from server code (metadata, sitemap, robots), which is why the
  * unprefixed Vercel variable can be used.
@@ -45,7 +46,7 @@ function marketOrigin(value: string | undefined): string {
 const localeOrigins: Record<Locale, string> = {
   sk: siteUrl,
   cz: marketOrigin(process.env.NEXT_PUBLIC_SITE_URL_CZ),
-  en: siteUrl,
+  en: marketOrigin(process.env.NEXT_PUBLIC_SITE_URL_EN),
   de: marketOrigin(process.env.NEXT_PUBLIC_SITE_URL_DE),
 };
 
