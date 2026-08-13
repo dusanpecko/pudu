@@ -62,7 +62,7 @@ export const productTextsDe: Record<
       "AMR T150 — kompakter autonomer Roboter mit 150 kg Traglast für Teile, Bauteile und wiederkehrende Logistikrunden. Technische Daten, Funktionen und Einsatzbereiche.",
   },
   "pudu-t300": {
-    name: "AMR T 300 (order 2 person)",
+    name: "AMR T 300",
     category:
       "Der Bestseller AMR T 300 Industrieller autonomer mobiler Roboter für den Materialtransport zu 300 kg.",
     headline: "Transport, die sich der Produktion anpasst.",
@@ -117,7 +117,7 @@ export const productTextsDe: Record<
       "AMR T 300 — universeller autonomer Roboter mit 300 kg Traglast für Produktion, Lager und Linienversorgung. Technische Daten, Funktionen und Einsatzbereiche.",
   },
   "pudu-t600-upright": {
-    name: "AMR T 600 (Order 2 Person)",
+    name: "AMR T 600",
     category:
       "AMR T 600 – ein autonomer Industrieroboter für den Transport schwerer Materialien mit einem Gewicht von bis zu 600 kg.",
     headline:

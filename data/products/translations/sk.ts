@@ -62,7 +62,7 @@ export const productTextsSk: Record<
       "AMR T150 — kompaktný autonómny robot s nosnosťou do 150 kg pre diely, komponenty a pravidelné logistické okruhy. Technické parametre, funkcie a oblasti využitia.",
   },
   "pudu-t300": {
-    name: "AMR T 300 (order 2 person)",
+    name: "AMR T 300",
     category:
       "Najpredávanejší AMR T 300 Priemyselný autonómny mobilný robot na prepravu materiálu do 300 kg.",
     headline: "Transport, ktorý sa prispôsobí výrobe.",
@@ -117,7 +117,7 @@ export const productTextsSk: Record<
       "AMR T 300 — univerzálny autonómny robot s nosnosťou do 300 kg pre výrobu, sklady a zásobovanie liniek. Technické parametre, funkcie a oblasti využitia.",
   },
   "pudu-t600-upright": {
-    name: "AMR T 600 (Order 2 Person)",
+    name: "AMR T 600",
     category:
       "AMR T 600 Priemyselný autonómny mobilný robot na prepravu ťažšieho materiálu do 600 kg.",
     headline: "Zvládne i ťažkú váhu bez obmedzenia na výkon.",

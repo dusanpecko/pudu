@@ -70,7 +70,7 @@ export const de: Translation = {
       titleLine1: "Maximieren,",
       titleLine2: "Sie Ihre Logistikleistung.",
       description:
-        "Die autonomen mobilen Industrieroboter AMR T-Series (Order 2 Person) für die Automatisierung der Intralogistik verwandeln den Materialtransport in einen präzisen, sicheren und unterbrechungsfreien Fluss vom Ursprungs- zum Verbrauchsort und gewährleisten so maximale effizienz.",
+        "Die autonomen mobilen Industrieroboter AMR T-Series für die Automatisierung der Intralogistik verwandeln den Materialtransport in einen präzisen, sicheren und unterbrechungsfreien Fluss vom Ursprungs- zum Verbrauchsort und gewährleisten so maximale effizienz.",
       exploreProducts: "Entdecken Sie unsere Flotte",
       contactUs: "Beratung anfordern",
       statModels: "AMR T-Series Modelle",

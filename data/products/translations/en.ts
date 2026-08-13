@@ -62,7 +62,7 @@ export const productTextsEn: Record<
       "AMR T150 — a compact autonomous robot up to 150 kg payload for parts, components and recurring logistics loops. Specifications, features and applications.",
   },
   "pudu-t300": {
-    name: "AMR T 300 (order 2 person)",
+    name: "AMR T 300",
     category:
       "Best-selling AMR T 300 Industrial autonomous mobile robot for material transport up to 300 kg.",
     headline: "Transport that adapts to production.",
@@ -117,7 +117,7 @@ export const productTextsEn: Record<
       "AMR T 300 — a versatile autonomous robot up to 300 kg payload for manufacturing, warehouses and line supply. Specifications, features and applications.",
   },
   "pudu-t600-upright": {
-    name: "AMR T 600 (Order 2 Person)",
+    name: "AMR T 600",
     category:
       "AMR T 600 – an industrial autonomous robot for transporting heavy materials weighing up to 600 kg.",
     headline: "It handles even heavy loads without compromising performance.",

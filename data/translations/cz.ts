@@ -71,7 +71,7 @@ export const cz: Translation = {
       titleLine1: "Maximalizujte,",
       titleLine2: "svůj logistický výkon.",
       description:
-        "Průmyslové autonomní mobilní roboty AMR T-Series (Order 2 Person) pro automatizaci intralogistiky mění pohyb materiálů na přesný, bezpečný a nepřerušovaný tok z místa původu do místa spotřeby tak, aby bylo dosaženo maximální efektivity.",
+        "Průmyslové autonomní mobilní roboty AMR T-Series pro automatizaci intralogistiky mění pohyb materiálů na přesný, bezpečný a nepřerušovaný tok z místa původu do místa spotřeby tak, aby bylo dosaženo maximální efektivity.",
       exploreProducts: "Objevte naši flotilu",
       contactUs: "Požádat o konzultaci",
       statModels: "modely AMR T-Series",
