@@ -190,6 +190,11 @@ export default function SmtpSettingsForm({ settings }: SmtpSettingsFormProps) {
                 placeholder="PUDU Industrial"
                 className={FIELD}
               />
+              <span className="block text-xs text-slate-500">
+                Používa sa pri testovacom e-maile. Dopyty sa odosielajú pod názvom
+                vybraného produktu, a pri všeobecnom dopyte pod názvom firmy z
+                kontaktných údajov.
+              </span>
             </label>
             <label className="space-y-1">
               <span className={LABEL}>Adresa odosielateľa</span>

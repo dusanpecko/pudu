@@ -35,10 +35,22 @@ function transportFor(settings: SmtpSettings) {
   });
 }
 
-function sender(settings: SmtpSettings): string {
-  return settings.fromName
-    ? `${settings.fromName} <${settings.fromEmail}>`
-    : settings.fromEmail;
+/**
+ * The address always comes from the settings — the mail server authenticates it,
+ * so it is not ours to choose. Only the display name beside it can vary, and a
+ * caller that knows something more useful than the configured name says so.
+ */
+function sender(settings: SmtpSettings, fromName?: string): string {
+  // Quotes and backslashes are what a display name is escaped with, and a line
+  // break is how a header is broken out of. Nodemailer re-encodes the name too,
+  // so this is belt and braces — cheap, and it keeps the value readable rather
+  // than escaped. Whitespace is collapsed so removing a character does not leave
+  // a gap behind.
+  const name = (fromName || settings.fromName)
+    .replace(/["\\]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+  return name ? `${name} <${settings.fromEmail}>` : settings.fromEmail;
 }
 
 type Message = {
@@ -46,6 +58,12 @@ type Message = {
   subject: string;
   text: string;
   replyTo?: string;
+  /**
+   * Display name to show instead of the configured one. Falls back to the
+   * settings when empty, so a caller may pass a value it did not manage to
+   * resolve without having to decide what to do about it.
+   */
+  fromName?: string;
 };
 
 /**
@@ -75,7 +93,7 @@ export async function sendMail(
 
   try {
     await transportFor(settings.data).sendMail({
-      from: sender(settings.data),
+      from: sender(settings.data, message.fromName),
       to: message.to,
       replyTo: message.replyTo || settings.data.replyTo || undefined,
       subject: message.subject,

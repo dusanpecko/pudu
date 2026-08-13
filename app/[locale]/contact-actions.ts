@@ -3,6 +3,7 @@
 import { headers } from "next/headers";
 
 import { products } from "@/data/products";
+import { loadCompanyDetails } from "@/lib/company";
 import { createEnquiry, markDelivery } from "@/lib/enquiries";
 import { isLocale, localeNames, type Locale } from "@/lib/i18n";
 import { recipientList, sendMail } from "@/lib/mailer";
@@ -142,6 +143,20 @@ export async function sendEnquiry(
     ? texts[productSlug as (typeof products)[number]["slug"]].name
     : "";
 
+  // The name shown beside the sending address — on the notification, where it
+  // sorts the enquiry at a glance, and on the customer's copy, where it is the
+  // first thing they see.
+  //
+  // It is derived rather than configured. The product the visitor chose is the
+  // most specific true thing about this enquiry, and the company that handles
+  // their market is the right answer when they chose none: the form offers a
+  // general enquiry as well. Both are data somebody already keeps current for
+  // other reasons — the footer names the company, the form names the products —
+  // whereas the sender name in the mail settings is one more field to remember,
+  // and a stale one goes out to customers unnoticed.
+  const ourCompany = await loadCompanyDetails(locale);
+  const senderName = productName || ourCompany.companyName;
+
   const lines = [
     `${t.contact.name}: ${name}`,
     company ? `${t.contact.company}: ${company}` : null,
@@ -165,6 +180,7 @@ export async function sendEnquiry(
       to: recipients,
       subject,
       text: lines.join("\n"),
+      fromName: senderName,
       // So the recipient replies to the customer, not to the website.
       replyTo: email,
     },
@@ -191,8 +207,11 @@ export async function sendEnquiry(
   const copy = await sendMail(
     {
       to: [email],
-      subject: oneLine(`${t.contact.copySubject} — ${settings.data.fromName || "PUDU"}`),
+      subject: oneLine(
+        senderName ? `${t.contact.copySubject} — ${senderName}` : t.contact.copySubject,
+      ),
       text: [t.contact.copyIntro, "", ...lines].join("\n"),
+      fromName: senderName,
     },
     locale,
   );
