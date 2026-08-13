@@ -73,15 +73,70 @@ takže ho nestratí ani zlyhaný poštový server.
 | `nodemailer` | 9.0.4 | Odosielanie pošty cez SMTP |
 | `pg` | 8.22.0 | Spúšťanie databázových migrácií |
 
-### 2.5 Typografia a vizuál
+### 2.5 Typografia
 
-Fonty **Inter** a **Space Grotesk**, hostované priamo z webu — pôvodná stránka ich
-načítavala z Google Fonts CDN, čo je jedno spojenie tretej strany navyše a jeden
-zdroj pomalšieho zobrazenia.
+| font | použitie |
+| --- | --- |
+| **Space Grotesk** | nadpisy a číselné údaje |
+| **Inter** | bežný text a rozhranie |
 
-Farby sú pomenované dizajnové tokeny v dvoch úplných sadách: **tmavá** a **svetlá
-téma**. Prepínač je v hlavičke; kým sa ho návštevník nedotkne, web sa riadi
-nastavením jeho zariadenia.
+Oba sú hostované priamo z webu. Pôvodná stránka ich načítavala z Google Fonts CDN,
+čo je jedno spojenie tretej strany navyše, jeden zdroj pomalšieho zobrazenia a jeden
+prenos údajov o návštevníkovi mimo webu.
+
+### 2.6 Farebná škála
+
+V pôvodnom webe bolo **35 farieb zapísaných priamo v štýloch**. Dnes je farebnosť
+sada pomenovaných tokenov, čo je dôvod, prečo web vôbec môže mať dve témy: farba sa
+mení na jedinom mieste a prejaví sa všade.
+
+| vrstva | počet tokenov |
+| --- | --- |
+| základná paleta | 9 farieb |
+| tmavá téma (predvolená) | 63 farebných tokenov |
+| svetlá téma | prepisuje 62 z nich |
+
+#### Základná paleta — tmavá téma
+
+| úloha | token | hodnota |
+| --- | --- | --- |
+| pozadie stránky | `--color-ink` | `#0B071C` |
+| panel a karta | `--color-panel` | `#150F28` |
+| text | `--color-fg` | `#F2EEFC` |
+| tlmený text | `--color-muted` | `#9990B4` |
+| **hlavný akcent** | `--color-accent` | `#73F6FF` |
+| doplnkový akcent | `--color-accent-blue` | `#3A8CFF` |
+| zvýraznenie | `--color-accent-lime` | `#C7FF64` |
+| chybový stav | `--color-danger` | `#FF9D8B` |
+| text na akcente | `--on-accent` | `#0A0718` |
+
+#### Svetlá téma
+
+| úloha | hodnota |
+| --- | --- |
+| pozadie stránky | `#F4F1FC` |
+| panel a karta | `#FFFFFF` |
+| text | `#1A1235` |
+| tlmený text | `#5D5580` |
+| **hlavný akcent** | `#4A2C8C` |
+| zvýraznenie | `#3F9142` |
+| text na akcente | `#FFFFFF` |
+
+Svetlá téma **nie je zosvetlená tmavá**. Dva akcenty v nej museli byť nahradené,
+pretože na svetlom podklade prestávajú byť čitateľné: tyrkysová `#73F6FF` sa mení
+na fialovú `#4A2C8C` a limetková `#C7FF64` na zelenú `#3F9142`. Fialová je zároveň
+to, čo dáva svetlej téme vlastný charakter namiesto vyblednutého dojmu.
+
+#### Ostatné tokeny
+
+Nad základnou paletou stojí ďalších približne šesťdesiat tokenov, ktoré z nej
+vychádzajú a robia rozdiel medzi plochým a hĺbkovým vzhľadom: šesť odstupňovaných
+podkladových plôch, priesvitné lišty navigácie a rozbaľovacích menu, vlasové linky,
+mriežky, jemné svetelné odlesky a tiene. Každý má vlastnú hodnotu pre tmavú aj
+svetlú tému.
+
+Prepínač tém je v hlavičke; kým sa ho návštevník nedotkne, web sa riadi nastavením
+jeho zariadenia. Farba lišty prehliadača sa mení spolu s témou.
 
 ---
 
