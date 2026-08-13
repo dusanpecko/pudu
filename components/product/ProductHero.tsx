@@ -4,6 +4,7 @@ import GridFloor from "@/components/effects/GridFloor";
 import HologramPanel from "@/components/effects/HologramPanel";
 import { LinkButton } from "@/components/ui/Button";
 import type { Locale } from "@/lib/i18n";
+import { resolveHeroImage } from "@/lib/gallery";
 import { homeSectionPath, sectionId } from "@/lib/routes";
 import { getProductContent, getTranslations } from "@/lib/translations";
 import type { Product } from "@/types/product";
@@ -16,6 +17,7 @@ type ProductHeroProps = {
 export default async function ProductHero({ product, locale }: ProductHeroProps) {
   const t = await getTranslations(locale);
   const content = await getProductContent(product, locale);
+  const heroImage = await resolveHeroImage(product.slug, product.heroImage);
   const [firstWord, ...restWords] = content.name.split(" ");
 
   return (
@@ -46,7 +48,7 @@ export default async function ProductHero({ product, locale }: ProductHeroProps)
         </div>
 
         <HologramPanel
-          image={product.heroImage}
+          image={heroImage}
           alt={content.imageAlt}
           statusLabel={t.product.hudStatus}
           dataLabel={`${t.specs.payload.toUpperCase()} / ${product.payload.toUpperCase()}`}

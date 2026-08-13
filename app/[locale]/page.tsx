@@ -8,7 +8,7 @@ import HomeHero from "@/components/home/HomeHero";
 import ProductGrid from "@/components/home/ProductGrid";
 import TechnologySection from "@/components/home/TechnologySection";
 import TickerBand from "@/components/home/TickerBand";
-import { HOME_GALLERY } from "@/lib/gallery";
+import { HOME_GALLERY, resolveSocialImage } from "@/lib/gallery";
 import { isLocale, locales } from "@/lib/i18n";
 import { buildPageMetadata } from "@/lib/metadata";
 import { getProduct } from "@/lib/products";
@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
     route: { type: "home" },
     title: t.meta.homeTitle,
     description: t.meta.homeDescription,
-    image: hero.socialImage ?? hero.heroImage,
+    image: await resolveSocialImage(HOME_GALLERY, hero.socialImage ?? hero.heroImage),
     imageAlt: heroContent.imageAlt,
   });
 }

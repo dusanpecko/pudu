@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import GalleryManager from "@/components/admin/GalleryManager";
 import { products } from "@/data/products";
-import { galleryKeys, loadAllImages, HOME_GALLERY } from "@/lib/gallery";
+import { heroKeys, loadAllImages, stripKeys, HOME_GALLERY } from "@/lib/gallery";
 import { isEditor } from "@/lib/supabase/editors";
 import { getEditor } from "@/lib/supabase/server";
 
@@ -19,21 +19,25 @@ export default async function GalleryPage() {
   // the route is reached another way.
   if (!isEditor(editor?.email)) notFound();
 
-  const labels = Object.fromEntries(
-    galleryKeys().map((key) => [
-      key,
-      key === HOME_GALLERY
-        ? "Domovská stránka"
-        : (products.find((product) => product.slug === key)?.slug ?? key)
-            .replace("pudu-", "PUDU ")
-            .toUpperCase(),
-    ]),
-  );
+  /** Product slugs read as "PUDU T300"; the home page names itself. */
+  const nameOf = (key: string) =>
+    key === HOME_GALLERY
+      ? "Domovská stránka"
+      : (products.find((product) => product.slug === key)?.slug ?? key)
+          .replace("pudu-", "PUDU ")
+          .toUpperCase();
+
+  const labels = Object.fromEntries([
+    ...stripKeys().map((key) => [key, nameOf(key)]),
+    // The prefix is an implementation detail; the editor sees where it lands.
+    ...heroKeys().map((key) => [key, nameOf(key.replace("hero:", ""))]),
+  ]);
 
   return (
     <GalleryManager
       images={await loadAllImages()}
-      galleries={galleryKeys()}
+      strips={stripKeys()}
+      heroes={heroKeys()}
       galleryLabels={labels}
     />
   );

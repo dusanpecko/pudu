@@ -9,6 +9,7 @@ import {
   BUCKET,
   type GalleryImage,
   type GalleryKey,
+  type ImageRole,
   type LocalizedText,
 } from "@/lib/gallery-shared";
 import { adminClientConfigured, createSupabaseAdminClient } from "@/lib/supabase/admin";
@@ -31,7 +32,19 @@ const TARGET_WIDTH = 2400;
 const TARGET_HEIGHT = 1350;
 const ASPECT = 16 / 9;
 
+/** A render keeps its ratio, so only the longest side is bounded. */
+const RENDER_MAX_SIDE = 1600;
+
 const WEBP_QUALITY = 82;
+const JPEG_QUALITY = 86;
+
+/**
+ * Background the Open Graph twin is flattened onto: the light theme's page
+ * colour (`--color-ink` in app/globals.css). JPEG has no alpha channel, and
+ * leaving it to default would put the transparent parts of a render on black
+ * while the page shows them on near-white.
+ */
+const SOCIAL_BACKGROUND = { r: 244, g: 241, b: 252 };
 
 const TABLE = "gallery_images";
 
@@ -133,16 +146,72 @@ export function cropRect(
 
 export type NewImageInput = {
   originalPath: string;
-  /** Focal point of the crop, 0–1 of the original. */
+  /** Focal point of the crop, 0–1 of the original. Ignored for a render. */
   focusX: number;
   focusY: number;
   /** Seeds the file name; SEO reads it, so it is not a random string. */
   slug: string;
+  role: ImageRole;
+  /** Only meaningful for a render: it ships on a dark backdrop, not on alpha. */
+  hasBackdrop: boolean;
   galleries: GalleryKey[];
   alt: LocalizedText;
   title: LocalizedText;
   caption: LocalizedText;
 };
+
+/**
+ * Turns the upright original into what the site serves.
+ *
+ * A photograph is cropped to 16:9 at the editor's focal point. A render is left
+ * whole — cropping a square robot to 16:9 would cut it in half — and only bounded
+ * on its longest side, with `alpha` telling sharp to keep the transparency that
+ * makes the render sit on the page instead of in a box.
+ */
+async function renderVariants(
+  upright: Buffer,
+  meta: { width: number; height: number },
+  input: NewImageInput,
+): Promise<{ webp: Buffer; social: Buffer | null; width: number; height: number }> {
+  if (input.role === "photo") {
+    const rect = cropRect(meta.width, meta.height, input.focusX, input.focusY);
+    const rendered = await sharp(upright)
+      .extract(rect)
+      // withoutEnlargement keeps a small original from being blown up into a
+      // soft 2400px image; the crop is already 16:9, so the ratio holds either
+      // way.
+      .resize(TARGET_WIDTH, TARGET_HEIGHT, { fit: "cover", withoutEnlargement: true })
+      .webp({ quality: WEBP_QUALITY, effort: 5 })
+      .toBuffer({ resolveWithObject: true });
+
+    return {
+      webp: rendered.data,
+      social: null,
+      width: rendered.info.width,
+      height: rendered.info.height,
+    };
+  }
+
+  const rendered = await sharp(upright)
+    .resize(RENDER_MAX_SIDE, RENDER_MAX_SIDE, { fit: "inside", withoutEnlargement: true })
+    .webp({ quality: WEBP_QUALITY, effort: 5, alphaQuality: 100 })
+    .toBuffer({ resolveWithObject: true });
+
+  // The twin exists for the crawlers that skip WebP, so it is flattened onto the
+  // page colour rather than left to JPEG's default black.
+  const social = await sharp(upright)
+    .resize(RENDER_MAX_SIDE, RENDER_MAX_SIDE, { fit: "inside", withoutEnlargement: true })
+    .flatten({ background: SOCIAL_BACKGROUND })
+    .jpeg({ quality: JPEG_QUALITY, mozjpeg: true })
+    .toBuffer();
+
+  return {
+    webp: rendered.data,
+    social,
+    width: rendered.info.width,
+    height: rendered.info.height,
+  };
+}
 
 /**
  * Derives the WebP from an already uploaded original and records the row.
@@ -169,6 +238,7 @@ export async function createImage(
   const source = Buffer.from(await download.data.arrayBuffer());
 
   let webp: Buffer;
+  let social: Buffer | null;
   let width: number;
   let height: number;
   try {
@@ -178,19 +248,15 @@ export async function createImage(
       return { ok: false, reason: "error", message: "Obrázok sa nepodarilo prečítať." };
     }
 
-    const rect = cropRect(meta.width, meta.height, input.focusX, input.focusY);
-    const rendered = await sharp(upright)
-      .extract(rect)
-      // withoutEnlargement keeps a small original from being blown up into a
-      // soft 2400px image; the crop is already 16:9, so the ratio holds either
-      // way.
-      .resize(TARGET_WIDTH, TARGET_HEIGHT, { fit: "cover", withoutEnlargement: true })
-      .webp({ quality: WEBP_QUALITY, effort: 5 })
-      .toBuffer({ resolveWithObject: true });
-
-    webp = rendered.data;
-    width = rendered.info.width;
-    height = rendered.info.height;
+    const variants = await renderVariants(
+      upright,
+      { width: meta.width, height: meta.height },
+      input,
+    );
+    webp = variants.webp;
+    social = variants.social;
+    width = variants.width;
+    height = variants.height;
   } catch (error) {
     return {
       ok: false,
@@ -211,14 +277,33 @@ export async function createImage(
     return { ok: false, reason: "error", message: upload.error.message };
   }
 
+  let socialPath: string | null = null;
+  if (social) {
+    socialPath = path.replace(/\.webp$/, ".jpg");
+    const twin = await supabase.storage.from(BUCKET).upload(socialPath, social, {
+      contentType: "image/jpeg",
+      cacheControl: "31536000",
+      upsert: false,
+    });
+    if (twin.error) {
+      // The WebP is already stored, so leaving it without a twin degrades the
+      // Open Graph preview rather than failing the upload.
+      console.warn(`Open Graph twin not stored: ${twin.error.message}`);
+      socialPath = null;
+    }
+  }
+
   const existing = await loadAllImages();
   const sortOrder = existing.reduce((max, image) => Math.max(max, image.sortOrder), 0) + 1;
 
   const { error } = await supabase.from(TABLE).insert({
     path,
     original_path: input.originalPath,
+    social_path: socialPath,
     width,
     height,
+    role: input.role,
+    has_backdrop: input.hasBackdrop,
     galleries: input.galleries,
     sort_order: sortOrder,
     alt: input.alt,
@@ -286,6 +371,7 @@ export async function deleteImage(id: string): Promise<GalleryResult<{ id: strin
 
   const paths = [image.path];
   if (image.originalPath) paths.push(image.originalPath);
+  if (image.socialPath) paths.push(image.socialPath);
   // The row is already gone, so a failure here only leaks storage — worth a
   // warning, not worth reporting the delete as failed.
   const removal = await supabase.storage.from(BUCKET).remove(paths);

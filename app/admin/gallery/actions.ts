@@ -8,6 +8,7 @@ import {
   type GalleryKey,
   type LocalizedText,
 } from "@/lib/gallery";
+import { isImageRole, type ImageRole } from "@/lib/gallery-shared";
 import {
   createImage,
   createUploadTarget,
@@ -105,6 +106,10 @@ export async function addImage(input: unknown): Promise<GalleryState> {
     };
   }
 
+  // An unrecognised role would silently crop a render to 16:9, so it defaults to
+  // the kind that cannot lose pixels the editor cared about.
+  const role: ImageRole = isImageRole(source.role) ? source.role : "photo";
+
   const title = parseText(source.title);
   const slugSeed =
     typeof source.slug === "string" && source.slug.trim().length > 0
@@ -117,6 +122,8 @@ export async function addImage(input: unknown): Promise<GalleryState> {
       focusX: parseFocus(source.focusX),
       focusY: parseFocus(source.focusY),
       slug: slugSeed,
+      role,
+      hasBackdrop: role === "render" && source.hasBackdrop === true,
       galleries,
       alt,
       title,

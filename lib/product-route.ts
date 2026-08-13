@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 
 import { isLocale, type Locale } from "@/lib/i18n";
 import { buildPageMetadata } from "@/lib/metadata";
+import { resolveSocialImage } from "@/lib/gallery";
 import { findProduct, productSlugs } from "@/lib/products";
 import { getProductContent } from "@/lib/translations";
 import type { Product } from "@/types/product";
@@ -44,7 +45,10 @@ export async function buildProductMetadata(
     route: { type: "product", slug: product.slug },
     title: content.seoTitle,
     description: content.seoDescription,
-    image: product.socialImage ?? product.heroImage,
+    image: await resolveSocialImage(
+      product.slug,
+      product.socialImage ?? product.heroImage,
+    ),
     imageAlt: content.imageAlt,
   });
 }

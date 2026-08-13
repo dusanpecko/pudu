@@ -4,6 +4,7 @@ import Link from "next/link";
 import Reveal from "@/components/effects/Reveal";
 import { cx } from "@/lib/cx";
 import type { Locale } from "@/lib/i18n";
+import { resolveHeroImage } from "@/lib/gallery";
 import { localizedPath } from "@/lib/routes";
 import { getProductContent } from "@/lib/translations";
 import type { Product } from "@/types/product";
@@ -26,6 +27,7 @@ export default async function ProductCard({
   featuredLabel,
 }: ProductCardProps) {
   const content = await getProductContent(product, locale);
+  const image = await resolveHeroImage(product.slug, product.heroImage);
   const featured = Boolean(product.featured && featuredLabel);
 
   return (
@@ -38,11 +40,11 @@ export default async function ProductCard({
         <span className="shot">
           {featured ? <span className="badge">{featuredLabel}</span> : null}
           <Image
-            className={product.heroImage.hasBackdrop ? "blend-backdrop" : undefined}
-            src={product.heroImage.src}
+            className={image.hasBackdrop ? "blend-backdrop" : undefined}
+            src={image.src}
             alt={content.imageAlt}
-            width={product.heroImage.width}
-            height={product.heroImage.height}
+            width={image.width}
+            height={image.height}
             sizes="(max-width: 620px) 88vw, (max-width: 950px) 44vw, 300px"
           />
         </span>

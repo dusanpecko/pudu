@@ -3,6 +3,7 @@ import GridFloor from "@/components/effects/GridFloor";
 import HologramPanel from "@/components/effects/HologramPanel";
 import { LinkButton } from "@/components/ui/Button";
 import type { Locale } from "@/lib/i18n";
+import { HOME_GALLERY, resolveHeroImage } from "@/lib/gallery";
 import { getProduct } from "@/lib/products";
 import { homeSectionPath } from "@/lib/routes";
 import { getProductContent, getTranslations } from "@/lib/translations";
@@ -20,6 +21,9 @@ export default async function HomeHero({ locale }: HomeHeroProps) {
   const { hero } = t.home;
   const heroProduct = getProduct("pudu-t300");
   const heroContent = await getProductContent(heroProduct, locale);
+  // The home hero has a slot of its own, so the picture no longer has to be
+  // whichever product happens to be featured.
+  const heroImage = await resolveHeroImage(HOME_GALLERY, heroProduct.heroImage);
   const modelCount = 4;
 
   return (
@@ -62,7 +66,7 @@ export default async function HomeHero({ locale }: HomeHeroProps) {
         </div>
 
         <HologramPanel
-          image={heroProduct.heroImage}
+          image={heroImage}
           alt={heroContent.imageAlt}
           statusLabel={hero.hudStatus}
           dataLabel={hero.hudRoute}

@@ -11,13 +11,40 @@ import { supabaseUrl } from "@/lib/supabase/env";
  */
 
 /**
- * Where an image appears: `home`, or a product slug. Kept as a plain string
- * because the set grows with the fleet; `galleryKeys` in lib/gallery.ts is the
- * authority, and `isGalleryKey` is what validates anything from a browser.
+ * Where an image appears. Two kinds of placement share one field:
+ *
+ *   home, <product slug>   a gallery strip, which shows every image in it
+ *   hero:home, hero:<slug> a single slot — only the first image is rendered
+ *
+ * Kept as a plain string because the set grows with the fleet; `galleryKeys` in
+ * lib/gallery.ts is the authority, and `isGalleryKey` validates anything that
+ * arrives from a browser.
  */
 export type GalleryKey = string;
 
 export const HOME_GALLERY = "home";
+
+/** Prefix marking a single-image slot rather than a strip. */
+export const HERO_PREFIX = "hero:";
+
+export function heroKey(target: string): GalleryKey {
+  return `${HERO_PREFIX}${target}`;
+}
+
+export function isHeroKey(key: GalleryKey): boolean {
+  return key.startsWith(HERO_PREFIX);
+}
+
+/**
+ * What the upload pipeline does with a file. A photograph is cropped to 16:9; a
+ * product render keeps its ratio and its transparency, because cropping one to
+ * 16:9 would cut the robot in half.
+ */
+export type ImageRole = "photo" | "render";
+
+export function isImageRole(value: unknown): value is ImageRole {
+  return value === "photo" || value === "render";
+}
 
 /** Storage bucket holding both the originals and the rendered WebPs. */
 export const BUCKET = "pudu";
@@ -31,9 +58,17 @@ export type GalleryImage = {
   path: string;
   /** Path of the uploaded master, if it was kept. */
   originalPath: string | null;
+  /** JPEG twin for Open Graph; renders only, since WebP previews get skipped. */
+  socialPath: string | null;
   url: string;
   width: number;
   height: number;
+  role: ImageRole;
+  /**
+   * The render ships on a dark studio backdrop rather than on transparency, so
+   * the page blends it into the background instead of showing a rectangle.
+   */
+  hasBackdrop: boolean;
   galleries: GalleryKey[];
   sortOrder: number;
   alt: LocalizedText;

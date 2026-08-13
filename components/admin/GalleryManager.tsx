@@ -13,7 +13,13 @@ import {
 } from "@/app/admin/gallery/actions";
 // Deliberately not from lib/gallery: that module is server-only, and importing
 // it here would pull the admin Supabase client into the browser bundle.
-import { BUCKET, type GalleryImage, type LocalizedText } from "@/lib/gallery-shared";
+import {
+  BUCKET,
+  isHeroKey,
+  type GalleryImage,
+  type ImageRole,
+  type LocalizedText,
+} from "@/lib/gallery-shared";
 import { locales, localeLabels, defaultLocale, type Locale } from "@/lib/i18n";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
@@ -23,8 +29,16 @@ const ASPECT_EPSILON = 0.01;
 
 type GalleryManagerProps = {
   images: GalleryImage[];
-  galleries: string[];
+  /** Strips show every image placed in them. */
+  strips: string[];
+  /** Single-image slots: only the first image in each is rendered. */
+  heroes: string[];
   galleryLabels: Record<string, string>;
+};
+
+const ROLE_LABELS: Record<ImageRole, string> = {
+  photo: "Fotografia — oreže sa na 16:9",
+  render: "Render — zachová pomer aj priehľadnosť",
 };
 
 /** The three translated fields, as the form holds them. */
@@ -158,44 +172,92 @@ function LocaleFields({
   );
 }
 
-function GalleryPicker({
-  galleries,
+function PlacementGroup({
+  title,
+  hint,
+  keys,
   galleryLabels,
   selected,
   onToggle,
 }: {
-  galleries: string[];
+  title: string;
+  hint: string;
+  keys: string[];
   galleryLabels: Record<string, string>;
   selected: string[];
   onToggle: (key: string) => void;
 }) {
   return (
-    <div className="flex flex-wrap gap-2">
-      {galleries.map((key) => {
-        const active = selected.includes(key);
-        return (
-          <button
-            key={key}
-            type="button"
-            onClick={() => onToggle(key)}
-            aria-pressed={active}
-            className={`rounded-full border px-3 py-1 text-xs ${
-              active
-                ? "border-slate-900 bg-slate-900 text-white"
-                : "border-slate-300 text-slate-600 hover:bg-slate-100"
-            }`}
-          >
-            {galleryLabels[key] ?? key}
-          </button>
-        );
-      })}
+    <div>
+      <span className="text-xs font-medium text-slate-700">{title}</span>
+      <p className="text-xs text-slate-400">{hint}</p>
+      <div className="mt-1 flex flex-wrap gap-2">
+        {keys.map((key) => {
+          const active = selected.includes(key);
+          return (
+            <button
+              key={key}
+              type="button"
+              onClick={() => onToggle(key)}
+              aria-pressed={active}
+              className={`rounded-full border px-3 py-1 text-xs ${
+                active
+                  ? "border-slate-900 bg-slate-900 text-white"
+                  : "border-slate-300 text-slate-600 hover:bg-slate-100"
+              }`}
+            >
+              {galleryLabels[key] ?? key}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Strips and hero slots are kept visibly apart: putting an image in a strip adds
+ * it to a row, while putting one in a hero slot replaces the render on that page.
+ */
+function GalleryPicker({
+  strips,
+  heroes,
+  galleryLabels,
+  selected,
+  onToggle,
+}: {
+  strips: string[];
+  heroes: string[];
+  galleryLabels: Record<string, string>;
+  selected: string[];
+  onToggle: (key: string) => void;
+}) {
+  return (
+    <div className="space-y-3">
+      <PlacementGroup
+        title="Galérie"
+        hint="Pás fotografií — zobrazia sa všetky."
+        keys={strips}
+        galleryLabels={galleryLabels}
+        selected={selected}
+        onToggle={onToggle}
+      />
+      <PlacementGroup
+        title="Hero pozície"
+        hint="Hlavný obrázok stránky — zobrazí sa iba prvý."
+        keys={heroes}
+        galleryLabels={galleryLabels}
+        selected={selected}
+        onToggle={onToggle}
+      />
     </div>
   );
 }
 
 export default function GalleryManager({
   images,
-  galleries,
+  strips,
+  heroes,
   galleryLabels,
 }: GalleryManagerProps) {
   const router = useRouter();
@@ -205,6 +267,8 @@ export default function GalleryManager({
     null,
   );
   const [focus, setFocus] = useState(0.5);
+  const [role, setRole] = useState<ImageRole>("photo");
+  const [hasBackdrop, setHasBackdrop] = useState(false);
   const [slug, setSlug] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
   const [fields, setFields] = useState<TextFields>(emptyFields);
@@ -229,6 +293,11 @@ export default function GalleryManager({
     return () => URL.revokeObjectURL(previewUrl);
   }, [previewUrl]);
 
+  /** Hero slots holding more than one image — only the first would be rendered. */
+  const crowdedHeroes = heroes.filter(
+    (key) => images.filter((image) => image.galleries.includes(key)).length > 1,
+  );
+
   const ratio = dimensions ? dimensions.width / dimensions.height : null;
   const window16by9 = ratio === null ? null : cropWindow(ratio, focus);
 
@@ -241,6 +310,8 @@ export default function GalleryManager({
     setFile(null);
     setDimensions(null);
     setFocus(0.5);
+    setRole("photo");
+    setHasBackdrop(false);
     setSlug("");
     setSelected([]);
     setFields(emptyFields());
@@ -299,6 +370,8 @@ export default function GalleryManager({
         focusX: axis === "x" ? focus : 0.5,
         focusY: axis === "y" ? focus : 0.5,
         slug: slug || fields.title[defaultLocale] || fields.alt[defaultLocale],
+        role,
+        hasBackdrop,
         galleries: selected,
         alt: toLocalized(fields.alt),
         title: toLocalized(fields.title),
@@ -380,6 +453,7 @@ export default function GalleryManager({
                     optimisation, so next/image would only get in the way here. */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={previewUrl} alt="" className="block w-full" />
+                {role === "photo" ? (
                 <div
                   className="pointer-events-none absolute border-2 border-white"
                   style={{
@@ -390,22 +464,26 @@ export default function GalleryManager({
                     boxShadow: "0 0 0 9999px rgba(2,6,23,0.6)",
                   }}
                 />
+                ) : null}
               </div>
 
               <p className="mt-2 text-xs text-slate-500">
                 Originál {dimensions.width}×{dimensions.height} ({ratio?.toFixed(2)}
-                :1). {window16by9.axis === null
+                :1).{" "}
+                {role === "render"
+                  ? "Render sa neoreže — pomer aj priehľadnosť zostanú."
+                  : window16by9.axis === null
                   ? "Presne 16:9, orezávať netreba."
-                  : `Orez odreže ${Math.round(
-                      (1 -
-                        (window16by9.axis === "y"
-                          ? window16by9.height
-                          : window16by9.width)) *
-                        100,
-                    )} % ${window16by9.axis === "y" ? "výšky" : "šírky"}.`}
+                    : `Orez odreže ${Math.round(
+                        (1 -
+                          (window16by9.axis === "y"
+                            ? window16by9.height
+                            : window16by9.width)) *
+                          100,
+                      )} % ${window16by9.axis === "y" ? "výšky" : "šírky"}.`}
               </p>
 
-              {window16by9.axis ? (
+              {role === "photo" && window16by9.axis ? (
                 <label className="mt-2 block">
                   <span className="text-xs font-medium text-slate-700">
                     Ohnisko orezu — {window16by9.axis === "y" ? "zvislo" : "vodorovne"}
@@ -425,10 +503,46 @@ export default function GalleryManager({
 
             <div className="space-y-4">
               <div>
-                <span className="text-xs font-medium text-slate-700">Galérie</span>
+                <span className="text-xs font-medium text-slate-700">Typ obrázka</span>
+                <div className="mt-1 grid gap-1">
+                  {(["photo", "render"] as const).map((candidate) => (
+                    <button
+                      key={candidate}
+                      type="button"
+                      onClick={() => setRole(candidate)}
+                      aria-pressed={role === candidate}
+                      className={`rounded-lg border px-3 py-1.5 text-left text-xs ${
+                        role === candidate
+                          ? "border-slate-900 bg-slate-900 text-white"
+                          : "border-slate-300 text-slate-600 hover:bg-slate-100"
+                      }`}
+                    >
+                      {ROLE_LABELS[candidate]}
+                    </button>
+                  ))}
+                </div>
+                {role === "render" ? (
+                  <label className="mt-2 flex items-start gap-2 text-xs text-slate-600">
+                    <input
+                      type="checkbox"
+                      checked={hasBackdrop}
+                      onChange={(event) => setHasBackdrop(event.target.checked)}
+                      className="mt-0.5"
+                    />
+                    <span>
+                      Render má tmavé pozadie, nie priehľadné — stránka ho zmieša
+                      s podkladom namiesto zobrazenia obdĺžnika.
+                    </span>
+                  </label>
+                ) : null}
+              </div>
+
+              <div>
+                <span className="text-xs font-medium text-slate-700">Umiestnenie</span>
                 <div className="mt-1">
                   <GalleryPicker
-                    galleries={galleries}
+                    strips={strips}
+                    heroes={heroes}
                     galleryLabels={galleryLabels}
                     selected={selected}
                     onToggle={(key) =>
@@ -514,6 +628,14 @@ export default function GalleryManager({
         ) : null}
       </section>
 
+      {crowdedHeroes.length > 0 ? (
+        <p className="rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900">
+          V hero pozícii {crowdedHeroes.map((key) => galleryLabels[key] ?? key).join(", ")}
+          {" "}je viac obrázkov. Stránka zobrazí iba prvý v poradí — ostatné odtiaľ
+          odoberte, aby bolo zjavné, ktorý platí.
+        </p>
+      ) : null}
+
       <section className="space-y-3">
         <h2 className="text-sm font-semibold text-slate-900">
           Nahrané obrázky ({images.length})
@@ -533,7 +655,8 @@ export default function GalleryManager({
             image={image}
             index={index}
             total={images.length}
-            galleries={galleries}
+            strips={strips}
+            heroes={heroes}
             galleryLabels={galleryLabels}
             busy={busy}
             expanded={editing === image.id}
@@ -559,7 +682,8 @@ function GalleryRow({
   image,
   index,
   total,
-  galleries,
+  strips,
+  heroes,
   galleryLabels,
   busy,
   expanded,
@@ -572,7 +696,8 @@ function GalleryRow({
   image: GalleryImage;
   index: number;
   total: number;
-  galleries: string[];
+  strips: string[];
+  heroes: string[];
   galleryLabels: Record<string, string>;
   busy: boolean;
   expanded: boolean;
@@ -620,13 +745,24 @@ function GalleryRow({
           </p>
           <p className="mt-0.5 flex flex-wrap items-center gap-1 text-xs text-slate-500">
             {image.galleries.map((key) => (
-              <span key={key} className="rounded bg-slate-100 px-1.5 py-0.5">
+              <span
+                key={key}
+                className={`rounded px-1.5 py-0.5 ${
+                  isHeroKey(key) ? "bg-violet-100 text-violet-900" : "bg-slate-100"
+                }`}
+              >
+                {isHeroKey(key) ? "hero: " : ""}
                 {galleryLabels[key] ?? key}
               </span>
             ))}
             <span>
               {image.width}×{image.height}
             </span>
+            {image.role === "render" ? (
+              <span className="rounded bg-indigo-100 px-1.5 py-0.5 text-indigo-900">
+                render{image.hasBackdrop ? " · pozadie" : ""}
+              </span>
+            ) : null}
             {missing.length > 0 ? (
               <span className="rounded bg-rose-100 px-1.5 py-0.5 text-rose-900">
                 chýba alt: {missing.map((key) => localeLabels[key]).join(", ")}
@@ -678,7 +814,8 @@ function GalleryRow({
             <span className="text-xs font-medium text-slate-700">Galérie</span>
             <div className="mt-1">
               <GalleryPicker
-                galleries={galleries}
+                strips={strips}
+                heroes={heroes}
                 galleryLabels={galleryLabels}
                 selected={selected}
                 onToggle={(key) =>
