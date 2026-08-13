@@ -205,6 +205,11 @@ export const cz: Translation = {
     successDetail: "Ozveme se vám s návrhem ukázky našeho robota AMR.",
     reset: "Odeslat další dotaz",
     optional: "nepovinné",
+    consent: "Souhlasím se zpracováním osobních údajů.",
+    consentLink: "Zásady zpracování osobních údajů",
+    copySubject: "Kopie vašeho dotazu",
+    copyIntro:
+      "Děkujeme za váš dotaz. Níže je kopie toho, co jste nám poslali — ozveme se vám co nejdříve.",
     required: "povinné",
     generalInquiry: "Obecný dotaz",
     placeholders: {
@@ -220,6 +225,8 @@ export const cz: Translation = {
       emailInvalid: "Zadejte platnou e-mailovou adresu.",
       message: "Napište krátkou zprávu.",
       summary: "Zkontrolujte prosím vyznačená pole.",
+      tooMany: "Příliš mnoho pokusů. Zkuste to prosím za chvíli.",
+      consent: "Bez souhlasu se zpracováním osobních údajů dotaz nemůžeme přijmout.",
     },
   },
   footer: {

@@ -5,6 +5,7 @@ import Reveal from "@/components/effects/Reveal";
 import { products } from "@/data/products";
 import type { Locale } from "@/lib/i18n";
 import { sectionId } from "@/lib/routes";
+import { loadSmtpSettings } from "@/lib/smtp-settings";
 import { getProductTexts, getTranslations } from "@/lib/translations";
 import type { ProductSlug } from "@/types/product";
 
@@ -27,6 +28,9 @@ export default async function ContactSection({
 }: ContactSectionProps) {
   const t = await getTranslations(locale);
   const texts = await getProductTexts(locale);
+  // Read from the mail settings, so each company links its own notice.
+  const settings = await loadSmtpSettings(locale);
+  const privacyUrl = settings.ok ? settings.data.privacyUrl : "";
 
   const productOptions: ContactProductOption[] = products.map((product) => ({
     value: product.slug,
@@ -45,6 +49,7 @@ export default async function ContactSection({
             <ContactForm
               content={t.contact}
               locale={locale}
+              privacyUrl={privacyUrl}
               productOptions={productOptions}
               defaultProduct={defaultProduct}
             />

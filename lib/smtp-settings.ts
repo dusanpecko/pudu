@@ -29,6 +29,8 @@ export type SmtpSettings = {
   fromEmail: string;
   replyTo: string;
   recipients: string;
+  /** This market's privacy notice, linked from the form's consent checkbox. */
+  privacyUrl: string;
   updatedAt: string | null;
   updatedBy: string | null;
 };
@@ -79,6 +81,7 @@ function empty(locale: Locale): SmtpSettings {
     fromEmail: "",
     replyTo: "",
     recipients: "",
+    privacyUrl: "",
     updatedAt: null,
     updatedBy: null,
   };
@@ -97,6 +100,8 @@ type Row = {
   from_email: string;
   reply_to: string;
   recipients: string;
+  /** Absent until migration 0008 has run. */
+  privacy_url?: string | null;
   updated_at: string | null;
   updated_by: string | null;
 };
@@ -114,6 +119,7 @@ function fromRow(row: Row, locale: Locale): SmtpSettings {
     fromEmail: row.from_email,
     replyTo: row.reply_to,
     recipients: row.recipients,
+    privacyUrl: row.privacy_url ?? "",
     updatedAt: row.updated_at,
     updatedBy: row.updated_by,
   };
@@ -252,6 +258,7 @@ export async function saveSmtpSettings(
         from_email: input.fromEmail.trim(),
         reply_to: input.replyTo.trim(),
         recipients: input.recipients.trim(),
+        privacy_url: input.privacyUrl.trim(),
         updated_at: new Date().toISOString(),
         updated_by: editorEmail,
       },

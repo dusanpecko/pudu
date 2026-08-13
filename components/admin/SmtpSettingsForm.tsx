@@ -227,6 +227,29 @@ export default function SmtpSettingsForm({ settings }: SmtpSettingsFormProps) {
           </label>
         </fieldset>
 
+        <fieldset className="space-y-4 rounded-xl border border-slate-200 bg-white p-4">
+          <legend className="px-1 text-sm font-semibold text-slate-900">
+            Kontaktný formulár
+          </legend>
+
+          <label className="block">
+            <span className={LABEL}>Odkaz na zásady spracovania osobných údajov</span>
+            <input
+              name="privacyUrl"
+              type="url"
+              defaultValue={view.privacyUrl}
+              placeholder="https://www.firma.sk/ochrana-osobnych-udajov"
+              className={FIELD}
+            />
+            <span className="mt-1 block text-xs text-slate-500">
+              Formulár ho pripojí k zaškrtávaciemu poľu so súhlasom. Každý trh môže
+              odkazovať na zásady svojej firmy. Bez odkazu je súhlas stále povinný,
+              len nie je na čo odkázať — a to je pri zbieraní osobných údajov slabé
+              miesto.
+            </span>
+          </label>
+        </fieldset>
+
         <Notice state={state} />
 
         <div className="flex flex-wrap items-center gap-3">

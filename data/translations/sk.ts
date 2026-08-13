@@ -212,6 +212,11 @@ export const sk = {
     successDetail: "Ozveme sa vám s návrhom pre ukážku AMR.",
     reset: "Odoslať ďalší dopyt",
     optional: "nepovinné",
+    consent: "Súhlasím so spracovaním osobných údajov.",
+    consentLink: "Zásady spracovania osobných údajov",
+    copySubject: "Kópia vášho dopytu",
+    copyIntro:
+      "Ďakujeme za váš dopyt. Nižšie je kópia toho, čo ste nám poslali — ozveme sa vám čo najskôr.",
     required: "povinné",
     generalInquiry: "Všeobecný dopyt",
     placeholders: {
@@ -227,6 +232,8 @@ export const sk = {
       emailInvalid: "Zadajte platnú e-mailovú adresu.",
       message: "Napíšte krátku správu.",
       summary: "Skontrolujte prosím vyznačené polia.",
+      tooMany: "Príliš mnoho pokusov. Skúste to prosím o chvíľu.",
+      consent: "Bez súhlasu so spracovaním osobných údajov dopyt nevieme prijať.",
     },
   },
   footer: {

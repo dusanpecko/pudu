@@ -204,6 +204,11 @@ export const de: Translation = {
       "Wir melden uns mit einem Vorschlag für eine Demo und eine Pilotroute.",
     reset: "Weitere Anfrage senden",
     optional: "optional",
+    consent: "Ich stimme der Verarbeitung meiner personenbezogenen Daten zu.",
+    consentLink: "Datenschutzhinweise",
+    copySubject: "Kopie Ihrer Anfrage",
+    copyIntro:
+      "Vielen Dank für Ihre Anfrage. Unten finden Sie eine Kopie Ihrer Nachricht — wir melden uns in Kürze.",
     required: "erforderlich",
     generalInquiry: "Allgemeine Anfrage",
     placeholders: {
@@ -220,6 +225,8 @@ export const de: Translation = {
       emailInvalid: "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
       message: "Bitte schreiben Sie eine kurze Nachricht.",
       summary: "Bitte prüfen Sie die markierten Felder.",
+      tooMany: "Zu viele Versuche. Bitte versuchen Sie es in einem Moment erneut.",
+      consent: "Ohne Ihre Zustimmung zur Datenverarbeitung können wir die Anfrage nicht annehmen.",
     },
   },
   footer: {

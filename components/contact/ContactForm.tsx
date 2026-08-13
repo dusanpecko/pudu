@@ -19,9 +19,14 @@ type ContactFormProps = {
   defaultProduct?: string;
   /** Decides which company's mailbox the enquiry reaches. */
   locale: Locale;
+  /**
+   * This market's privacy notice, from the mail settings. Empty means none is
+   * configured; the consent is still required, only unlinked.
+   */
+  privacyUrl: string;
 };
 
-type FieldName = "name" | "email" | "message";
+type FieldName = "name" | "email" | "message" | "consent";
 type Errors = Partial<Record<FieldName, string>>;
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -40,6 +45,7 @@ export default function ContactForm({
   productOptions,
   defaultProduct = "",
   locale,
+  privacyUrl,
 }: ContactFormProps) {
   const id = useId();
   const [errors, setErrors] = useState<Errors>({});
@@ -58,6 +64,7 @@ export default function ContactForm({
     if (!email) next.email = content.errors.email;
     else if (!EMAIL_PATTERN.test(email)) next.email = content.errors.emailInvalid;
     if (!message) next.message = content.errors.message;
+    if (!data.get("consent")) next.consent = content.errors.consent;
 
     return next;
   };
@@ -211,6 +218,32 @@ export default function ContactForm({
             </p>
           ) : null}
         </div>
+      </div>
+
+      <div className="consent">
+        <label className="consent-label">
+          <input
+            id={fieldId("consent")}
+            name="consent"
+            type="checkbox"
+            aria-invalid={errors.consent ? "true" : undefined}
+            aria-describedby={errors.consent ? errorId("consent") : undefined}
+            required
+          />
+          <span>
+            {content.consent}{" "}
+            {privacyUrl ? (
+              <a href={privacyUrl} target="_blank" rel="noopener noreferrer">
+                {content.consentLink}
+              </a>
+            ) : null}
+          </span>
+        </label>
+        {errors.consent ? (
+          <p className="field-error" id={errorId("consent")} role="alert">
+            {errors.consent}
+          </p>
+        ) : null}
       </div>
 
       {state.status === "error" ? (

@@ -204,6 +204,11 @@ export const en: Translation = {
       "We will get back to you with a demo and pilot-route proposal.",
     reset: "Send another enquiry",
     optional: "optional",
+    consent: "I agree to the processing of my personal data.",
+    consentLink: "Privacy notice",
+    copySubject: "A copy of your enquiry",
+    copyIntro:
+      "Thank you for your enquiry. Below is a copy of what you sent us — we will be in touch shortly.",
     required: "required",
     generalInquiry: "General enquiry",
     placeholders: {
@@ -219,6 +224,8 @@ export const en: Translation = {
       emailInvalid: "Please enter a valid email address.",
       message: "Please write a short message.",
       summary: "Please check the highlighted fields.",
+      tooMany: "Too many attempts. Please try again in a moment.",
+      consent: "We cannot accept the enquiry without your consent to data processing.",
     },
   },
   footer: {

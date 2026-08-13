@@ -60,6 +60,7 @@ export async function saveSettings(
       fromEmail: String(formData.get("fromEmail") ?? ""),
       replyTo: String(formData.get("replyTo") ?? ""),
       recipients: String(formData.get("recipients") ?? ""),
+      privacyUrl: String(formData.get("privacyUrl") ?? ""),
     },
     editorEmail,
   );
