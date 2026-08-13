@@ -36,14 +36,38 @@ export function isHeroKey(key: GalleryKey): boolean {
 }
 
 /**
- * What the upload pipeline does with a file. A photograph is cropped to 16:9; a
- * product render keeps its ratio and its transparency, because cropping one to
- * 16:9 would cut the robot in half.
+ * What the upload pipeline does with a file. The two kinds are cropped to
+ * different shapes and a render additionally keeps its transparency.
+ *
+ * This is never asked of the editor: the placement decides it. A strip is a row
+ * of landscape photographs, a hero slot is a square product render, and there is
+ * no combination of the two that makes sense — which is why
+ * {@link roleForPlacements} derives it and {@link hasMixedPlacements} rejects the
+ * mixture outright.
  */
 export type ImageRole = "photo" | "render";
 
 export function isImageRole(value: unknown): value is ImageRole {
   return value === "photo" || value === "render";
+}
+
+/**
+ * The shape each kind is cropped to. A photograph is landscape because it sits in
+ * a row; a render is square because it stands in the hero panel, where a 16:9
+ * crop would cut the robot off at the knees.
+ */
+export const aspectForRole: Record<ImageRole, number> = {
+  photo: 16 / 9,
+  render: 1,
+};
+
+export function roleForPlacements(keys: GalleryKey[]): ImageRole {
+  return keys.some(isHeroKey) ? "render" : "photo";
+}
+
+/** True when strips and hero slots are mixed, which no image can satisfy. */
+export function hasMixedPlacements(keys: GalleryKey[]): boolean {
+  return keys.some(isHeroKey) && keys.some((key) => !isHeroKey(key));
 }
 
 /** Storage bucket holding both the originals and the rendered WebPs. */

@@ -14,8 +14,10 @@ import {
 // Deliberately not from lib/gallery: that module is server-only, and importing
 // it here would pull the admin Supabase client into the browser bundle.
 import {
+  aspectForRole,
   BUCKET,
   isHeroKey,
+  roleForPlacements,
   type GalleryImage,
   type ImageRole,
   type LocalizedText,
@@ -23,8 +25,7 @@ import {
 import { locales, localeLabels, defaultLocale, type Locale } from "@/lib/i18n";
 import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
-const ASPECT = 16 / 9;
-/** Ratios within this of 16:9 have no meaningful slack to position. */
+/** Ratios this close to the target have no meaningful slack to position. */
 const ASPECT_EPSILON = 0.01;
 
 type GalleryManagerProps = {
@@ -36,9 +37,10 @@ type GalleryManagerProps = {
   galleryLabels: Record<string, string>;
 };
 
-const ROLE_LABELS: Record<ImageRole, string> = {
-  photo: "Fotografia — oreže sa na 16:9",
-  render: "Render — zachová pomer aj priehľadnosť",
+/** What the chosen placement means for the file, shown instead of asked. */
+const ROLE_NOTES: Record<ImageRole, string> = {
+  photo: "Fotografia do pásu — oreže sa na 16:9.",
+  render: "Render do hero panela — oreže sa na kvadrát a zachová priehľadnosť.",
 };
 
 /** The three translated fields, as the form holds them. */
@@ -97,9 +99,9 @@ function toLocalized(map: Record<Locale, string>): LocalizedText {
  * displayed box. Exactly one axis has slack — the other is fully used — so the
  * editor only ever has one thing to decide.
  */
-function cropWindow(ratio: number, focus: number) {
-  if (ratio > ASPECT + ASPECT_EPSILON) {
-    const width = ASPECT / ratio;
+function cropWindow(ratio: number, focus: number, aspect: number) {
+  if (ratio > aspect + ASPECT_EPSILON) {
+    const width = aspect / ratio;
     return {
       axis: "x" as const,
       width,
@@ -108,8 +110,8 @@ function cropWindow(ratio: number, focus: number) {
       top: 0,
     };
   }
-  if (ratio < ASPECT - ASPECT_EPSILON) {
-    const height = ratio / ASPECT;
+  if (ratio < aspect - ASPECT_EPSILON) {
+    const height = ratio / aspect;
     return {
       axis: "y" as const,
       width: 1,
@@ -267,7 +269,6 @@ export default function GalleryManager({
     null,
   );
   const [focus, setFocus] = useState(0.5);
-  const [role, setRole] = useState<ImageRole>("photo");
   const [hasBackdrop, setHasBackdrop] = useState(false);
   const [slug, setSlug] = useState("");
   const [selected, setSelected] = useState<string[]>([]);
@@ -298,8 +299,25 @@ export default function GalleryManager({
     (key) => images.filter((image) => image.galleries.includes(key)).length > 1,
   );
 
+  // The placement decides the shape, so the preview follows the toggles rather
+  // than a separate control the editor could set to disagree with them.
+  const role = roleForPlacements(selected);
+  const aspect = aspectForRole[role];
   const ratio = dimensions ? dimensions.width / dimensions.height : null;
-  const window16by9 = ratio === null ? null : cropWindow(ratio, focus);
+  const cropFrame = ratio === null ? null : cropWindow(ratio, focus, aspect);
+
+  /**
+   * Strips and hero slots cannot be combined — the two are cropped to different
+   * shapes — so picking one kind drops the other rather than letting the editor
+   * build a selection the server would refuse.
+   */
+  const togglePlacement = (key: string) => {
+    setSelected((current) => {
+      if (current.includes(key)) return current.filter((item) => item !== key);
+      const sameKind = current.filter((item) => isHeroKey(item) === isHeroKey(key));
+      return [...sameKind, key];
+    });
+  };
 
   const report = (text: string, isError: boolean) => {
     setMessage(text);
@@ -310,7 +328,6 @@ export default function GalleryManager({
     setFile(null);
     setDimensions(null);
     setFocus(0.5);
-    setRole("photo");
     setHasBackdrop(false);
     setSlug("");
     setSelected([]);
@@ -364,13 +381,12 @@ export default function GalleryManager({
       }
 
       report("Spracúvam orez a WebP…", false);
-      const axis = window16by9?.axis;
+      const axis = cropFrame?.axis;
       const result = await addImage({
         originalPath: target.path,
         focusX: axis === "x" ? focus : 0.5,
         focusY: axis === "y" ? focus : 0.5,
         slug: slug || fields.title[defaultLocale] || fields.alt[defaultLocale],
-        role,
         hasBackdrop,
         galleries: selected,
         alt: toLocalized(fields.alt),
@@ -445,7 +461,7 @@ export default function GalleryManager({
           className="mt-3 block w-full text-sm"
         />
 
-        {previewUrl && window16by9 && dimensions ? (
+        {previewUrl && cropFrame && dimensions ? (
           <div className="mt-4 grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
             <div>
               <div className="relative overflow-hidden rounded-lg bg-slate-900">
@@ -453,40 +469,36 @@ export default function GalleryManager({
                     optimisation, so next/image would only get in the way here. */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={previewUrl} alt="" className="block w-full" />
-                {role === "photo" ? (
                 <div
                   className="pointer-events-none absolute border-2 border-white"
                   style={{
-                    left: `${window16by9.left * 100}%`,
-                    top: `${window16by9.top * 100}%`,
-                    width: `${window16by9.width * 100}%`,
-                    height: `${window16by9.height * 100}%`,
+                    left: `${cropFrame.left * 100}%`,
+                    top: `${cropFrame.top * 100}%`,
+                    width: `${cropFrame.width * 100}%`,
+                    height: `${cropFrame.height * 100}%`,
                     boxShadow: "0 0 0 9999px rgba(2,6,23,0.6)",
                   }}
                 />
-                ) : null}
               </div>
 
               <p className="mt-2 text-xs text-slate-500">
                 Originál {dimensions.width}×{dimensions.height} ({ratio?.toFixed(2)}
                 :1).{" "}
-                {role === "render"
-                  ? "Render sa neoreže — pomer aj priehľadnosť zostanú."
-                  : window16by9.axis === null
+                {cropFrame.axis === null
                   ? "Presne 16:9, orezávať netreba."
-                    : `Orez odreže ${Math.round(
+                  : `Orez odreže ${Math.round(
                         (1 -
-                          (window16by9.axis === "y"
-                            ? window16by9.height
-                            : window16by9.width)) *
+                          (cropFrame.axis === "y"
+                            ? cropFrame.height
+                            : cropFrame.width)) *
                           100,
-                      )} % ${window16by9.axis === "y" ? "výšky" : "šírky"}.`}
+                    )} % ${cropFrame.axis === "y" ? "výšky" : "šírky"}.`}
               </p>
 
-              {role === "photo" && window16by9.axis ? (
+              {cropFrame.axis ? (
                 <label className="mt-2 block">
                   <span className="text-xs font-medium text-slate-700">
-                    Ohnisko orezu — {window16by9.axis === "y" ? "zvislo" : "vodorovne"}
+                    Ohnisko orezu — {cropFrame.axis === "y" ? "zvislo" : "vodorovne"}
                   </span>
                   <input
                     type="range"
@@ -503,24 +515,17 @@ export default function GalleryManager({
 
             <div className="space-y-4">
               <div>
-                <span className="text-xs font-medium text-slate-700">Typ obrázka</span>
-                <div className="mt-1 grid gap-1">
-                  {(["photo", "render"] as const).map((candidate) => (
-                    <button
-                      key={candidate}
-                      type="button"
-                      onClick={() => setRole(candidate)}
-                      aria-pressed={role === candidate}
-                      className={`rounded-lg border px-3 py-1.5 text-left text-xs ${
-                        role === candidate
-                          ? "border-slate-900 bg-slate-900 text-white"
-                          : "border-slate-300 text-slate-600 hover:bg-slate-100"
-                      }`}
-                    >
-                      {ROLE_LABELS[candidate]}
-                    </button>
-                  ))}
+                <span className="text-xs font-medium text-slate-700">Umiestnenie</span>
+                <div className="mt-1">
+                  <GalleryPicker
+                    strips={strips}
+                    heroes={heroes}
+                    galleryLabels={galleryLabels}
+                    selected={selected}
+                    onToggle={togglePlacement}
+                  />
                 </div>
+                <p className="mt-2 text-xs text-slate-500">{ROLE_NOTES[role]}</p>
                 {role === "render" ? (
                   <label className="mt-2 flex items-start gap-2 text-xs text-slate-600">
                     <input
@@ -535,25 +540,6 @@ export default function GalleryManager({
                     </span>
                   </label>
                 ) : null}
-              </div>
-
-              <div>
-                <span className="text-xs font-medium text-slate-700">Umiestnenie</span>
-                <div className="mt-1">
-                  <GalleryPicker
-                    strips={strips}
-                    heroes={heroes}
-                    galleryLabels={galleryLabels}
-                    selected={selected}
-                    onToggle={(key) =>
-                      setSelected((current) =>
-                        current.includes(key)
-                          ? current.filter((item) => item !== key)
-                          : [...current, key],
-                      )
-                    }
-                  />
-                </div>
               </div>
 
               <label className="block">
@@ -819,11 +805,18 @@ function GalleryRow({
                 galleryLabels={galleryLabels}
                 selected={selected}
                 onToggle={(key) =>
-                  setSelected((current) =>
-                    current.includes(key)
-                      ? current.filter((item) => item !== key)
-                      : [...current, key],
-                  )
+                  setSelected((current) => {
+                    if (current.includes(key)) {
+                      return current.filter((item) => item !== key);
+                    }
+                    // Same rule as the upload form: the two kinds are cropped
+                    // differently, so a stored file cannot move between them
+                    // without being uploaded again.
+                    const sameKind = current.filter(
+                      (item) => isHeroKey(item) === isHeroKey(key),
+                    );
+                    return [...sameKind, key];
+                  })
                 }
               />
             </div>

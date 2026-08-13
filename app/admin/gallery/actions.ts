@@ -8,7 +8,7 @@ import {
   type GalleryKey,
   type LocalizedText,
 } from "@/lib/gallery";
-import { isImageRole, type ImageRole } from "@/lib/gallery-shared";
+import { hasMixedPlacements, roleForPlacements } from "@/lib/gallery-shared";
 import {
   createImage,
   createUploadTarget,
@@ -95,7 +95,15 @@ export async function addImage(input: unknown): Promise<GalleryState> {
 
   const galleries = parseGalleries(source.galleries);
   if (galleries.length === 0) {
-    return { status: "error", message: "Vyberte aspoň jednu galériu." };
+    return { status: "error", message: "Vyberte aspoň jedno umiestnenie." };
+  }
+  // The two kinds are cropped to different shapes, so one file cannot serve
+  // both. The form prevents it; this is the same rule on the server.
+  if (hasMixedPlacements(galleries)) {
+    return {
+      status: "error",
+      message: "Obrázok patrí buď do galérií, alebo do hero pozícií — nie do oboch.",
+    };
   }
 
   const alt = parseText(source.alt);
@@ -106,9 +114,9 @@ export async function addImage(input: unknown): Promise<GalleryState> {
     };
   }
 
-  // An unrecognised role would silently crop a render to 16:9, so it defaults to
-  // the kind that cannot lose pixels the editor cared about.
-  const role: ImageRole = isImageRole(source.role) ? source.role : "photo";
+  // Derived, never taken from the browser: the placement is what decides whether
+  // this is a landscape photograph or a square render.
+  const role = roleForPlacements(galleries);
 
   const title = parseText(source.title);
   const slugSeed =
@@ -149,7 +157,15 @@ export async function saveImage(id: unknown, edit: unknown): Promise<GalleryStat
 
   const galleries = parseGalleries(source.galleries);
   if (galleries.length === 0) {
-    return { status: "error", message: "Vyberte aspoň jednu galériu." };
+    return { status: "error", message: "Vyberte aspoň jedno umiestnenie." };
+  }
+  // Moving a photograph into a hero slot would need a different crop, which
+  // means a re-upload rather than an edit.
+  if (hasMixedPlacements(galleries)) {
+    return {
+      status: "error",
+      message: "Obrázok patrí buď do galérií, alebo do hero pozícií — nie do oboch.",
+    };
   }
 
   const alt = parseText(source.alt);

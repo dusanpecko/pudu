@@ -6,6 +6,7 @@ import sharp from "sharp";
 
 import { loadAllImages } from "@/lib/gallery";
 import {
+  aspectForRole,
   BUCKET,
   type GalleryImage,
   type GalleryKey,
@@ -30,10 +31,9 @@ import { adminClientConfigured, createSupabaseAdminClient } from "@/lib/supabase
 /** 16:9, and wide enough that next/image has something to downscale from. */
 const TARGET_WIDTH = 2400;
 const TARGET_HEIGHT = 1350;
-const ASPECT = 16 / 9;
 
-/** A render keeps its ratio, so only the longest side is bounded. */
-const RENDER_MAX_SIDE = 1600;
+/** A render is square, and the hero panel never shows it larger than this. */
+const RENDER_SIDE = 1600;
 
 const WEBP_QUALITY = 82;
 const JPEG_QUALITY = 86;
@@ -113,24 +113,26 @@ export async function createUploadTarget(
 }
 
 /**
- * The largest 16:9 rectangle that fits, positioned by a focal point.
+ * The largest rectangle of the given aspect that fits, positioned by a focal
+ * point.
  *
  * Deriving the rectangle here rather than trusting one from the browser means
- * the aspect ratio cannot arrive wrong: only *where* the crop sits is the
- * editor's choice, never its shape.
+ * the shape cannot arrive wrong: only *where* the crop sits is the editor's
+ * choice, never how it is proportioned.
  */
 export function cropRect(
   width: number,
   height: number,
   focusX: number,
   focusY: number,
+  aspect: number,
 ): { left: number; top: number; width: number; height: number } {
   let cropWidth = width;
-  let cropHeight = Math.round(width / ASPECT);
+  let cropHeight = Math.round(width / aspect);
 
   if (cropHeight > height) {
     cropHeight = height;
-    cropWidth = Math.round(height * ASPECT);
+    cropWidth = Math.round(height * aspect);
   }
 
   const clamp = (value: number, max: number) =>
@@ -146,7 +148,7 @@ export function cropRect(
 
 export type NewImageInput = {
   originalPath: string;
-  /** Focal point of the crop, 0–1 of the original. Ignored for a render. */
+  /** Focal point of the crop, 0–1 of the original. */
   focusX: number;
   focusY: number;
   /** Seeds the file name; SEO reads it, so it is not a random string. */
@@ -163,18 +165,25 @@ export type NewImageInput = {
 /**
  * Turns the upright original into what the site serves.
  *
- * A photograph is cropped to 16:9 at the editor's focal point. A render is left
- * whole — cropping a square robot to 16:9 would cut it in half — and only bounded
- * on its longest side, with `alpha` telling sharp to keep the transparency that
- * makes the render sit on the page instead of in a box.
+ * Both kinds are cropped at the editor's focal point, only to different shapes:
+ * 16:9 for a photograph that sits in a row, square for a render that stands in
+ * the hero panel. `extract` leaves the alpha channel alone, so a render keeps the
+ * transparency that lets it sit on the page rather than in a box.
  */
 async function renderVariants(
   upright: Buffer,
   meta: { width: number; height: number },
   input: NewImageInput,
 ): Promise<{ webp: Buffer; social: Buffer | null; width: number; height: number }> {
+  const rect = cropRect(
+    meta.width,
+    meta.height,
+    input.focusX,
+    input.focusY,
+    aspectForRole[input.role],
+  );
+
   if (input.role === "photo") {
-    const rect = cropRect(meta.width, meta.height, input.focusX, input.focusY);
     const rendered = await sharp(upright)
       .extract(rect)
       // withoutEnlargement keeps a small original from being blown up into a
@@ -193,14 +202,16 @@ async function renderVariants(
   }
 
   const rendered = await sharp(upright)
-    .resize(RENDER_MAX_SIDE, RENDER_MAX_SIDE, { fit: "inside", withoutEnlargement: true })
+    .extract(rect)
+    .resize(RENDER_SIDE, RENDER_SIDE, { fit: "inside", withoutEnlargement: true })
     .webp({ quality: WEBP_QUALITY, effort: 5, alphaQuality: 100 })
     .toBuffer({ resolveWithObject: true });
 
   // The twin exists for the crawlers that skip WebP, so it is flattened onto the
   // page colour rather than left to JPEG's default black.
   const social = await sharp(upright)
-    .resize(RENDER_MAX_SIDE, RENDER_MAX_SIDE, { fit: "inside", withoutEnlargement: true })
+    .extract(rect)
+    .resize(RENDER_SIDE, RENDER_SIDE, { fit: "inside", withoutEnlargement: true })
     .flatten({ background: SOCIAL_BACKGROUND })
     .jpeg({ quality: JPEG_QUALITY, mozjpeg: true })
     .toBuffer();
