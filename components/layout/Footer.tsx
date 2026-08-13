@@ -25,6 +25,18 @@ export default async function Footer({ locale }: FooterProps) {
   const company = await loadCompanyDetails(locale);
   const hasCompany = !isEmpty(company);
 
+  /**
+   * The copyright names the company that stands behind this market, so it
+   * follows the language like the rest of the block. The year is taken at build
+   * time — it can lag into January until the next deployment, which is a better
+   * trade than a number somebody has to remember to edit every year.
+   *
+   * A language with no company row keeps the line from the translation files.
+   */
+  const copyright = company.companyName
+    ? `© ${new Date().getFullYear()} ${company.companyName}`
+    : t.footer.copyright;
+
   return (
     <footer className="footer">
       <div className="wrap">
@@ -118,7 +130,7 @@ export default async function Footer({ locale }: FooterProps) {
         ) : null}
 
         <div className="footin">
-          <span>{t.footer.copyright}</span>
+          <span>{copyright}</span>
           <span>{t.footer.tagline}</span>
         </div>
       </div>
