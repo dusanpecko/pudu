@@ -30,5 +30,12 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "legacy"]
+  "exclude": [
+    "node_modules",
+    "legacy",
+    // Material delivered by the client, already folded into data/translations.
+    // It is a snapshot of an older shape, so compiling it only reports keys the
+    // repository has since added.
+    "data/translations/new_translations"
+  ]
 }

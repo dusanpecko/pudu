@@ -49,6 +49,12 @@ export const sk = {
     heroVisual: "Vizualizácia robota s holografickým rozhraním",
     decorative: "Dekoratívny prvok",
     currentPage: "Aktuálna stránka",
+    galleryOpen: "Zobraziť obrázok na celú obrazovku",
+    galleryClose: "Zavrieť",
+    galleryPrevious: "Predchádzajúci obrázok",
+    galleryNext: "Nasledujúci obrázok",
+    /** "{index} z {total}" — the counter in the lightbox. */
+    galleryCounter: "{index} z {total}",
   },
   navigation: {
     home: "Domov",
@@ -129,6 +135,12 @@ export const sk = {
         "Automotive a elektronika",
         "Nemocnice, laboratóriá, zdravotnícky priemysel",
       ],
+    },
+    gallery: {
+      titleLine1: "Naše roboty",
+      titleLine2: "v reálnej prevádzke.",
+      description:
+        "Zábery z nasadení u zákazníkov — výroba, sklady a zásobovanie liniek.",
     },
   },
   product: {

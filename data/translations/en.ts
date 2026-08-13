@@ -20,6 +20,11 @@ export const en: Translation = {
     heroVisual: "Robot visualisation with a holographic interface",
     decorative: "Decorative element",
     currentPage: "Current page",
+    galleryOpen: "View image full screen",
+    galleryClose: "Close",
+    galleryPrevious: "Previous image",
+    galleryNext: "Next image",
+    galleryCounter: "{index} of {total}",
   },
   navigation: {
     home: "Home",
@@ -122,6 +127,12 @@ export const en: Translation = {
         "Automotive and electronics",
         "Hospitals, laboratories, healthcare industry",
       ],
+    },
+    gallery: {
+      titleLine1: "Our robots",
+      titleLine2: "in real operation.",
+      description:
+        "Shots from customer deployments — manufacturing, warehousing and line supply.",
     },
   },
   product: {

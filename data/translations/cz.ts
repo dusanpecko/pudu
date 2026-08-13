@@ -21,6 +21,11 @@ export const cz: Translation = {
     heroVisual: "Vizualizace robota s holografickým rozhraním",
     decorative: "Dekorativní prvek",
     currentPage: "Aktuální stránka",
+    galleryOpen: "Zobrazit obrázek na celou obrazovku",
+    galleryClose: "Zavřít",
+    galleryPrevious: "Předchozí obrázek",
+    galleryNext: "Následující obrázek",
+    galleryCounter: "{index} z {total}",
   },
   navigation: {
     home: "Domů",
@@ -123,6 +128,12 @@ export const cz: Translation = {
         "Automotive a elektronika",
         "Nemocnice, laboratoře, zdravotnický průmysl",
       ],
+    },
+    gallery: {
+      titleLine1: "Naši roboti",
+      titleLine2: "v reálném provozu.",
+      description:
+        "Záběry z nasazení u zákazníků — výroba, sklady a zásobování linek.",
     },
   },
   product: {

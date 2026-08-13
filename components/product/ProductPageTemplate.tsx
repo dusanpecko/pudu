@@ -1,4 +1,5 @@
 import ContactSection from "@/components/contact/ContactSection";
+import PhotoGallery from "@/components/gallery/PhotoGallery";
 import ProductApplications from "@/components/product/ProductApplications";
 import ProductFeatures from "@/components/product/ProductFeatures";
 import ProductGallery from "@/components/product/ProductGallery";
@@ -36,6 +37,8 @@ export default async function ProductPageTemplate({
       <ProductGallery product={product} locale={locale} />
       <ProductFeatures locale={locale} />
       <ProductApplications product={product} locale={locale} />
+      {/* Renders nothing until this model has photographs of its own. */}
+      <PhotoGallery locale={locale} gallery={product.slug} />
       <ProductNavigation slug={product.slug} locale={locale} />
       <ContactSection
         locale={locale}

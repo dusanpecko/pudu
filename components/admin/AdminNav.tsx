@@ -12,6 +12,7 @@ type AdminNavProps = {
 const LINKS = [
   { href: "/admin", label: "Prehľad" },
   { href: "/admin/translations-manager", label: "Preklady" },
+  { href: "/admin/gallery", label: "Galéria" },
   { href: "/admin/settings", label: "Nastavenia" },
 ];
 

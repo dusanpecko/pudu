@@ -20,6 +20,11 @@ export const de: Translation = {
     heroVisual: "Roboter-Visualisierung mit holografischer Oberfläche",
     decorative: "Dekoratives Element",
     currentPage: "Aktuelle Seite",
+    galleryOpen: "Bild im Vollbild ansehen",
+    galleryClose: "Schließen",
+    galleryPrevious: "Vorheriges Bild",
+    galleryNext: "Nächstes Bild",
+    galleryCounter: "{index} von {total}",
   },
   navigation: {
     home: "Startseite",
@@ -122,6 +127,12 @@ export const de: Translation = {
         "Automotive und Elektronik",
         "Krankenhäuser, Labore, Gesundheitsbranche",
       ],
+    },
+    gallery: {
+      titleLine1: "Unsere Roboter",
+      titleLine2: "im realen Einsatz.",
+      description:
+        "Aufnahmen aus Kundeneinsätzen — Fertigung, Lager und Linienversorgung.",
     },
   },
   product: {

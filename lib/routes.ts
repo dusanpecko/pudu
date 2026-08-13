@@ -12,6 +12,7 @@ export const sectionIds = {
     de: "technologie",
   },
   solutions: { sk: "riesenia", cz: "reseni", en: "solutions", de: "loesungen" },
+  gallery: { sk: "galeria", cz: "galerie", en: "gallery", de: "galerie" },
   contact: { sk: "kontakt", cz: "kontakt", en: "contact", de: "kontakt" },
   specs: {
     sk: "parametre",

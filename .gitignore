@@ -43,3 +43,7 @@ next-env.d.ts
 
 # Local-only working documents (pricing, notes) — never published.
 /private/
+
+# Client deliveries, kept out of the app but not in the repository either.
+data/translations/new_translations/
+Design.pdf
