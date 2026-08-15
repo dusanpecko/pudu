@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 
+import AdminNoAccessPage from "@/app/admin/no-access/page";
 import AdminNav from "@/components/admin/AdminNav";
-import { isEditor } from "@/lib/supabase/editors";
+import { isEditor } from "@/lib/editors";
 import { getEditor } from "@/lib/supabase/server";
 
 import "@/app/admin/admin.css";
@@ -23,14 +24,32 @@ export const metadata: Metadata = {
  */
 export default async function AdminLayout({ children }: { children: ReactNode }) {
   const editor = await getEditor();
-  // The sign-in and refusal pages render without the shell, since there is
-  // nothing to navigate to yet.
-  const showNav = isEditor(editor?.email);
+  const allowed = await isEditor(editor?.email);
+
+  // Signed in but not on the list. The refusal is rendered here rather than
+  // rewritten to by the middleware, because the list lives in the database and
+  // the middleware cannot read it. Rendering it in place of the children also
+  // means a page never runs for somebody who may not see it.
+  //
+  // `editor` has to be present for this branch: without a session the middleware
+  // is already sending the visitor to the sign-in page, which this layout wraps
+  // and which nobody is allowed into yet by definition.
+  if (editor && !allowed) {
+    return (
+      <html lang="sk">
+        <body>
+          <AdminNoAccessPage />
+        </body>
+      </html>
+    );
+  }
 
   return (
     <html lang="sk">
       <body>
-        {showNav ? <AdminNav editorEmail={editor?.email ?? null} /> : null}
+        {/* The sign-in page renders without the shell, since there is nothing to
+            navigate to yet. */}
+        {allowed ? <AdminNav editorEmail={editor?.email ?? null} /> : null}
         {children}
       </body>
     </html>

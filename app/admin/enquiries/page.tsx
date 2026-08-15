@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import EnquiriesTable from "@/components/admin/EnquiriesTable";
 import { products } from "@/data/products";
 import { countExpired, loadEnquiries, retentionLabel } from "@/lib/enquiries";
-import { isEditor } from "@/lib/supabase/editors";
+import { isEditor } from "@/lib/editors";
 import { getEditor } from "@/lib/supabase/server";
 
 /**
@@ -17,7 +17,7 @@ export default async function EnquiriesPage() {
   const editor = await getEditor();
   // Middleware already checks this; repeated here so the personal data below
   // cannot be rendered even if the route is reached another way.
-  if (!isEditor(editor?.email)) notFound();
+  if (!(await isEditor(editor?.email))) notFound();
 
   // Slugs read as "PUDU T300" rather than being looked up by whoever reads the
   // enquiry.

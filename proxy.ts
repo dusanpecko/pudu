@@ -1,7 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
-import { isEditor } from "@/lib/supabase/editors";
 import {
   supabaseConfigured,
   supabasePublishableKey,
@@ -9,12 +8,19 @@ import {
 } from "@/lib/supabase/env";
 
 const LOGIN_PATH = "/admin/login";
-const NO_ACCESS_PATH = "/admin/no-access";
 
 /**
- * Refreshes the Supabase session and gates the editing tools. Scoped to
- * `/admin` by the matcher below, so the public site keeps running with nothing
- * in front of it.
+ * Refreshes the Supabase session and requires one for the editing tools. Scoped
+ * to `/admin` by the matcher below, so the public site keeps running with
+ * nothing in front of it.
+ *
+ * It answers one question — is anybody signed in — and leaves the other one,
+ * whether that person is allowed in, to the admin layout. That split is forced:
+ * the allowlist now lives in the database, reaching it means the module that
+ * holds the secret key, and that module is marked `server-only`, which throws if
+ * it is imported here. It is also the better place for the decision. The layout
+ * can render the refusal as a page instead of rewriting to one, and it re-reads
+ * the list on every request, so access revoked a minute ago is gone now.
  *
  * Named `proxy` in a `proxy.ts` file: Next 16 deprecated the `middleware`
  * convention and renamed it.
@@ -53,13 +59,6 @@ export async function proxy(request: NextRequest) {
     const target = new URL(LOGIN_PATH, request.url);
     target.searchParams.set("next", pathname);
     return NextResponse.redirect(target);
-  }
-
-  // A session proves who somebody is, not that they are allowed in. Sign-ups
-  // can be enabled on the Supabase project, so the allowlist decides.
-  if (user && !isEditor(user.email)) {
-    if (pathname === NO_ACCESS_PATH) return response;
-    return NextResponse.rewrite(new URL(NO_ACCESS_PATH, request.url));
   }
 
   if (user && pathname === LOGIN_PATH) {

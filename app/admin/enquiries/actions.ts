@@ -8,7 +8,7 @@ import {
   retentionLabel,
   setHandled,
 } from "@/lib/enquiries";
-import { isEditor } from "@/lib/supabase/editors";
+import { isEditor } from "@/lib/editors";
 import { getEditor } from "@/lib/supabase/server";
 
 export type EnquiryActionState = {
@@ -19,7 +19,7 @@ export type EnquiryActionState = {
 /** Every action re-checks the allowlist: a server action is a public endpoint. */
 async function requireEditor(): Promise<string> {
   const editor = await getEditor();
-  if (!isEditor(editor?.email) || !editor?.email) {
+  if (!(await isEditor(editor?.email)) || !editor?.email) {
     throw new Error("Neoprávnený prístup.");
   }
   return editor.email;

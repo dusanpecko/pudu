@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import GalleryManager from "@/components/admin/GalleryManager";
 import { products } from "@/data/products";
 import { heroKeys, loadAllImages, stripKeys, HOME_GALLERY } from "@/lib/gallery";
-import { isEditor } from "@/lib/supabase/editors";
+import { isEditor } from "@/lib/editors";
 import { getEditor } from "@/lib/supabase/server";
 
 /**
@@ -17,7 +17,7 @@ export default async function GalleryPage() {
   const editor = await getEditor();
   // Middleware already checks this; repeated here so nothing renders even if
   // the route is reached another way.
-  if (!isEditor(editor?.email)) notFound();
+  if (!(await isEditor(editor?.email))) notFound();
 
   /** Product slugs read as "PUDU T300"; the home page names itself. */
   const nameOf = (key: string) =>

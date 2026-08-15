@@ -16,6 +16,7 @@ const LINKS = [
   { href: "/admin/gallery", label: "Galéria" },
   { href: "/admin/contacts", label: "Kontakty" },
   { href: "/admin/settings", label: "Nastavenia" },
+  { href: "/admin/editors", label: "Používatelia" },
 ];
 
 /** Shared header for the whole /admin subtree. */
@@ -50,7 +51,22 @@ export default function AdminNav({ editorEmail }: AdminNavProps) {
         </div>
 
         <div className="flex items-center gap-3 text-sm">
-          {editorEmail ? <span className="text-slate-500">{editorEmail}</span> : null}
+          {/* The address doubles as the way into the profile — it is where
+              somebody looks when they want to know who they are signed in as,
+              which is the same moment they want to change their password. */}
+          {editorEmail ? (
+            <Link
+              href="/admin/profile"
+              aria-current={pathname.startsWith("/admin/profile") ? "page" : undefined}
+              className={`rounded-lg px-2 py-1 ${
+                pathname.startsWith("/admin/profile")
+                  ? "bg-slate-900 text-white"
+                  : "text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+              }`}
+            >
+              {editorEmail}
+            </Link>
+          ) : null}
           <form action={signOut}>
             <button
               type="submit"

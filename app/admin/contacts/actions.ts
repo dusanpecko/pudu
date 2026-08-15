@@ -5,7 +5,7 @@ import { revalidatePath, updateTag } from "next/cache";
 import { COMPANY_TAG, saveCompanyDetails } from "@/lib/company";
 import type { Identifier, SocialLink } from "@/lib/company-shared";
 import { isLocale } from "@/lib/i18n";
-import { isEditor } from "@/lib/supabase/editors";
+import { isEditor } from "@/lib/editors";
 import { getEditor } from "@/lib/supabase/server";
 
 export type ContactsState = {
@@ -16,7 +16,7 @@ export type ContactsState = {
 /** Every action re-checks the allowlist: a server action is a public endpoint. */
 async function requireEditor(): Promise<string> {
   const editor = await getEditor();
-  if (!isEditor(editor?.email) || !editor?.email) {
+  if (!(await isEditor(editor?.email)) || !editor?.email) {
     throw new Error("Neoprávnený prístup.");
   }
   return editor.email;

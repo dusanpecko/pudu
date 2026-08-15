@@ -9,7 +9,7 @@ import {
   liveSet,
   loadOverrideRows,
 } from "@/lib/translation-overrides";
-import { isEditor } from "@/lib/supabase/editors";
+import { isEditor } from "@/lib/editors";
 import { getEditor } from "@/lib/supabase/server";
 import type { StringTree } from "@/lib/translation-source";
 
@@ -27,7 +27,7 @@ export default async function TranslationsManagerPage() {
   const editor = await getEditor();
   // Middleware already checks this; repeated here so the data cannot be
   // rendered even if the route is reached another way.
-  if (!isEditor(editor?.email)) notFound();
+  if (!(await isEditor(editor?.email))) notFound();
 
   const ui = Object.fromEntries(
     locales.map((locale) => [locale, translations[locale] as unknown as StringTree]),

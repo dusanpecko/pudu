@@ -4,7 +4,7 @@ import Link from "next/link";
 import MetricList from "@/components/admin/MetricList";
 import StatTiles from "@/components/admin/StatTiles";
 import TrafficChart from "@/components/admin/TrafficChart";
-import { isEditor } from "@/lib/supabase/editors";
+import { isEditor } from "@/lib/editors";
 import { getEditor } from "@/lib/supabase/server";
 import { dashboardConfigured, getDashboardData, ranges, resolveRange } from "@/lib/umami";
 
@@ -18,7 +18,7 @@ type DashboardPageProps = {
  */
 export default async function AdminDashboardPage({ searchParams }: DashboardPageProps) {
   const editor = await getEditor();
-  if (!isEditor(editor?.email)) notFound();
+  if (!(await isEditor(editor?.email))) notFound();
 
   const { range: rangeParam } = await searchParams;
   const range = resolveRange(rangeParam);

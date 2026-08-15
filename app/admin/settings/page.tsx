@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import SmtpSettingsForm from "@/components/admin/SmtpSettingsForm";
 import { loadSmtpSettingsViews } from "@/lib/smtp-settings";
-import { isEditor } from "@/lib/supabase/editors";
+import { isEditor } from "@/lib/editors";
 import { getEditor } from "@/lib/supabase/server";
 
 /**
@@ -11,7 +11,7 @@ import { getEditor } from "@/lib/supabase/server";
  */
 export default async function AdminSettingsPage() {
   const editor = await getEditor();
-  if (!isEditor(editor?.email)) notFound();
+  if (!(await isEditor(editor?.email))) notFound();
 
   const settings = await loadSmtpSettingsViews();
 

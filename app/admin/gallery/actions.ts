@@ -17,7 +17,7 @@ import {
   updateImage,
 } from "@/lib/gallery-upload";
 import { locales } from "@/lib/i18n";
-import { isEditor } from "@/lib/supabase/editors";
+import { isEditor } from "@/lib/editors";
 import { getEditor } from "@/lib/supabase/server";
 
 export type GalleryState = {
@@ -28,7 +28,7 @@ export type GalleryState = {
 /** Every action re-checks the allowlist: a server action is a public endpoint. */
 async function requireEditor(): Promise<string> {
   const editor = await getEditor();
-  if (!isEditor(editor?.email) || !editor?.email) {
+  if (!(await isEditor(editor?.email)) || !editor?.email) {
     throw new Error("Neoprávnený prístup.");
   }
   return editor.email;

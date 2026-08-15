@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 
 import ContactsManager from "@/components/admin/ContactsManager";
 import { loadAllCompanyDetails } from "@/lib/company";
-import { isEditor } from "@/lib/supabase/editors";
+import { isEditor } from "@/lib/editors";
 import { getEditor } from "@/lib/supabase/server";
 
 /**
@@ -16,7 +16,7 @@ export default async function ContactsPage() {
   const editor = await getEditor();
   // Middleware already checks this; repeated here so nothing renders even if
   // the route is reached another way.
-  if (!isEditor(editor?.email)) notFound();
+  if (!(await isEditor(editor?.email))) notFound();
 
   return <ContactsManager details={await loadAllCompanyDetails()} />;
 }
