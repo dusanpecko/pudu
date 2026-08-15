@@ -19,14 +19,14 @@ chyba v kóde: pošta je nastavená iba pre slovenský trh a s testovacími úda
 naplánované mazanie dopytov nebežalo, a český trh by pri spustení pošty narazil
 na SPF. **Jeden z nich (mazanie) bol vyriešený ešte počas auditu**, rovnako ako
 zraniteľnosť závislosti. Otvorené ostávajú **2 vysoké**, **2 stredné**
-a **4 nízke**.
+a **3 nízke** (N4 medzičasom vyriešený).
 
 | priorita | počet | charakter |
 | --- | --- | --- |
 | vysoká | 2 | prevádzkové kroky pred ostrým spustením |
 | stredná | 2 | obrana do hĺbky (hlavičky, DMARC) |
-| nízka | 4 | poriadok a odolnosť |
-| vyriešené počas auditu | 2 | závislosť `nanoid`; `CRON_SECRET` (V2) |
+| nízka | 3 | poriadok a odolnosť |
+| vyriešené počas auditu | 3 | `nanoid`; `CRON_SECRET` (V2); serializér (N4) |
 
 ---
 
@@ -179,14 +179,15 @@ kým tam niekto neuloží. Nový zoznam prístupov už toto riziko nemá (bez ca
 **Riešenie:** doplniť strop expirácie (napr. 1 hodina). Úpravy z administrácie
 budú naďalej okamžité; zásah odinakiaľ sa prejaví do hodiny namiesto nikdy.
 
-### N4 — nízka · Editor prekladov negeneruje jazykové súbory bajt na bajt
+### N4 — VYRIEŠENÉ 14. 8. · Editor prekladov negeneroval jazykové súbory bajt na bajt
 
-**Zistené:** štyri produktové súbory sa reprodukujú presne; štyri jazykové sa
-líšia v zalomení riadkov a jednom komentári (obsah je totožný — overené
-normalizovaným porovnaním). Preklady nie sú v ohrození; commit stiahnutého
-súboru len vyrobí hlučný diff.
+**Zistené:** štyri produktové súbory sa reprodukovali presne; štyri jazykové sa
+líšili v zalomení riadkov a jednom ručne dopísanom komentári (obsah totožný).
 
-**Riešenie:** zarovnať serializér, keď bude vhodná chvíľa. Netlačí.
+**Vyriešené:** štyri jazykové súbory regenerované do kanonickej podoby
+serializéra a záruku odteraz stráži test — regenerácia každého z ôsmich
+dátových súborov sa porovnáva bajt na bajt pri každom spustení `npm test`
+aj v CI. Postup pri páde testu je v docs/TESTY.md.
 
 ### Opravené počas auditu · Zraniteľnosť závislosti nanoid
 
