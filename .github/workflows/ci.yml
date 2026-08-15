@@ -1,0 +1,33 @@
+# Runs on every push and pull request: type check, lint, unit tests.
+#
+# The build itself is deliberately absent — Vercel builds every push anyway and
+# refuses to deploy a broken one, so building here would double the work for no
+# extra safety. What Vercel does *not* run is exactly what this adds: the type
+# check as its own signal, the lint, and the test suite.
+#
+# No secrets are needed: the tests are pure by design (see docs/TESTY.md), so
+# this workflow can never touch the database or send mail.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # Same pin as .nvmrc and package.json engines.
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm test

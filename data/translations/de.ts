@@ -226,8 +226,10 @@ export const de: Translation = {
       emailInvalid: "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
       message: "Bitte schreiben Sie eine kurze Nachricht.",
       summary: "Bitte prüfen Sie die markierten Felder.",
-      tooMany: "Zu viele Versuche. Bitte versuchen Sie es in einem Moment erneut.",
-      consent: "Ohne Ihre Zustimmung zur Datenverarbeitung können wir die Anfrage nicht annehmen.",
+      tooMany:
+        "Zu viele Versuche. Bitte versuchen Sie es in einem Moment erneut.",
+      consent:
+        "Ohne Ihre Zustimmung zur Datenverarbeitung können wir die Anfrage nicht annehmen.",
     },
   },
   footer: {

@@ -53,7 +53,6 @@ export const sk = {
     galleryClose: "Zavrieť",
     galleryPrevious: "Predchádzajúci obrázok",
     galleryNext: "Nasledujúci obrázok",
-    /** "{index} z {total}" — the counter in the lightbox. */
     galleryCounter: "{index} z {total}",
     socialLinks: "Sociálne siete",
     themeToggle: "Prepnúť vzhľad",
@@ -234,7 +233,8 @@ export const sk = {
       message: "Napíšte krátku správu.",
       summary: "Skontrolujte prosím vyznačené polia.",
       tooMany: "Príliš mnoho pokusov. Skúste to prosím o chvíľu.",
-      consent: "Bez súhlasu so spracovaním osobných údajov dopyt nevieme prijať.",
+      consent:
+        "Bez súhlasu so spracovaním osobných údajov dopyt nevieme prijať.",
     },
   },
   footer: {
