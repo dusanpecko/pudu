@@ -16,16 +16,17 @@ hranici (97–99 bodov, plný počet za prístupnosť, postupy aj SEO).
 
 Audit našiel **3 nálezy vysokej priority** — všetky prevádzkové, žiadny nie je
 chyba v kóde: pošta je nastavená iba pre slovenský trh a s testovacími údajmi,
-naplánované mazanie dopytov nebeží, a český trh by pri spustení pošty narazil na
-SPF. Ďalej **2 nálezy strednej** a **4 nízkej** priority. Jedna zraniteľnosť
-závislosti bola opravená priamo počas auditu.
+naplánované mazanie dopytov nebežalo, a český trh by pri spustení pošty narazil
+na SPF. **Jeden z nich (mazanie) bol vyriešený ešte počas auditu**, rovnako ako
+zraniteľnosť závislosti. Otvorené ostávajú **2 vysoké**, **2 stredné**
+a **4 nízke**.
 
 | priorita | počet | charakter |
 | --- | --- | --- |
-| vysoká | 3 | prevádzkové kroky pred ostrým spustením |
+| vysoká | 2 | prevádzkové kroky pred ostrým spustením |
 | stredná | 2 | obrana do hĺbky (hlavičky, DMARC) |
 | nízka | 4 | poriadok a odolnosť |
-| opravené počas auditu | 1 | závislosť `nanoid` |
+| vyriešené počas auditu | 2 | závislosť `nanoid`; `CRON_SECRET` (V2) |
 
 ---
 
@@ -101,17 +102,16 @@ nastavenia pre CZ — pri EN a DE je dedenie zo SK pravdepodobne v poriadku,
 keďže za nimi stojí tá istá firma. Overiť testovacím e-mailom. Ide o krok 2
 odovzdávacieho protokolu; je na strane objednávateľa.
 
-### V2 — vysoká · Naplánované mazanie dopytov nebeží
+### V2 — VYRIEŠENÉ 14. 8. · Naplánované mazanie dopytov nebežalo
 
-**Zistené:** endpoint dennej úlohy vracia na produkcii **503** — premenná
-`CRON_SECRET` nie je nastavená. (503 je zámerné správanie: bez kľúča úloha
+**Zistené:** endpoint dennej úlohy vracal na produkcii **503** — premenná
+`CRON_SECRET` nebola nastavená. (503 je zámerné správanie: bez kľúča úloha
 odmieta bežať, aby nebola verejným zapisovacím endpointom.)
 
-**Dopad:** dopyty staršie ako päť rokov sa nemažú automaticky. Po zverejnení
-zásad, ktoré päťročnú dobu sľúbia, to bude rozpor so zásadami.
-
-**Riešenie:** nastaviť `CRON_SECRET` (ľubovoľný dlhý náhodný reťazec) vo Verceli
-pre Production a redeploynúť. Overenie: volanie bez kľúča má vrátiť 401.
+**Vyriešené počas auditu:** objednávateľ nastavil `CRON_SECRET` vo Verceli
+a redeployol. Overené na všetkých štyroch doménach: volanie bez kľúča aj so
+zlým kľúčom vracia **401**. Prvý naplánovaný beh: najbližšia noc, 3:17 UTC —
+skontrolovateľný v logoch cronu vo Verceli.
 
 ### V3 — vysoká pred spustením CZ · SPF domény 4igv.cz odmietne poštu z webu
 
@@ -214,7 +214,7 @@ build prechádza.
 
 | # | krok | kto | nález |
 | --- | --- | --- | --- |
-| 1 | Nastaviť `CRON_SECRET` + redeploy | dodávateľ (2 min) | V2 |
+| 1 | ~~Nastaviť `CRON_SECRET` + redeploy~~ **hotové 14. 8.** | — | V2 |
 | 2 | Ostré údaje pošty pre SK, nastavenie pre CZ, test | objednávateľ | V1 |
 | 3 | Pred CZ poštou: SPF 4igv.cz alebo M365 | objednávateľ / IT firmy | V3 |
 | 4 | Bezpečnostné hlavičky do `next.config.ts` | dodávateľ (malá zmena) | S1 |
