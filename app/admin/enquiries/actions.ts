@@ -77,11 +77,15 @@ export async function purgeOldEnquiries(): Promise<EnquiryActionState> {
   const removed = await purgeExpiredEnquiries();
   revalidatePath("/admin/enquiries");
 
+  // The blocked submissions are mentioned only when some went, so the ordinary
+  // message stays about the thing the button is named after.
+  const blocked = removed.spam > 0 ? ` Zmazaných aj ${removed.spam} zablokovaných.` : "";
+
   return {
     status: "ok",
     message:
-      removed === 0
-        ? `Nič staršie ako ${retentionLabel()} tu nie je.`
-        : `Zmazaných ${removed} dopytov starších ako ${retentionLabel()}.`,
+      removed.expired === 0
+        ? `Nič staršie ako ${retentionLabel()} tu nie je.${blocked}`
+        : `Zmazaných ${removed.expired} dopytov starších ako ${retentionLabel()}.${blocked}`,
   };
 }

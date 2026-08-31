@@ -233,6 +233,7 @@ export const sk = {
       message: "Napíšte krátku správu.",
       summary: "Skontrolujte prosím vyznačené polia.",
       tooMany: "Príliš mnoho pokusov. Skúste to prosím o chvíľu.",
+      verification: "Overenie sa nepodarilo. Skúste to prosím ešte raz.",
       consent:
         "Bez súhlasu so spracovaním osobných údajov dopyt nevieme prijať.",
     },

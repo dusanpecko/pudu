@@ -1901,6 +1901,16 @@ h3 {
   color: var(--color-danger);
 }
 
+/* Container for the Turnstile challenge, between the consent and the button.
+   Empty until Cloudflare's script renders an iframe into it, so it carries no
+   height of its own — a reserved box would leave a gap on every page where the
+   widget is not configured. The widget itself is sized `flexible`, which makes it
+   follow this width rather than impose its own. */
+.turnstile {
+  margin-top: 4px;
+  max-width: 100%;
+}
+
 .form-foot {
   display: flex;
   align-items: center;

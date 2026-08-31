@@ -226,6 +226,7 @@ export const en: Translation = {
       message: "Please write a short message.",
       summary: "Please check the highlighted fields.",
       tooMany: "Too many attempts. Please try again in a moment.",
+      verification: "Verification failed. Please try once more.",
       consent:
         "We cannot accept the enquiry without your consent to data processing.",
     },

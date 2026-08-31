@@ -2,7 +2,13 @@ import { notFound } from "next/navigation";
 
 import EnquiriesTable from "@/components/admin/EnquiriesTable";
 import { products } from "@/data/products";
-import { countExpired, loadEnquiries, retentionLabel } from "@/lib/enquiries";
+import {
+  countExpired,
+  countRecentSpam,
+  loadEnquiries,
+  loadSpamEnquiries,
+  retentionLabel,
+} from "@/lib/enquiries";
 import { isEditor } from "@/lib/editors";
 import { getEditor } from "@/lib/supabase/server";
 
@@ -28,12 +34,23 @@ export default async function EnquiriesPage() {
     ]),
   );
 
+  // In parallel: four independent reads, and the page shows nothing until it has
+  // all of them anyway.
+  const [enquiries, spam, expiredCount, spamToday] = await Promise.all([
+    loadEnquiries(),
+    loadSpamEnquiries(),
+    countExpired(),
+    countRecentSpam(),
+  ]);
+
   return (
     <EnquiriesTable
-      enquiries={await loadEnquiries()}
+      enquiries={enquiries}
       productNames={productNames}
-      expiredCount={await countExpired()}
+      expiredCount={expiredCount}
       retention={retentionLabel()}
+      spam={spam}
+      spamToday={spamToday}
     />
   );
 }

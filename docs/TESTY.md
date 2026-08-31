@@ -3,7 +3,7 @@
 Ako sa web testuje, čo je pokryté zámerne a čo zámerne nie.
 
 ```bash
-npm test          # jednotkové testy — ~34 testov, pod sekundu, bez siete
+npm test          # jednotkové testy — ~61 testov, pod sekundu, bez siete
 npm run smoke     # 32 kontrol živej produkcie — len na čítanie, ~15 s
 ```
 
@@ -29,14 +29,23 @@ všetky stránky, a Vercel rozbitý build nenasadí.
 | `mailer-sender.test.ts` | meno odosielateľa: adresa vždy z nastavení, a **cez meno sa nedá prepašovať hlavička** (nový riadok, úvodzovky, spätné lomky) |
 | `gallery-crop.test.ts` | orez má vždy žiadaný pomer, vždy sa zmestí, ohnisko na okraji **nepretečie** |
 | `editors-env.test.ts` | `ADMIN_EMAILS`: normalizácia adries, prázdna premenná nepúšťa nikoho — polovica poistky proti zamknutiu |
+| `spam.test.ts` | klasifikátor dopytov: vlna, ktorá web zneužila ako relay, je chytená — a **žiadny jednotlivý nevinný signál nezablokuje nič**. Falošný pozitív je tichý, preto je drahší |
+| `form-token.test.ts` | podpísaná časová značka formulára: sfalšovaný podpis, **prepísaný čas pod vlastným podpisom**, expirácia aj značka z budúcnosti sú odmietnuté |
+| `turnstile-hostnames.test.ts` | zoznam hostnamov, na ktorých smie byť Turnstile token vyriešený. Kontrola z neho je **mimo produkcie vypnutá**, takže chyba tu sa neprejaví ani lokálne, ani na preview — až zablokovaným formulárom na všetkých živých doménach |
 
 ## 2. Jedna zvláštnosť: testy „vystrihujú" zo zdrojákov
 
-`sender()`, skript témy a `cropRect` žijú v súboroch, ktoré sa z testu nedajú
+`sender()`, skript témy, `cropRect` a `verifyFormToken()` žijú v súboroch,
+ktoré sa z testu nedajú
 importovať celé — `server-only` mimo Reactu vyhodí výnimku, `.tsx` obsahuje JSX
 a aliasy `@/` Node nerozlúšti. Testy preto **vystrihnú presne tú funkciu zo
 skutočného súboru** (regexom, cez `tests/helpers.ts`) a spustia doslova text,
 ktorý sa nasadzuje.
+
+Opak sa dá tiež zariadiť, a je lepší, keď to ide: `lib/spam.ts` je zámerne
+**bez jedinej závislosti** — bez `server-only`, bez aliasov — takže sa importuje
+celý a normálne. Klasifikátor, ktorého váhy sa nedajú spustiť v izolácii, je
+klasifikátor ladený od oka.
 
 Dôsledok, s ktorým treba počítať: **premenovanie alebo presun takej funkcie
 zhodí test** s hláškou „Snippet not found". To je zámer — alternatívou by bolo

@@ -17,6 +17,12 @@ import { adminClientConfigured, createSupabaseAdminClient } from "@/lib/supabase
  * Two kinds of deletion, for two different obligations. {@link deleteEnquiry}
  * answers a person who asks to be erased. {@link purgeExpiredEnquiries} enforces
  * the retention period, so the data does not simply accumulate for ever.
+ *
+ * Not everything stored here is an enquiry. A submission the classifier in
+ * lib/spam.ts rejects is written down too, flagged and never mailed, so that a
+ * wrong verdict is something an editor can find rather than something a customer
+ * silently loses. Those rows are kept for a fortnight, not five years, and the
+ * two reading functions are separate — see {@link loadEnquiries}.
  */
 
 /**
@@ -51,6 +57,25 @@ export function retentionCutoff(): Date {
   return cutoff;
 }
 
+/**
+ * How long a blocked submission is kept.
+ *
+ * Days, not years, and for a different reason than the retention period above.
+ * A flagged row exists so a misjudgement by lib/spam.ts can be spotted and
+ * rescued; two weeks is longer than anyone takes to notice a missing enquiry, and
+ * after that the row is neither useful nor ours to keep. The privacy notice
+ * promises five years to *customers* — it does not oblige us to archive what a
+ * bot typed into the form.
+ */
+export const SPAM_RETENTION_DAYS = 14;
+
+/** Blocked submissions created before this moment are swept. */
+export function spamCutoff(): Date {
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - SPAM_RETENTION_DAYS);
+  return cutoff;
+}
+
 export type Enquiry = {
   id: string;
   locale: Locale;
@@ -69,6 +94,10 @@ export type Enquiry = {
   handledBy: string | null;
   handledAt: string | null;
   createdAt: string;
+  /** Blocked by lib/spam.ts. Nothing was sent, for this row or about it. */
+  spam: boolean;
+  /** The score and signals behind the verdict, for arguing with it. */
+  spamReason: string | null;
 };
 
 export type NewEnquiry = {
@@ -79,6 +108,14 @@ export type NewEnquiry = {
   phone: string;
   product: string;
   message: string;
+  /**
+   * The classifier's verdict, decided before this is called. Required rather
+   * than defaulted: a caller that forgets it would silently store a blocked
+   * submission as a real enquiry and mail it onward, which is the one mistake
+   * this whole mechanism exists to prevent.
+   */
+  spam: boolean;
+  spamReason: string | null;
 };
 
 const TABLE = "enquiries";
@@ -100,6 +137,8 @@ type Row = {
   handled_by: string | null;
   handled_at: string | null;
   created_at: string;
+  spam: boolean | null;
+  spam_reason: string | null;
 };
 
 function fromRow(row: Row): Enquiry {
@@ -122,6 +161,8 @@ function fromRow(row: Row): Enquiry {
     handledBy: row.handled_by,
     handledAt: row.handled_at,
     createdAt: row.created_at,
+    spam: row.spam ?? false,
+    spamReason: row.spam_reason,
   };
 }
 
@@ -151,6 +192,8 @@ export async function createEnquiry(
       phone: input.phone,
       product: input.product,
       message: input.message,
+      spam: input.spam,
+      spam_reason: input.spamReason,
     })
     .select("id")
     .single<{ id: string }>();
@@ -165,7 +208,13 @@ export async function createEnquiry(
   return { ok: true, data: { id: data.id } };
 }
 
-/** How many enquiries are past their retention period. */
+/**
+ * How many real enquiries are past their retention period.
+ *
+ * Blocked submissions are excluded on purpose: they are swept on their own
+ * fortnightly schedule, and counting them here would put a number next to a
+ * label that says "older than five years" and mean something else entirely.
+ */
 export async function countExpired(): Promise<number> {
   if (!adminClientConfigured) return 0;
 
@@ -174,6 +223,7 @@ export async function countExpired(): Promise<number> {
     const { count, error } = await supabase
       .from(TABLE)
       .select("id", { count: "exact", head: true })
+      .eq("spam", false)
       .lt("created_at", retentionCutoff().toISOString());
 
     if (error) {
@@ -186,33 +236,64 @@ export async function countExpired(): Promise<number> {
   }
 }
 
+export type PurgeCounts = {
+  /** Real enquiries past the period the privacy notice states. */
+  expired: number;
+  /** Blocked submissions past their much shorter window. */
+  spam: number;
+};
+
 /**
- * Deletes everything past the retention period. Returns how many went.
+ * Deletes everything past its retention period. Returns how many of each went.
+ *
+ * Two sweeps rather than one, because the two populations are kept for
+ * unrelated reasons and therefore for unrelated lengths of time: a customer's
+ * enquiry is kept because the privacy notice promises it, a blocked submission
+ * only long enough for a misjudgement to be noticed. One cutoff could not honour
+ * both.
  *
  * Never throws: this runs alongside storing a new enquiry, and a failed sweep
  * must not cost the customer their message.
  */
-export async function purgeExpiredEnquiries(): Promise<number> {
-  if (!adminClientConfigured) return 0;
+export async function purgeExpiredEnquiries(): Promise<PurgeCounts> {
+  const none: PurgeCounts = { expired: 0, spam: 0 };
+  if (!adminClientConfigured) return none;
 
   try {
     const supabase = createSupabaseAdminClient();
-    const { data, error } = await supabase
+
+    const expired = await supabase
       .from(TABLE)
       .delete()
+      .eq("spam", false)
       .lt("created_at", retentionCutoff().toISOString())
       .select("id");
 
-    if (error) {
-      console.warn(`expired enquiries not purged: ${error.message}`);
-      return 0;
+    const spam = await supabase
+      .from(TABLE)
+      .delete()
+      .eq("spam", true)
+      .lt("created_at", spamCutoff().toISOString())
+      .select("id");
+
+    // Reported separately: one sweep failing is no reason to hide what the other
+    // managed, and the two errors have different causes worth reading apart.
+    if (expired.error) {
+      console.warn(`expired enquiries not purged: ${expired.error.message}`);
     }
-    return (data ?? []).length;
+    if (spam.error) {
+      console.warn(`blocked submissions not purged: ${spam.error.message}`);
+    }
+
+    return {
+      expired: (expired.data ?? []).length,
+      spam: (spam.data ?? []).length,
+    };
   } catch (error) {
     console.warn(
-      `expired enquiries not purged: ${error instanceof Error ? error.message : error}`,
+      `enquiries not purged: ${error instanceof Error ? error.message : error}`,
     );
-    return 0;
+    return none;
   }
 }
 
@@ -262,8 +343,29 @@ export async function markDelivery(
   }
 }
 
-/** Newest first. Read uncached — the admin must see the current state. */
+/**
+ * Newest first. Read uncached — the admin must see the current state.
+ *
+ * Blocked submissions are filtered out in the query rather than in the table
+ * component, and that is the load-bearing part: a flood can outnumber the real
+ * enquiries by two orders of magnitude, so a client-side filter over the newest
+ * two hundred rows would show an empty list while four customers waited.
+ */
 export async function loadEnquiries(limit = 200): Promise<Enquiry[]> {
+  return read(limit, false);
+}
+
+/**
+ * The blocked submissions, for checking what the classifier has been doing.
+ *
+ * A shorter default than the real list: this is read to sample the verdicts and
+ * spot a wrong one, not to work through.
+ */
+export async function loadSpamEnquiries(limit = 50): Promise<Enquiry[]> {
+  return read(limit, true);
+}
+
+async function read(limit: number, spam: boolean): Promise<Enquiry[]> {
   if (!adminClientConfigured) return [];
 
   try {
@@ -271,6 +373,7 @@ export async function loadEnquiries(limit = 200): Promise<Enquiry[]> {
     const { data, error } = await supabase
       .from(TABLE)
       .select("*")
+      .eq("spam", spam)
       .order("created_at", { ascending: false })
       .limit(limit)
       .returns<Row[]>();
@@ -285,6 +388,35 @@ export async function loadEnquiries(limit = 200): Promise<Enquiry[]> {
       `enquiries unavailable: ${error instanceof Error ? error.message : error}`,
     );
     return [];
+  }
+}
+
+/**
+ * How many submissions have been blocked in the last day.
+ *
+ * A day rather than a total, because the number is there to answer "is something
+ * happening right now" — the question nobody thought to ask for two days while a
+ * flood ran.
+ */
+export async function countRecentSpam(): Promise<number> {
+  if (!adminClientConfigured) return 0;
+
+  try {
+    const since = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+    const supabase = createSupabaseAdminClient();
+    const { count, error } = await supabase
+      .from(TABLE)
+      .select("id", { count: "exact", head: true })
+      .eq("spam", true)
+      .gt("created_at", since);
+
+    if (error) {
+      console.warn(`blocked submissions not counted: ${error.message}`);
+      return 0;
+    }
+    return count ?? 0;
+  } catch {
+    return 0;
   }
 }
 

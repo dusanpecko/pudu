@@ -18,6 +18,14 @@ type EnquiriesTableProps = {
   expiredCount: number;
   /** Already worded, e.g. "5 rokov". */
   retention: string;
+  /**
+   * The submissions the spam classifier blocked, loaded separately from the real
+   * ones — a flood outnumbers them by orders of magnitude, so the two lists
+   * cannot share a query limit.
+   */
+  spam: Enquiry[];
+  /** Blocked in the last 24 hours. The number that says something is happening. */
+  spamToday: number;
 };
 
 function when(value: string): string {
@@ -39,10 +47,13 @@ export default function EnquiriesTable({
   productNames,
   expiredCount,
   retention,
+  spam,
+  spamToday,
 }: EnquiriesTableProps) {
   const router = useRouter();
 
   const [openOnly, setOpenOnly] = useState(false);
+  const [showSpam, setShowSpam] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
   const [message, setMessage] = useState("");
@@ -50,7 +61,7 @@ export default function EnquiriesTable({
 
   const open = enquiries.filter((entry) => !entry.handled);
   const undelivered = enquiries.filter((entry) => !entry.mailSent);
-  const rows = openOnly ? open : enquiries;
+  const rows = showSpam ? spam : openOnly ? open : enquiries;
 
   /**
    * Deletion is irreversible and the row is somebody's personal data, so it asks
@@ -119,14 +130,19 @@ export default function EnquiriesTable({
           >
             {open.length === 0 ? "všetko vybavené" : `${open.length} nevybavených`}
           </span>
-          <label className="flex items-center gap-2 text-slate-600">
-            <input
-              type="checkbox"
-              checked={openOnly}
-              onChange={(event) => setOpenOnly(event.target.checked)}
-            />
-            iba nevybavené
-          </label>
+          {/* Hidden in the spam view, where it would filter on a flag those rows
+              deliberately do not carry — a control that visibly does nothing is
+              read as a broken screen. */}
+          {!showSpam ? (
+            <label className="flex items-center gap-2 text-slate-600">
+              <input
+                type="checkbox"
+                checked={openOnly}
+                onChange={(event) => setOpenOnly(event.target.checked)}
+              />
+              iba nevybavené
+            </label>
+          ) : null}
         </div>
       </header>
 
@@ -158,7 +174,40 @@ export default function EnquiriesTable({
         </div>
       ) : null}
 
-      {undelivered.length > 0 ? (
+      {spamToday > 0 || spam.length > 0 ? (
+        <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-700">
+          <span>
+            {spamToday > 0 ? (
+              <>
+                Za posledný deň{" "}
+                <strong>
+                  {spamToday}{" "}
+                  {spamToday === 1
+                    ? "zablokovaný pokus"
+                    : spamToday < 5
+                      ? "zablokované pokusy"
+                      : "zablokovaných pokusov"}
+                </strong>
+                . Neodišel z nich žiadny e-mail.
+              </>
+            ) : (
+              <>Zablokované pokusy sa tu držia dva týždne, potom sa mažú.</>
+            )}{" "}
+            Ak zákazník tvrdí, že dopyt poslal a nič neprišlo, hľadajte ho tu.
+          </span>
+          <button
+            type="button"
+            onClick={() => setShowSpam(!showSpam)}
+            className="shrink-0 rounded-lg border border-slate-400 bg-white px-3 py-1.5 font-medium disabled:opacity-40"
+          >
+            {showSpam ? "Späť na dopyty" : `Zobraziť zablokované (${spam.length})`}
+          </button>
+        </div>
+      ) : null}
+
+      {/* Hidden in the spam view: it counts real enquiries, and next to a list of
+          blocked submissions it would read as a claim about them. */}
+      {undelivered.length > 0 && !showSpam ? (
         <p className="rounded-lg border border-rose-300 bg-rose-50 px-3 py-2 text-sm text-rose-900">
           <strong>{undelivered.length}</strong>{" "}
           {undelivered.length === 1 ? "dopyt sa" : "dopytov sa"} nepodarilo odoslať
@@ -169,7 +218,11 @@ export default function EnquiriesTable({
 
       {rows.length === 0 ? (
         <p className="rounded-xl border border-slate-200 bg-white px-4 py-6 text-sm text-slate-500">
-          {openOnly ? "Žiadne nevybavené dopyty." : "Zatiaľ žiadne dopyty."}
+          {showSpam
+            ? "Žiadne zablokované pokusy."
+            : openOnly
+              ? "Žiadne nevybavené dopyty."
+              : "Zatiaľ žiadne dopyty."}
         </p>
       ) : null}
 
@@ -177,8 +230,12 @@ export default function EnquiriesTable({
         {rows.map((entry) => (
           <article
             key={entry.id}
-            className={`rounded-xl border bg-white ${
-              entry.handled ? "border-slate-200" : "border-amber-300"
+            className={`rounded-xl border ${
+              entry.spam
+                ? "border-slate-200 bg-slate-50"
+                : entry.handled
+                  ? "border-slate-200 bg-white"
+                  : "border-amber-300 bg-white"
             }`}
           >
             <div className="flex flex-wrap items-start gap-4 p-4">
@@ -196,7 +253,19 @@ export default function EnquiriesTable({
                       {productNames[entry.product] ?? entry.product}
                     </span>
                   ) : null}
-                  {!entry.mailSent ? (
+                  {/* The mail badges are meaningless on a blocked submission —
+                      nothing was sent, and saying "neodoslané" would suggest a
+                      broken mail server rather than a working filter. It gets its
+                      own badge, carrying the arithmetic that produced the verdict. */}
+                  {entry.spam ? (
+                    <span
+                      title={entry.spamReason ?? undefined}
+                      className="rounded bg-slate-200 px-1.5 py-0.5 text-xs text-slate-700"
+                    >
+                      zablokované
+                    </span>
+                  ) : null}
+                  {!entry.spam && !entry.mailSent ? (
                     <span
                       title={entry.mailError ?? undefined}
                       className="rounded bg-rose-100 px-1.5 py-0.5 text-xs text-rose-900"
@@ -250,15 +319,24 @@ export default function EnquiriesTable({
               </div>
 
               <div className="flex shrink-0 flex-col items-end gap-2">
-                <label className="flex items-center gap-2 text-sm text-slate-700">
-                  <input
-                    type="checkbox"
-                    checked={entry.handled}
-                    disabled={busy === entry.id}
-                    onChange={() => void toggle(entry)}
-                  />
-                  vybavené
-                </label>
+                {/* Nothing to hand off on a blocked submission: it reached
+                    nobody, so "vybavené" would be a claim about work that never
+                    existed. Deleting it is the only action that makes sense. */}
+                {entry.spam ? (
+                  <span className="text-right text-xs text-slate-500">
+                    {entry.spamReason}
+                  </span>
+                ) : (
+                  <label className="flex items-center gap-2 text-sm text-slate-700">
+                    <input
+                      type="checkbox"
+                      checked={entry.handled}
+                      disabled={busy === entry.id}
+                      onChange={() => void toggle(entry)}
+                    />
+                    vybavené
+                  </label>
+                )}
                 <button
                   type="button"
                   onClick={() => void destroy(entry)}

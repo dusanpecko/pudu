@@ -28,6 +28,12 @@ a **3 nízke** (N4 medzičasom vyriešený).
 | nízka | 3 | poriadok a odolnosť |
 | vyriešené počas auditu | 3 | `nanoid`; `CRON_SECRET` (V2); serializér (N4) |
 
+**Doplnenie 31. 8. 2026:** pribudol nález **V4** — formulár bol dva dni použitý
+ako relay na rozosielanie scamu 617 cudzím adresám pod doménou objednávateľa.
+Vyriešený v kóde, čaká na migráciu a nasadenie. Tvrdenie zhrnutia, že formulár
+má „ochranu pred zneužitím", bolo v čase auditu pravdivé a ukázalo sa ako
+nedostatočné; oddiel 2 je opravený podľa súčasného stavu.
+
 ---
 
 ## 2. Čo je v poriadku (overené)
@@ -65,8 +71,16 @@ a **3 nízke** (N4 medzičasom vyriešený).
 
 - Rozhoduje **serverová** validácia; prehliadačová je len pre odozvu.
 - Súhlas so spracovaním je vynútený na serveri a ukladá sa **čas** súhlasu.
-- Honeypot odpovedá robotom „úspech", takže sa nemajú čo naučiť.
-- Limit 5 odoslaní / 10 min na adresu, 60 / hod. celkovo.
+- Honeypot odpovedá robotom „úspech", takže sa nemajú čo naučiť. **Sám však
+  nestačí** — viď nález V4 z 31. 8.
+- Limit 4 odoslania / 30 min na adresu, 20 / hod. celkovo za skutočné dopyty.
+  Pokusy vyhodnotené ako spam sa počítajú v **oddelenom** rozpočte, aby záplava
+  nevyžrala hodinovú kvótu zákazníkom (V4).
+- Obsahový klasifikátor (`lib/spam.ts`): zablokovaný pokus sa uloží s dôvodom,
+  ale **neodošle sa z neho nič** — ani firme, ani na adresu v poli e-mail.
+- Podpísaná časová značka formulára: dokazuje, že požiadavka prešla otvoreným
+  formulárom, a koľko času v ňom kto strávil.
+- Cloudflare Turnstile — pripravené, aktivuje sa doplnením dvoch kľúčov.
 - Chybové hlásenia neprezrádzajú príčinu (tá ide do serverového logu).
 - Mazanie: jednotlivo na žiadosť, hromadne po dobe uchovávania, kód dennej
   úlohy je nasadený a chránený kľúčom (že kľúč chýba — viď nález V2).
@@ -112,6 +126,44 @@ odmieta bežať, aby nebola verejným zapisovacím endpointom.)
 a redeployol. Overené na všetkých štyroch doménach: volanie bez kľúča aj so
 zlým kľúčom vracia **401**. Prvý naplánovaný beh: najbližšia noc, 3:17 UTC —
 skontrolovateľný v logoch cronu vo Verceli.
+
+### V4 — VYRIEŠENÉ V KÓDE 31. 8. · Formulár bol použitý ako relay na rozosielanie spamu
+
+**Doplnené 31. 8. 2026**, mimo pôvodného auditu. Zmerané na produkčnej databáze,
+nie odhadnuté.
+
+**Zistené:** za dva dni prijal formulár **659 odoslaní** — ustálene ~57/hod.,
+teda presne na vtedajšom globálnom limite 60/hod. Ruský scam („OZON", výhra
+1 000 000 rubľov + odkaz), 100 % správ s odkazom, 99 % v cyrilike.
+
+Vtedajšie tri obrany urobili presne to, na čo boli napísané, a nezabránili
+ničomu:
+
+- **honeypot** nezafungoval — robot vypĺňa len polia, ktoré vidí (všetkých 659
+  malo telefón aj firmu, skryté pole `website` ani jeden);
+- **limit na adresu** nezafungoval — 16 rôznych adries za dve hodiny, každá
+  slušne pod limitom;
+- **globálny limit** zafungoval nepretržite, a to bola tá škoda. Držaný na
+  strope prestal byť brzdou a stal sa ventilom: 1440 správ denne, a hodinová
+  kvóta bola vyčerpaná skôr, než na formulár prišel skutočný zákazník. Ten
+  dostal odpoveď „príliš mnoho pokusov, skúste neskôr".
+
+**Skutočný cieľ útoku nebola schránka objednávateľa.** Robot dával do poľa
+e-mail adresu **cudzej osoby** — 627 rôznych gmailových adries — a potvrdzovacia
+kópia dopytu jej poslušne doručila scam aj s odkazom, **z firemnej schránky
+objednávateľa a pod jeho doménou**. Odoslaných takých kópií: **617**. Spam
+v schránke bol vedľajší účinok; spotrebúvaným majetkom bola reputácia domény
+u Gmailu.
+
+**Vyriešené v kóde 31. 8.** — klasifikátor obsahu, podpísaná značka formulára,
+oddelené rozpočty limitov, Turnstile a hlavne: **potvrdzovacia kópia odchádza
+už len na overené odoslanie**. To je vec, ktorá relay zatvára. Klasifikátor bol
+overený proti reálnym dátam: 643 z 643 spamov zachytených, 0 falošných
+pozitívov (jediné dva čisté riadky v tabuľke boli testovacie správy). 657
+uložených spamov zmazaných.
+
+**Ostáva objednávateľovi / dodávateľovi:** aplikovať migráciu `0010`, nasadiť,
+a doplniť kľúče Turnstile — viď krok 1 a 2 nižšie.
 
 ### V3 — vysoká pred spustením CZ · SPF domény 4igv.cz odmietne poštu z webu
 
@@ -215,14 +267,16 @@ build prechádza.
 
 | # | krok | kto | nález |
 | --- | --- | --- | --- |
-| 1 | ~~Nastaviť `CRON_SECRET` + redeploy~~ **hotové 14. 8.** | — | V2 |
-| 2 | Ostré údaje pošty pre SK, nastavenie pre CZ, test | objednávateľ | V1 |
-| 3 | Pred CZ poštou: SPF 4igv.cz alebo M365 | objednávateľ / IT firmy | V3 |
-| 4 | Bezpečnostné hlavičky do `next.config.ts` | dodávateľ (malá zmena) | S1 |
-| 5 | Zásady OÚ + odkazy pre všetky jazyky | objednávateľ (texty) | N1 |
-| 6 | Kontakty CZ/EN/DE doplniť | objednávateľ (5 min) | N2 |
-| 7 | DMARC s hlásením, neskôr sprísniť | samostatná úloha | S2 |
-| 8 | Strop expirácie cache | dodávateľ, pri ďalšej zmene | N3 |
+| 1 | **Migrácia `0010` + nasadenie** — zastaví relay | dodávateľ, hneď | V4 |
+| 2 | Kľúče Turnstile do Vercelu (obe polovice) | objednávateľ + dodávateľ | V4 |
+| 3 | ~~Nastaviť `CRON_SECRET` + redeploy~~ **hotové 14. 8.** | — | V2 |
+| 4 | Ostré údaje pošty pre SK, nastavenie pre CZ, test | objednávateľ | V1 |
+| 5 | Pred CZ poštou: SPF 4igv.cz alebo M365 | objednávateľ / IT firmy | V3 |
+| 6 | Bezpečnostné hlavičky do `next.config.ts` | dodávateľ (malá zmena) | S1 |
+| 7 | Zásady OÚ + odkazy pre všetky jazyky | objednávateľ (texty) | N1 |
+| 8 | Kontakty CZ/EN/DE doplniť | objednávateľ (5 min) | N2 |
+| 9 | DMARC s hlásením, neskôr sprísniť | samostatná úloha | S2 |
+| 10 | Strop expirácie cache | dodávateľ, pri ďalšej zmene | N3 |
 
 ---
 

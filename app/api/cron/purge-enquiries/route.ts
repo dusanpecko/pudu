@@ -1,4 +1,8 @@
-import { purgeExpiredEnquiries, retentionLabel } from "@/lib/enquiries";
+import {
+  purgeExpiredEnquiries,
+  retentionLabel,
+  SPAM_RETENTION_DAYS,
+} from "@/lib/enquiries";
 
 /**
  * Deletes the enquiries that are past their retention period.
@@ -31,8 +35,14 @@ export async function GET(request: Request) {
 
   const removed = await purgeExpiredEnquiries();
   // Logged rather than silent: on the day this finally deletes something, the
-  // number is the only record that it did.
-  console.log(`purge-enquiries: removed ${removed} older than ${retentionLabel()}`);
+  // number is the only record that it did. The two counts are logged apart
+  // because they answer different questions — the first whether a promise in the
+  // privacy notice is being kept, the second how much the classifier is
+  // catching.
+  console.log(
+    `purge-enquiries: removed ${removed.expired} older than ${retentionLabel()}, ` +
+      `${removed.spam} blocked submissions older than ${SPAM_RETENTION_DAYS} days`,
+  );
 
-  return Response.json({ removed, retention: retentionLabel() });
+  return Response.json({ ...removed, retention: retentionLabel() });
 }

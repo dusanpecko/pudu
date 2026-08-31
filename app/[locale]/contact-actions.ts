@@ -5,11 +5,18 @@ import { headers } from "next/headers";
 import { products } from "@/data/products";
 import { loadCompanyDetails } from "@/lib/company";
 import { createEnquiry, markDelivery } from "@/lib/enquiries";
+import { verifyFormToken } from "@/lib/form-token";
 import { isLocale, localeNames, type Locale } from "@/lib/i18n";
 import { recipientList, sendMail } from "@/lib/mailer";
 import { allowEnquiry, visitorToken } from "@/lib/rate-limit";
 import { loadSmtpSettings } from "@/lib/smtp-settings";
+import { classifyEnquiry, spamReason } from "@/lib/spam";
 import { getProductTexts, getTranslations } from "@/lib/translations";
+import {
+  TURNSTILE_FIELD,
+  turnstileConfigured,
+  verifyTurnstile,
+} from "@/lib/turnstile";
 
 /**
  * Delivers an enquiry from the contact form.
@@ -28,6 +35,34 @@ import { getProductTexts, getTranslations } from "@/lib/translations";
  * the least reliable link here — a changed password or a provider block would
  * otherwise lose a customer's message outright — so delivery is recorded as an
  * outcome rather than assumed.
+ *
+ * ## What this endpoint was being used for
+ *
+ * Not, as it appeared, to fill an inbox. A distributed bot submitted an OZON
+ * prize scam a minute for two days, putting a *stranger's* address in the e-mail
+ * field each time — 627 different ones — and the acknowledgement below dutifully
+ * forwarded the scam text and its link to every one of them, over the client's own
+ * company mailbox and under the client's own domain. The inbox noise was the side
+ * effect. The form was a relay, and the asset being spent was the domain's
+ * standing with Gmail.
+ *
+ * That is why the order of the checks below is the substance of this file and not
+ * an implementation detail. Reading downwards:
+ *
+ *   1. the honeypot, and the field validation — free, and no side effects;
+ *   2. the form token, which dates the visitor's arrival (lib/form-token.ts);
+ *   3. the classifier, which is pure regex and therefore *first* among the real
+ *      defences (lib/spam.ts). A submission it rejects is stored, flagged, and
+ *      mailed nowhere — which is what closes the relay;
+ *   4. Turnstile, which asks whether a browser did real work (lib/turnstile.ts);
+ *   5. the rate limit, last, because by now we know which budget to charge.
+ *
+ * The two cheap steps come before the two expensive ones for the usual reason.
+ * Steps 3 and 4 come before step 5 for a much less obvious one: whatever they
+ * reject must not consume the hourly allowance that real customers share. Getting
+ * that ordering wrong is precisely how the previous version of this file, with a
+ * rate limit that worked exactly as designed, spent two days answering customers
+ * in Žilina with "too many attempts, try later".
  */
 
 export type EnquiryState = {
@@ -68,13 +103,15 @@ export async function sendEnquiry(
 
   const t = await getTranslations(locale);
   const failed = { status: "error" as const, message: t.contact.errors.summary };
+  // What a bot is told, whatever the reason. Indistinguishable from a delivered
+  // enquiry on purpose: a rejection that announces itself is a rejection somebody
+  // tunes against.
+  const silent = { status: "sent" as const, message: t.contact.success };
 
   // Hidden field, off-screen and unlabelled: a person never fills it, a naive
   // bot fills everything it finds. Answered as success, so the bot has nothing
   // to learn from the difference and stops rather than retrying.
-  if (formData.get("website")) {
-    return { status: "sent", message: t.contact.success };
-  }
+  if (formData.get("website")) return silent;
 
   const name = field(formData, "name");
   const email = field(formData, "email");
@@ -91,21 +128,94 @@ export async function sendEnquiry(
     return { status: "error", message: t.contact.errors.consent };
   }
 
+  const company = field(formData, "company");
+  const phone = field(formData, "phone");
+  const productSlug = field(formData, "product");
+
+  // How long this visitor had the form open, if they had it open at all.
+  const token = verifyFormToken(formData.get("formToken"));
+
+  const verdict = classifyEnquiry({
+    name,
+    company,
+    email,
+    phone,
+    message,
+    tokenValid: token.valid,
+    fillMs: token.fillMs,
+  });
+
+  const forwarded = (await headers()).get("x-forwarded-for");
+  const visitor = visitorToken(forwarded);
+
+  if (verdict.spam) {
+    // Charged to the spam budget, which is a storage cap and nothing more —
+    // nothing is sent for these rows. Exceeding it drops the submission without
+    // a trace beyond this log line, which is the correct trade: the hundredth
+    // identical scam of the hour teaches nobody anything the first ninety-nine
+    // did not.
+    const room = await allowEnquiry(visitor, locale, "spam");
+    if (room.allowed) {
+      await createEnquiry({
+        locale,
+        name,
+        company,
+        email,
+        phone,
+        product: productSlug,
+        message,
+        spam: true,
+        spamReason: spamReason(verdict),
+      });
+    }
+
+    // Logged at warn with the score, because this is the number that says whether
+    // the classifier is earning its place — and the one to look at first if a
+    // customer ever reports an enquiry that vanished.
+    console.warn(
+      `enquiry blocked (${locale}, ${spamReason(verdict)}, stored=${room.allowed})`,
+    );
+    return silent;
+  }
+
+  // Asked before the rate limit, so that a submission failing the challenge never
+  // spends any of the hourly allowance real customers share. Asked after
+  // everything free, because a Turnstile token is single-use and a visitor who
+  // mistyped their address should not be told their verification failed on the
+  // second attempt.
+  //
+  // The visitor's address is deliberately *not* sent along. Cloudflare would then
+  // require it to match the one that solved the challenge, and a proxy hop that
+  // rewrites `x-forwarded-for` in a way we did not anticipate would fail
+  // verification for every real visitor at once. Tokens are single-use and expire
+  // in minutes, which bounds replay well enough to not be worth that risk.
+  const challenge = await verifyTurnstile(formData.get(TURNSTILE_FIELD), null);
+  if (!challenge.ok) {
+    if (challenge.hard) {
+      console.warn(`enquiry challenge failed (${locale}, ${challenge.reason})`);
+      return { status: "error", message: t.contact.errors.verification };
+    }
+    // Inconclusive rather than negative — Cloudflare unreachable, or our own key
+    // misconfigured. Shouted about here and allowed through: see the note in
+    // lib/turnstile.ts on why a third party's downtime must not cost a customer
+    // their enquiry.
+    console.error(`enquiry challenge inconclusive (${locale}, ${challenge.reason})`);
+  }
+
+  // Whether we have a positive reason to believe a person sent this. It governs
+  // the acknowledgement further down, and nothing else.
+  const trusted = (turnstileConfigured && challenge.ok) || token.valid;
+
   // Checked after validation, so a malformed submission does not consume a
   // visitor's allowance — but before the mail server is contacted, which is the
   // resource being protected.
-  const forwarded = (await headers()).get("x-forwarded-for");
-  const verdict = await allowEnquiry(visitorToken(forwarded), locale);
-  if (!verdict.allowed) {
-    console.warn(`enquiry rate limited (${locale}, ${verdict.reason})`);
+  const allowance = await allowEnquiry(visitor, locale, "clean");
+  if (!allowance.allowed) {
+    console.warn(`enquiry rate limited (${locale}, ${allowance.reason})`);
     // Said plainly: a real visitor who submitted twice deserves to know it is a
     // timing problem, not a mistake in their form.
     return { status: "error", message: t.contact.errors.tooMany };
   }
-
-  const company = field(formData, "company");
-  const phone = field(formData, "phone");
-  const productSlug = field(formData, "product");
 
   // Written down first. Everything after this can fail without the enquiry
   // being lost, which is the whole point of the order.
@@ -117,6 +227,8 @@ export async function sendEnquiry(
     phone,
     product: productSlug,
     message,
+    spam: false,
+    spamReason: null,
   });
   if (!stored.ok) {
     // Storage failing is not a reason to refuse the customer: the mail may still
@@ -201,29 +313,53 @@ export async function sendEnquiry(
     return failed;
   }
 
-  // The acknowledgement goes out after the notification, and its failure is
-  // recorded rather than shown: the enquiry did reach the company, so telling the
-  // visitor it failed would be a lie.
-  const copy = await sendMail(
-    {
-      to: [email],
-      subject: oneLine(
-        senderName ? `${t.contact.copySubject} — ${senderName}` : t.contact.copySubject,
-      ),
-      text: [t.contact.copyIntro, "", ...lines].join("\n"),
-      fromName: senderName,
-    },
-    locale,
-  );
-  if (!copy.ok) {
-    console.warn(`enquiry copy not sent (${locale}): ${copy.message}`);
+  /**
+   * The acknowledgement, and the one piece of mail this site sends to an address
+   * nobody has verified.
+   *
+   * Which makes it the relay, and why it is now conditional. The notification
+   * above goes to a fixed recipient from the settings and can be sent freely; this
+   * one goes wherever the form was told to send it, carrying whatever the form was
+   * given to carry. Sending it to an unverified address on nothing but a
+   * well-formed submission is what let a scam reach six hundred strangers under
+   * the client's domain.
+   *
+   * `trusted` is a low bar deliberately — a solved challenge, or merely a token
+   * proving the form was actually opened. A real customer clears it without
+   * noticing. What it excludes is the case that matters: a request that arrived
+   * from nowhere, addressed to somebody who never asked us for anything.
+   *
+   * Its failure is recorded rather than shown, as before: the enquiry did reach
+   * the company, so telling the visitor it failed would be a lie.
+   */
+  let copySent = false;
+  if (trusted) {
+    const copy = await sendMail(
+      {
+        to: [email],
+        subject: oneLine(
+          senderName ? `${t.contact.copySubject} — ${senderName}` : t.contact.copySubject,
+        ),
+        text: [t.contact.copyIntro, "", ...lines].join("\n"),
+        fromName: senderName,
+      },
+      locale,
+    );
+    copySent = copy.ok;
+    if (!copy.ok) {
+      console.warn(`enquiry copy not sent (${locale}): ${copy.message}`);
+    }
+  } else {
+    // Worth a line, because a run of these means the token endpoint is failing
+    // for real visitors and every one of them is missing their receipt.
+    console.warn(`enquiry copy withheld (${locale}): submission not verified`);
   }
 
   if (stored.ok) {
     await markDelivery(stored.data.id, {
       mailSent: true,
       mailError: null,
-      copySent: copy.ok,
+      copySent,
     });
   }
 

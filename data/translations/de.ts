@@ -228,6 +228,8 @@ export const de: Translation = {
       summary: "Bitte prüfen Sie die markierten Felder.",
       tooMany:
         "Zu viele Versuche. Bitte versuchen Sie es in einem Moment erneut.",
+      verification:
+        "Die Überprüfung ist fehlgeschlagen. Bitte versuchen Sie es noch einmal.",
       consent:
         "Ohne Ihre Zustimmung zur Datenverarbeitung können wir die Anfrage nicht annehmen.",
     },

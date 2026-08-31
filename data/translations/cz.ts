@@ -227,6 +227,7 @@ export const cz: Translation = {
       message: "Napište krátkou zprávu.",
       summary: "Zkontrolujte prosím vyznačená pole.",
       tooMany: "Příliš mnoho pokusů. Zkuste to prosím za chvíli.",
+      verification: "Ověření se nezdařilo. Zkuste to prosím ještě jednou.",
       consent:
         "Bez souhlasu se zpracováním osobních údajů dotaz nemůžeme přijmout.",
     },

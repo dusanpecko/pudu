@@ -6,6 +6,7 @@ import { products } from "@/data/products";
 import type { Locale } from "@/lib/i18n";
 import { sectionId } from "@/lib/routes";
 import { loadSmtpSettings } from "@/lib/smtp-settings";
+import { TURNSTILE_ACTION, turnstileSiteKey } from "@/lib/turnstile";
 import { getProductTexts, getTranslations } from "@/lib/translations";
 import type { ProductSlug } from "@/types/product";
 
@@ -52,6 +53,12 @@ export default async function ContactSection({
               privacyUrl={privacyUrl}
               productOptions={productOptions}
               defaultProduct={defaultProduct}
+              turnstileSiteKey={turnstileSiteKey}
+              // Threaded from the server rather than written out again in the
+              // client component: the value the widget declares and the value
+              // the action verifies have to be the same string, and a copy that
+              // drifts would refuse every submission.
+              turnstileAction={TURNSTILE_ACTION}
             />
           </div>
         </Reveal>

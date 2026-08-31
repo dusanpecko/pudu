@@ -1,8 +1,9 @@
 "use client";
 
-import { useActionState, useId, useState } from "react";
+import { useActionState, useId, useRef, useState } from "react";
 
 import { sendEnquiry, type EnquiryState } from "@/app/[locale]/contact-actions";
+import Turnstile from "@/components/contact/Turnstile";
 import { SubmitButton } from "@/components/ui/Button";
 import type { Locale } from "@/lib/i18n";
 import type { Translation } from "@/types/translation";
@@ -24,6 +25,14 @@ type ContactFormProps = {
    * configured; the consent is still required, only unlinked.
    */
   privacyUrl: string;
+  /**
+   * Cloudflare Turnstile's public key. Empty means the challenge is not
+   * configured and no widget is rendered — the form still works, with the other
+   * defences carrying the load. See lib/turnstile.ts.
+   */
+  turnstileSiteKey: string;
+  /** The action name the widget declares, verified server-side on the way back. */
+  turnstileAction: string;
 };
 
 type FieldName = "name" | "email" | "message" | "consent";
@@ -46,10 +55,48 @@ export default function ContactForm({
   defaultProduct = "",
   locale,
   privacyUrl,
+  turnstileSiteKey,
+  turnstileAction,
 }: ContactFormProps) {
   const id = useId();
   const [errors, setErrors] = useState<Errors>({});
   const [state, formAction, pending] = useActionState(sendEnquiry, INITIAL);
+
+  /**
+   * The signed timestamp that dates the visitor's arrival at this form.
+   *
+   * Fetched on the first interaction rather than on mount, for two reasons: this
+   * form sits on every page, so minting one per page view would be a request
+   * nobody asked for, and the moment somebody first touches a field is a more
+   * honest start time than the moment a section scrolled into view. A bot that
+   * POSTs straight at the action never runs any of this and arrives without a
+   * token. See lib/form-token.ts for why that costs points rather than the
+   * submission.
+   */
+  const [formToken, setFormToken] = useState("");
+  const tokenRequested = useRef(false);
+
+  /**
+   * The solved Turnstile token, held here rather than in the widget's own injected
+   * input — see the note in Turnstile.tsx for why that injection is not relied on.
+   * Empty until the challenge resolves, and emptied again whenever it is spent.
+   */
+  const [turnstileToken, setTurnstileToken] = useState("");
+
+  const requestToken = () => {
+    if (tokenRequested.current) return;
+    tokenRequested.current = true;
+
+    fetch("/api/form-token", { method: "POST" })
+      .then((response) => (response.ok ? response.json() : null))
+      .then((data: { token?: unknown } | null) => {
+        if (data && typeof data.token === "string") setFormToken(data.token);
+      })
+      // Swallowed deliberately. Without a token the submission is merely
+      // scored a little more suspiciously; telling the visitor that a request
+      // they never made has failed would be noise about nothing they can fix.
+      .catch(() => {});
+  };
 
   const fieldId = (field: string) => `${id}-${field}`;
   const errorId = (field: FieldName) => `${id}-${field}-error`;
@@ -107,8 +154,18 @@ export default function ContactForm({
   }
 
   return (
-    <form className="form" action={formAction} onSubmit={onSubmit} noValidate>
+    <form
+      className="form"
+      action={formAction}
+      onSubmit={onSubmit}
+      // Both, because either can come first: a click into a field fires focus,
+      // while browser autofill can populate the form without one.
+      onFocus={requestToken}
+      onChange={requestToken}
+      noValidate
+    >
       <input type="hidden" name="locale" value={locale} />
+      <input type="hidden" name="formToken" value={formToken} />
       {/* Honeypot: hidden from sight and from assistive technology, and left out
           of the tab order. A person never reaches it; a naive bot fills it. */}
       <div className="sr-only" aria-hidden="true">
@@ -245,6 +302,27 @@ export default function ContactForm({
           </p>
         ) : null}
       </div>
+
+      {turnstileSiteKey ? (
+        <>
+          <input
+            type="hidden"
+            name="cf-turnstile-response"
+            value={turnstileToken}
+          />
+          {/* `state` is a fresh object for every result the action returns, which
+              is exactly when the widget's spent token needs replacing.
+              `setTurnstileToken` is passed rather than a closure over it because
+              the widget rebuilds itself if this identity changes. */}
+          <Turnstile
+            siteKey={turnstileSiteKey}
+            action={turnstileAction}
+            locale={locale}
+            resetOn={state}
+            onToken={setTurnstileToken}
+          />
+        </>
+      ) : null}
 
       {state.status === "error" ? (
         <p className="field-error" role="alert">
