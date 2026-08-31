@@ -97,6 +97,28 @@ sa rovno kliknúť), dátum a text. Dlhší text sa zbalí, rozbalíte ho odkazo
 | --- | --- |
 | **neodoslané** | dopyt sa nepodarilo poslať e-mailom. Zákazník o tom nevie — text máte tu, ale skontrolujte nastavenie pošty. |
 | **bez kópie** | dopyt firme odišiel, potvrdzovacia kópia zákazníkovi nie. |
+| **zablokované** | filter to vyhodnotil ako spam. Neodišlo z toho nič — ani firme, ani na adresu vo formulári. |
+
+### Zablokované pokusy (spam)
+
+Formulár je chránený filtrom. Keď niečo zablokuje, **neodošle sa z toho žiadny
+e-mail**, ale pokus sa aj tak uloží — aby ste videli, čo sa zablokovalo, a keby
+sa filter niekedy zmýlil, aby sa to dalo zachrániť.
+
+Zablokované pokusy sa **nezobrazujú medzi dopytmi**. Keď nejaké sú, ukáže sa nad
+zoznamom sivý pás a v ňom dve tlačidlá:
+
+- **Zobraziť zablokované** — prepne zoznam na ne. Rovnakým tlačidlom
+  (**Späť na dopyty**) sa vrátite.
+- **Zmazať všetky** — zmaže ich všetky naraz. Pýta sa na potvrdenie a povie
+  presný počet. **Skutočných dopytov sa to nedotkne**, maže len to, čo filter
+  zablokoval.
+
+Mazať ich nemusíte — **po dvoch týždňoch sa zmažú samé**. Tlačidlo je tam pre
+prípad, že ich pri väčšej vlne pribudne priveľa a chcete mať poriadok hneď.
+
+> **Keď zákazník tvrdí, že dopyt poslal a nič neprišlo**, hľadajte ho práve tu.
+> Pri každom zablokovanom pokuse je uvedený dôvod, prečo filter zasiahol.
 
 ### Doba uchovávania
 

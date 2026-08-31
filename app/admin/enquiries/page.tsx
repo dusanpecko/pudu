@@ -5,6 +5,7 @@ import { products } from "@/data/products";
 import {
   countExpired,
   countRecentSpam,
+  countSpam,
   loadEnquiries,
   loadSpamEnquiries,
   retentionLabel,
@@ -34,13 +35,17 @@ export default async function EnquiriesPage() {
     ]),
   );
 
-  // In parallel: four independent reads, and the page shows nothing until it has
+  // In parallel: five independent reads, and the page shows nothing until it has
   // all of them anyway.
-  const [enquiries, spam, expiredCount, spamToday] = await Promise.all([
+  //
+  // `spamTotal` is separate from the list because the list is capped — the number
+  // on the delete button has to be the number it will actually delete.
+  const [enquiries, spam, expiredCount, spamToday, spamTotal] = await Promise.all([
     loadEnquiries(),
     loadSpamEnquiries(),
     countExpired(),
     countRecentSpam(),
+    countSpam(),
   ]);
 
   return (
@@ -51,6 +56,7 @@ export default async function EnquiriesPage() {
       retention={retentionLabel()}
       spam={spam}
       spamToday={spamToday}
+      spamTotal={spamTotal}
     />
   );
 }

@@ -6,6 +6,7 @@ import { useState } from "react";
 import {
   markHandled,
   purgeOldEnquiries,
+  purgeSpamEnquiries,
   removeEnquiry,
 } from "@/app/admin/enquiries/actions";
 import type { Enquiry } from "@/lib/enquiries";
@@ -26,6 +27,11 @@ type EnquiriesTableProps = {
   spam: Enquiry[];
   /** Blocked in the last 24 hours. The number that says something is happening. */
   spamToday: number;
+  /**
+   * Every blocked submission stored, not just the loaded page of them. This is
+   * the number the delete button promises, so it cannot be `spam.length`.
+   */
+  spamTotal: number;
 };
 
 function when(value: string): string {
@@ -49,6 +55,7 @@ export default function EnquiriesTable({
   retention,
   spam,
   spamToday,
+  spamTotal,
 }: EnquiriesTableProps) {
   const router = useRouter();
 
@@ -95,6 +102,38 @@ export default function EnquiriesTable({
     setFailed(result.status === "error");
     setBusy(null);
     if (result.status === "ok") router.refresh();
+  };
+
+  /**
+   * Deletes every blocked submission at once.
+   *
+   * Asks first, with the real total rather than the number on screen — the list
+   * is capped and somebody who sees fifty rows should not be surprised by three
+   * hundred going.
+   *
+   * Leaves the spam view on success, because the banner holding the way back out
+   * of it disappears along with the last blocked row.
+   */
+  const purgeSpam = async () => {
+    if (
+      !window.confirm(
+        `Zmazať ${spamTotal} zablokovaných pokusov? Nedá sa vrátiť.\n\n` +
+          "Skutočné dopyty sa nemažú — maže sa len to, čo filter zablokoval a " +
+          "z čoho nikdy nič neodišlo.",
+      )
+    ) {
+      return;
+    }
+
+    setBusy("spam");
+    const result = await purgeSpamEnquiries();
+    setMessage(result.message);
+    setFailed(result.status === "error");
+    setBusy(null);
+    if (result.status === "ok") {
+      setShowSpam(false);
+      router.refresh();
+    }
   };
 
   const toggle = async (entry: Enquiry) => {
@@ -174,7 +213,7 @@ export default function EnquiriesTable({
         </div>
       ) : null}
 
-      {spamToday > 0 || spam.length > 0 ? (
+      {spamToday > 0 || spamTotal > 0 ? (
         <div className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-slate-300 bg-slate-50 px-3 py-2 text-sm text-slate-700">
           <span>
             {spamToday > 0 ? (
@@ -191,17 +230,30 @@ export default function EnquiriesTable({
                 . Neodišel z nich žiadny e-mail.
               </>
             ) : (
-              <>Zablokované pokusy sa tu držia dva týždne, potom sa mažú.</>
+              <>Zablokované pokusy sa tu držia dva týždne, potom sa mažú samé.</>
             )}{" "}
             Ak zákazník tvrdí, že dopyt poslal a nič neprišlo, hľadajte ho tu.
           </span>
-          <button
-            type="button"
-            onClick={() => setShowSpam(!showSpam)}
-            className="shrink-0 rounded-lg border border-slate-400 bg-white px-3 py-1.5 font-medium disabled:opacity-40"
-          >
-            {showSpam ? "Späť na dopyty" : `Zobraziť zablokované (${spam.length})`}
-          </button>
+          <div className="flex shrink-0 flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setShowSpam(!showSpam)}
+              disabled={busy !== null}
+              className="rounded-lg border border-slate-400 bg-white px-3 py-1.5 font-medium disabled:opacity-40"
+            >
+              {showSpam ? "Späť na dopyty" : `Zobraziť zablokované (${spamTotal})`}
+            </button>
+            {spamTotal > 0 ? (
+              <button
+                type="button"
+                onClick={() => void purgeSpam()}
+                disabled={busy !== null}
+                className="rounded-lg border border-rose-300 bg-white px-3 py-1.5 font-medium text-rose-700 disabled:opacity-40"
+              >
+                {busy === "spam" ? "Mažem…" : "Zmazať všetky"}
+              </button>
+            ) : null}
+          </div>
         </div>
       ) : null}
 

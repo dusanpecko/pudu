@@ -421,6 +421,66 @@ export async function countRecentSpam(): Promise<number> {
 }
 
 /**
+ * How many blocked submissions are stored, all told.
+ *
+ * Separate from {@link countRecentSpam} because the two answer different
+ * questions and one must not be used for the other: that one says whether a
+ * flood is running now, this one is the number on the button that deletes them,
+ * and a button that promises to delete fifty when three hundred are stored is a
+ * button nobody can trust. The list is read with a limit; this count is not.
+ */
+export async function countSpam(): Promise<number> {
+  if (!adminClientConfigured) return 0;
+
+  try {
+    const supabase = createSupabaseAdminClient();
+    const { count, error } = await supabase
+      .from(TABLE)
+      .select("id", { count: "exact", head: true })
+      .eq("spam", true);
+
+    if (error) {
+      console.warn(`blocked submissions not counted: ${error.message}`);
+      return 0;
+    }
+    return count ?? 0;
+  } catch {
+    return 0;
+  }
+}
+
+/**
+ * Deletes every blocked submission, now rather than in a fortnight.
+ *
+ * These rows are kept only so a misjudgement by lib/spam.ts can be spotted and
+ * rescued, and the retention sweep already removes them on its own. This exists
+ * for the case the sweep is too slow to be useful: a flood that puts hundreds of
+ * rows between an editor and the enquiries they are looking for.
+ *
+ * Counted before deleting rather than by asking the delete what it removed. The
+ * `select("id")` that {@link purgeExpiredEnquiries} uses to count would, on the
+ * population this is aimed at, drag every deleted id back over the wire for no
+ * reason but to measure them.
+ *
+ * Real enquiries are untouched: the filter is the flag, not a date, so nothing
+ * here can reach a row somebody is waiting on. Unlike the sweeps this one *does*
+ * report failure — it answers a button somebody pressed, and a button that
+ * silently does nothing is worse than one that says it could not.
+ */
+export async function deleteAllSpam(): Promise<EnquiryResult<{ removed: number }>> {
+  if (!adminClientConfigured) return { ok: false, message: "Chýba SUPABASE_SECRET_KEY." };
+
+  const removed = await countSpam();
+  if (removed === 0) return { ok: true, data: { removed: 0 } };
+
+  const supabase = createSupabaseAdminClient();
+  const { error } = await supabase.from(TABLE).delete().eq("spam", true);
+
+  if (error) return { ok: false, message: error.message };
+  return { ok: true, data: { removed } };
+}
+
+/**
  * Marks an enquiry handled, or puts it back.
  *
  * Who and when are recorded together with the flag, because "handled" without a

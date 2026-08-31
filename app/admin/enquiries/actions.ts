@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 
 import {
+  deleteAllSpam,
   deleteEnquiry,
   purgeExpiredEnquiries,
   retentionLabel,
@@ -87,5 +88,30 @@ export async function purgeOldEnquiries(): Promise<EnquiryActionState> {
       removed.expired === 0
         ? `Nič staršie ako ${retentionLabel()} tu nie je.${blocked}`
         : `Zmazaných ${removed.expired} dopytov starších ako ${retentionLabel()}.${blocked}`,
+  };
+}
+
+/**
+ * Deletes every blocked submission.
+ *
+ * Nothing was ever sent for these rows and nobody is waiting on one, so this is
+ * the least consequential delete on the screen — but it is still a delete, and
+ * it still goes through the editor check, because a server action is a public
+ * endpoint whatever it happens to remove.
+ */
+export async function purgeSpamEnquiries(): Promise<EnquiryActionState> {
+  await requireEditor();
+
+  const result = await deleteAllSpam();
+  if (!result.ok) return { status: "error", message: result.message };
+
+  revalidatePath("/admin/enquiries");
+
+  return {
+    status: "ok",
+    message:
+      result.data.removed === 0
+        ? "Žiadne zablokované pokusy tu nie sú."
+        : `Zmazaných ${result.data.removed} zablokovaných pokusov.`,
   };
 }
