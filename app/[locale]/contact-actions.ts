@@ -4,11 +4,12 @@ import { headers } from "next/headers";
 
 import { products } from "@/data/products";
 import { loadCompanyDetails } from "@/lib/company";
-import { createEnquiry, markDelivery } from "@/lib/enquiries";
+import { createEnquiry, markDelivery, spamSignatureSeen } from "@/lib/enquiries";
 import { verifyFormToken } from "@/lib/form-token";
 import { isLocale, localeNames, type Locale } from "@/lib/i18n";
 import { recipientList, sendMail } from "@/lib/mailer";
 import { allowEnquiry, visitorToken } from "@/lib/rate-limit";
+import { siteHostnames } from "@/lib/site";
 import { loadSmtpSettings } from "@/lib/smtp-settings";
 import { classifyEnquiry, spamReason } from "@/lib/spam";
 import { getProductTexts, getTranslations } from "@/lib/translations";
@@ -135,6 +136,33 @@ export async function sendEnquiry(
   // How long this visitor had the form open, if they had it open at all.
   const token = verifyFormToken(formData.get("formToken"));
 
+  const requestHeaders = await headers();
+
+  /**
+   * Whether the request announced itself as coming from one of our own pages.
+   *
+   * A browser attaches `Origin` to every POST, and Next.js rejects a *mismatched*
+   * one as CSRF before this code runs — so what reaches here is either ours or
+   * missing entirely, and missing means no browser was involved. The host set is
+   * checked anyway rather than trusting the framework's check by implication:
+   * `serverActions.allowedOrigins` could one day widen it, and this is cheap.
+   *
+   * Note for local work: `localhost` is genuinely not one of this site's hosts,
+   * so a submission from `next dev` scores the three points too. Left truthful
+   * rather than special-cased — a signal that means something different in
+   * development is worse than one that costs a clean local test three points it
+   * can afford. The reason appears in the log line, so it is never a mystery.
+   */
+  const origin = requestHeaders.get("origin");
+  const originOk = (() => {
+    if (!origin) return false;
+    try {
+      return siteHostnames.has(new URL(origin).hostname);
+    } catch {
+      return false;
+    }
+  })();
+
   const verdict = classifyEnquiry({
     name,
     company,
@@ -143,19 +171,27 @@ export async function sendEnquiry(
     message,
     tokenValid: token.valid,
     fillMs: token.fillMs,
+    originOk,
   });
 
-  const forwarded = (await headers()).get("x-forwarded-for");
+  const forwarded = requestHeaders.get("x-forwarded-for");
   const visitor = visitorToken(forwarded);
 
   if (verdict.spam) {
-    // Charged to the spam budget, which is a storage cap and nothing more —
-    // nothing is sent for these rows. Exceeding it drops the submission without
-    // a trace beyond this log line, which is the correct trade: the hundredth
-    // identical scam of the hour teaches nobody anything the first ninety-nine
-    // did not.
+    // Charged to the spam budget, which is a ceiling on storage and nothing more:
+    // nothing is sent for these rows, so there is no mail account to protect
+    // here. It bounds what a flood can write; the deduplication below decides
+    // what is worth writing at all.
+    const reason = spamReason(verdict);
     const room = await allowEnquiry(visitor, locale, "spam");
-    if (room.allowed) {
+
+    // One row per signature per hour. The rows exist so a wrong verdict can be
+    // found, and the ninetieth identical copy of a verdict makes it no easier to
+    // find than the first — while a flood of them buries the enquiries somebody
+    // opened the screen to read. See spamSignatureSeen for why this is keyed on
+    // the reason and not on a lower cap.
+    const stored = room.allowed && !(await spamSignatureSeen(reason));
+    if (stored) {
       await createEnquiry({
         locale,
         name,
@@ -165,16 +201,16 @@ export async function sendEnquiry(
         product: productSlug,
         message,
         spam: true,
-        spamReason: spamReason(verdict),
+        spamReason: reason,
       });
     }
 
     // Logged at warn with the score, because this is the number that says whether
     // the classifier is earning its place — and the one to look at first if a
-    // customer ever reports an enquiry that vanished.
-    console.warn(
-      `enquiry blocked (${locale}, ${spamReason(verdict)}, stored=${room.allowed})`,
-    );
+    // customer ever reports an enquiry that vanished. Logged for every attempt,
+    // stored or not, so the log stays the complete record of the rate even as the
+    // table keeps only a sample.
+    console.warn(`enquiry blocked (${locale}, ${reason}, stored=${stored})`);
     return silent;
   }
 

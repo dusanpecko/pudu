@@ -52,6 +52,16 @@ export type SpamInput = {
    * or null when unknown. Taken from the signed token, so a bot cannot choose it.
    */
   fillMs: number | null;
+  /**
+   * Whether the request carried an `Origin` header naming one of this site's own
+   * hosts.
+   *
+   * A browser sends `Origin` on every POST — it is not optional and not something
+   * a privacy setting strips. Its absence therefore means the request did not come
+   * from a form in a browser at all, which is as close to a direct statement of
+   * "this is a script" as anything here gets.
+   */
+  originOk: boolean;
 };
 
 export type SpamVerdict = {
@@ -172,6 +182,24 @@ const SIGNALS: {
     key: "no-token",
     weight: 2,
     test: ({ tokenValid }) => !tokenValid,
+  },
+  {
+    // No `Origin` naming one of our hosts.
+    //
+    // The most specific signal here, and it was found by reading the logs rather
+    // than by reasoning: Next.js warns about a Server Action request with no
+    // `Origin` and lets it through, and every one of the flood's submissions
+    // carried that warning while the one real submission in the same minute did
+    // not. A mismatched `Origin` never reaches this code — the framework rejects
+    // those as CSRF — so in practice the header is either ours or absent.
+    //
+    // Three rather than six despite that, for the same reason as `no-token`:
+    // there is one path to a false positive here, an unforeseen proxy that
+    // rewrites headers, and it would be silent. Three lets a clean submission
+    // through alone and settles it in company.
+    key: "no-origin",
+    weight: 3,
+    test: ({ originOk }) => !originOk,
   },
 ];
 

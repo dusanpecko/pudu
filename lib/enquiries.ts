@@ -421,6 +421,60 @@ export async function countRecentSpam(): Promise<number> {
 }
 
 /**
+ * How long one blocked signature stands for all the others like it.
+ *
+ * An hour, because the reason these rows exist is to make a wrong verdict
+ * findable, and one example of a verdict makes it exactly as findable as nine
+ * hundred. Measured on the flood this was written against: 81 rows in under two
+ * hours, every one of them `foreign-script, link, shortener, no-token` — the same
+ * sentence, eighty-one times.
+ */
+export const SPAM_SAMPLE_WINDOW_MINUTES = 60;
+
+/**
+ * Whether a blocked submission with this exact signature was already stored
+ * recently.
+ *
+ * Deduplicating on the *reason* rather than on the content is what makes this
+ * safe. A bot has one signature and leaves one row an hour. A misjudged real
+ * enquiry has a different signature — a lone `foreign-script`, say, where the
+ * flood carries four signals — so it is stored whatever the bot is doing.
+ *
+ * The alternative, a lower storage cap, was rejected for being the same bug this
+ * whole file has been fighting in miniature: the bot would spend the allowance in
+ * the first quarter of an hour and the one submission worth keeping would arrive
+ * after it was gone.
+ *
+ * **Fails towards storing.** An unreachable database answers "not seen", so a
+ * failure here costs a duplicate row rather than the record of a mistake.
+ */
+export async function spamSignatureSeen(reason: string): Promise<boolean> {
+  if (!adminClientConfigured) return false;
+
+  try {
+    const since = new Date(
+      Date.now() - SPAM_SAMPLE_WINDOW_MINUTES * 60 * 1000,
+    ).toISOString();
+
+    const supabase = createSupabaseAdminClient();
+    const { count, error } = await supabase
+      .from(TABLE)
+      .select("id", { count: "exact", head: true })
+      .eq("spam", true)
+      .eq("spam_reason", reason)
+      .gt("created_at", since);
+
+    if (error) {
+      console.warn(`spam signature not checked: ${error.message}`);
+      return false;
+    }
+    return (count ?? 0) > 0;
+  } catch {
+    return false;
+  }
+}
+
+/**
  * How many blocked submissions are stored, all told.
  *
  * Separate from {@link countRecentSpam} because the two answer different

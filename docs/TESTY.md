@@ -3,7 +3,7 @@
 Ako sa web testuje, čo je pokryté zámerne a čo zámerne nie.
 
 ```bash
-npm test          # jednotkové testy — ~65 testov, pod sekundu, bez siete
+npm test          # jednotkové testy — ~70 testov, pod sekundu, bez siete
 npm run smoke     # 32 kontrol živej produkcie — len na čítanie, ~15 s
 ```
 
@@ -31,7 +31,7 @@ všetky stránky, a Vercel rozbitý build nenasadí.
 | `editors-env.test.ts` | `ADMIN_EMAILS`: normalizácia adries, prázdna premenná nepúšťa nikoho — polovica poistky proti zamknutiu |
 | `spam.test.ts` | klasifikátor dopytov: vlna, ktorá web zneužila ako relay, je chytená — a **žiadny jednotlivý nevinný signál nezablokuje nič**. Falošný pozitív je tichý, preto je drahší |
 | `form-token.test.ts` | podpísaná časová značka formulára: sfalšovaný podpis, **prepísaný čas pod vlastným podpisom**, expirácia aj značka z budúcnosti sú odmietnuté |
-| `turnstile-hostnames.test.ts` | zoznam hostnamov, na ktorých smie byť Turnstile token vyriešený. Kontrola z neho je **mimo produkcie vypnutá**, takže chyba tu sa neprejaví ani lokálne, ani na preview — až zablokovaným formulárom na všetkých živých doménach |
+| `site-hostnames.test.ts` | zoznam hostnamov, ktoré sú vlastné tomuto webu — používa ho overenie Turnstile tokenu aj kontrola hlavičky `Origin`. Prvá z tých kontrol je **mimo produkcie vypnutá**, takže chyba tu sa neprejaví ani lokálne, ani na preview — až zablokovaným formulárom na všetkých živých doménach |
 | `turnstile-widget.test.ts` | stráži jednu konkrétnu chybu, ktorá už raz zložila celý web: `turnstile.ready()` vyhodí výnimku, keď je api.js `async` — a `next/script` ho vždy `async` urobí. Typecheck, build ani kontrola stavu to nezachytili, HTML bolo celý čas správne |
 
 ## 2. Jedna zvláštnosť: testy „vystrihujú" zo zdrojákov

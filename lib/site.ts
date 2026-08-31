@@ -60,6 +60,46 @@ export const siteOrigins: string[] = [
   ...new Set([siteUrl, ...Object.values(localeOrigins)]),
 ];
 
+/**
+ * Both spellings of every host in the given origins.
+ *
+ * Pure, and exported separately from {@link siteHostnames} so it can be tested
+ * without the environment — see tests/site-hostnames.test.ts, which exists
+ * because a mistake here is invisible outside production.
+ *
+ * Both spellings, because the site redirects bare domains to `www` and anything
+ * reporting a hostname back to us — a Turnstile token, an `Origin` header —
+ * carries whichever host the visitor actually stood on.
+ */
+export function originHostnames(origins: readonly string[]): Set<string> {
+  return new Set(
+    origins.flatMap((origin) => {
+      let hostname: string;
+      try {
+        hostname = new URL(origin).hostname;
+      } catch {
+        // A malformed origin contributes nothing rather than throwing. One bad
+        // variable must not empty the whole set, which is used to decide what to
+        // trust — an empty set trusts nothing and would refuse every submission.
+        return [];
+      }
+      const bare = hostname.replace(/^www\./, "");
+      return [bare, `www.${bare}`];
+    }),
+  );
+}
+
+/**
+ * The hosts this site is served from, as hostnames.
+ *
+ * The answer to "is this ours?" for anything that names a host: which hostnames a
+ * Turnstile token may have been solved on (lib/turnstile.ts), and which `Origin`
+ * a form submission may carry (app/[locale]/contact-actions.ts). One definition,
+ * derived from the same variables as the canonical URLs, so a market that moves
+ * to a new domain is covered by the change somebody had to make anyway.
+ */
+export const siteHostnames: ReadonlySet<string> = originHostnames(siteOrigins);
+
 /** Absolute canonical URL of a page. */
 export function localizedUrl(locale: Locale, route: Route): string {
   return `${localeOrigin(locale)}${localizedPath(locale, route)}`;

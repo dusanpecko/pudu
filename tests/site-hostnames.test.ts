@@ -23,7 +23,7 @@ type Module = { originHostnames: (origins: readonly string[]) => Set<string> };
 
 async function load(): Promise<Module["originHostnames"]> {
   const mod = await importSnippet<Module>(
-    "lib/turnstile.ts",
+    "lib/site.ts",
     /export function originHostnames[\s\S]*?\n\}/,
     (snippet) => snippet,
     "origin-hostnames",

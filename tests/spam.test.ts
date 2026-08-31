@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { classifyEnquiry, MIN_FILL_MS, THRESHOLD } from "../lib/spam.ts";
+import { classifyEnquiry, MIN_FILL_MS, spamReason, THRESHOLD } from "../lib/spam.ts";
 
 /**
  * The contact form's spam classifier.
@@ -33,6 +33,7 @@ const GENUINE = {
     "Máme dve haly, prevoz paliet medzi nimi po vonkajšej rampe. Radi by sme ukážku.",
   tokenValid: true,
   fillMs: 45_000,
+  originOk: true,
 };
 
 test("a genuine enquiry scores nothing at all", () => {
@@ -174,7 +175,102 @@ test("empty fields score nothing", () => {
     message: "",
     tokenValid: true,
     fillMs: 10_000,
+    originOk: true,
   });
 
   assert.equal(verdict.score, 0);
+});
+
+test("a missing Origin alone is not enough", () => {
+  // Three points. The signal is as close to proof of a script as this file has —
+  // a browser always sends `Origin` on a POST — and it still does not decide on
+  // its own, because the one route to a false positive here is an unforeseen
+  // proxy rewriting headers, and that failure would be silent.
+  const verdict = classifyEnquiry({ ...GENUINE, originOk: false });
+
+  assert.equal(verdict.spam, false);
+  assert.equal(verdict.score, 3);
+  assert.deepEqual(verdict.reasons, ["no-origin"]);
+});
+
+test("all three mechanical signals together do block", () => {
+  // No token, submitted instantly, no Origin: eight. Nothing is claimed about
+  // what the visitor wrote — only that no browser form produced this.
+  const verdict = classifyEnquiry({
+    ...GENUINE,
+    tokenValid: false,
+    fillMs: MIN_FILL_MS - 1,
+    originOk: false,
+  });
+
+  assert.equal(verdict.score, 8);
+  assert.equal(verdict.spam, true);
+});
+
+test("the wave as it actually arrives scores thirteen", () => {
+  // The same submission as above, judged with the two mechanical facts the
+  // production logs showed for every one of them: no form token, no Origin. Worth
+  // asserting separately from the content-only case, because this is the number
+  // the running site sees.
+  const verdict = classifyEnquiry({
+    ...GENUINE,
+    name: "Ирина Соколова",
+    company: "",
+    message:
+      "Компания OZON рада пригласить вас на нашу новую акцию: " +
+      "https://share.google/0gTK1uQbWflbqoSmQ",
+    tokenValid: false,
+    fillMs: null,
+    originOk: false,
+  });
+
+  assert.equal(verdict.spam, true);
+  assert.equal(verdict.score, 13);
+  assert.deepEqual(verdict.reasons, [
+    "foreign-script",
+    "link",
+    "shortener",
+    "no-token",
+    "no-origin",
+  ]);
+});
+
+test("identical signatures produce an identical reason string", () => {
+  // Load-bearing for storage, not for classification. Blocked submissions are
+  // deduplicated on this string — see spamSignatureSeen in lib/enquiries.ts — so
+  // if two submissions with the same signals ever produced different text, the
+  // table would fill up with rows nobody needs. Different bodies, same signals.
+  const first = classifyEnquiry({
+    ...GENUINE,
+    message: "Поздравляем! https://share.google/aaaa",
+    tokenValid: false,
+    fillMs: null,
+    originOk: false,
+  });
+  const second = classifyEnquiry({
+    ...GENUINE,
+    name: "Другое Имя",
+    message: "Вы стали победителем: https://share.google/bbbb",
+    tokenValid: false,
+    fillMs: null,
+    originOk: false,
+  });
+
+  assert.equal(spamReason(first), spamReason(second));
+  assert.equal(spamReason(first), "13: foreign-script, link, shortener, no-token, no-origin");
+});
+
+test("a different signature is a different string, so it is stored anyway", () => {
+  // The other half of the deduplication contract: a misjudged real enquiry does
+  // not share the flood's signature, so it is never suppressed by it.
+  const flood = classifyEnquiry({
+    ...GENUINE,
+    message: "Акция: https://share.google/aaaa",
+    tokenValid: false,
+    fillMs: null,
+    originOk: false,
+  });
+  const other = classifyEnquiry({ ...GENUINE, name: "李伟", message: "您好。" });
+
+  assert.notEqual(spamReason(flood), spamReason(other));
 });

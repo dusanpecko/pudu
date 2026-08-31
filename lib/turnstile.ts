@@ -1,6 +1,6 @@
 import "server-only";
 
-import { siteOrigins } from "@/lib/site";
+import { siteHostnames } from "@/lib/site";
 
 /**
  * Cloudflare Turnstile, the one defence here that a distributed bot cannot
@@ -53,11 +53,11 @@ export const TURNSTILE_ACTION = "enquiry";
  * a customer's is *where* it was solved, which siteverify reports and which only
  * we can judge.
  *
- * Derived from the same origins that build the canonical URLs, so a market that
- * moves to a new domain is covered by the change somebody had to make anyway.
- * Both spellings, because the site redirects bare to `www` and the token carries
- * whichever host the visitor was actually on.
+ * The set itself lives in lib/site.ts, because the same question — "is this host
+ * ours?" — is now also asked of the `Origin` header on every submission.
  */
+const expectedHostnames = siteHostnames;
+
 /**
  * Whether to hold a token to where and what it was solved for.
  *
@@ -65,26 +65,6 @@ export const TURNSTILE_ACTION = "enquiry";
  * see the note at the check itself for what a dummy token reports instead.
  */
 const enforceOrigin = process.env.NODE_ENV === "production";
-
-export function originHostnames(origins: readonly string[]): Set<string> {
-  return new Set(
-    origins.flatMap((origin) => {
-      let hostname: string;
-      try {
-        hostname = new URL(origin).hostname;
-      } catch {
-        // A malformed origin contributes nothing rather than throwing. One bad
-        // variable must not empty the whole allowlist, which would refuse every
-        // submission on every domain.
-        return [];
-      }
-      const bare = hostname.replace(/^www\./, "");
-      return [bare, `www.${bare}`];
-    }),
-  );
-}
-
-const expectedHostnames: ReadonlySet<string> = originHostnames(siteOrigins);
 
 /** Public half of the pair. Empty means the widget is not rendered. */
 export const turnstileSiteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? "";
