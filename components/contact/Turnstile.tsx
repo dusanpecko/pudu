@@ -31,8 +31,6 @@ type TurnstileState = {
   ) => string | undefined;
   remove: (widgetId: string) => void;
   reset: (widgetId?: string) => void;
-  /** Runs its callback once the API is initialised. Optional across versions. */
-  ready?: (callback: () => void) => void;
 };
 
 declare global {
@@ -89,7 +87,25 @@ export default function Turnstile({
     if (!api) return;
 
     const element = container.current;
-    const create = () => {
+
+    // Rendered directly, and **never** through `turnstile.ready()`.
+    //
+    // That call looks like the careful thing to do and is documented for the
+    // plain-script case, but it throws a TurnstileError outright when api.js
+    // carries `async` or `defer` — which `next/script` always adds. Thrown from
+    // inside this effect it reaches React's error boundary, and since this form
+    // sits on every page, the whole site renders Next's "This page couldn't
+    // load" instead of anything at all. It did exactly that in production.
+    //
+    // The guarantee `ready()` offers is already here without it: next/script's
+    // `onReady` fires after the script has executed, and `window.turnstile` is
+    // checked just above — the same fact, by direct observation.
+    //
+    // Wrapped anyway, because this is third-party code running inside an effect
+    // on every page of the site. Whatever it does to itself, it does not get to
+    // take the page down with it: a form without a challenge still validates,
+    // classifies and rate-limits on the server.
+    try {
       widget.current =
         api.render(element, {
           sitekey: siteKey,
@@ -106,12 +122,10 @@ export default function Turnstile({
           "expired-callback": () => onToken(""),
           "error-callback": () => onToken(""),
         }) ?? null;
-    };
-
-    // `ready` guarantees the API is initialised. Not every version exposes it, so
-    // the direct call remains the fallback rather than the assumption.
-    if (api.ready) api.ready(create);
-    else create();
+    } catch (error) {
+      console.error("Turnstile did not render", error);
+      widget.current = null;
+    }
 
     return () => {
       if (widget.current) api.remove(widget.current);
@@ -133,7 +147,13 @@ export default function Turnstile({
     // the server has already spent, and a submission in that window would be
     // rejected for a reason the visitor cannot see.
     onToken("");
-    window.turnstile?.reset(widget.current);
+    try {
+      window.turnstile?.reset(widget.current);
+    } catch (error) {
+      // Same reasoning as the render: a failed reset costs this visitor a retry,
+      // not the page.
+      console.error("Turnstile did not reset", error);
+    }
   }, [resetOn, onToken]);
 
   return (
