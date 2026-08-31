@@ -157,3 +157,41 @@ ktorá pokazí, keď chýba.
 | piaty jazyk | `lib/i18n.ts` (locale, doména), preklady, `next.config.ts` redirect, sitemap — vzor: commit nemčiny `6b54ec3` |
 | zmena doby uchovávania dopytov | `RETENTION_YEARS` v `lib/enquiries.ts` — a zosúladiť so zásadami OÚ |
 | nový editor | administrácia → Používatelia (nie Vercel) |
+| doladenie spam filtra | váhy signálov v `lib/spam.ts`, prah `THRESHOLD`; `tests/spam.test.ts` drží hranice |
+
+---
+
+## 9. Odložené: hlavička `Origin` ako signál spam filtra
+
+Zmerané 31. 8. 2026 na produkčných logoch, **zámerne nedokončené** — filter
+v tej podobe, v akej je, zachytával vlnu úplne, a v ten deň sa nasadzovalo
+štyrikrát. Zapísané preto, aby sa na to prišlo znova s dôvodom, nie náhodou.
+
+Next.js pri Server Action porovnáva `Origin` s `Host` a nesúlad odmieta, ale
+**chýbajúci `Origin` len ohlási varovaním a požiadavku pustí**. Prehliadač
+pritom `Origin` pri POST posiela vždy. Z produkčných logov, dva riadky na tej
+istej minúte:
+
+```
+10:55:39  POST /sk  ⚠ Missing `origin` header …   ← bot
+10:55:45  POST /sk  (žiadne varovanie)            ← skutočný prehliadač
+```
+
+Ako signál by to bolo **najsilnejšie kritérium v celom klasifikátore** —
+lacnejšie než Turnstile (žiadna sieťová požiadavka) a špecifickejšie než
+obsahové heuristiky, pretože nehovorí o tom, *čo* niekto napísal, ale že to
+neposlal formulár v prehliadači.
+
+Ako na to, keby sa to raz robilo:
+
+1. V `sendEnquiry` prečítať `(await headers()).get("origin")`.
+2. Porovnať s vlastnými hostmi — `originHostnames(siteOrigins)` v
+   `lib/turnstile.ts` už presne tú množinu počíta a je testovaná.
+3. Pridať do `SIGNALS` v `lib/spam.ts` ako `no-origin` s váhou 3–4. **Nie ako
+   tvrdú bránu**: rovnaká úvaha ako pri `no-token` — jeden nečakaný proxy hop
+   a tichá strata dopytov od ľudí, ktorí neurobili nič zle.
+4. Otestovať, že samotný chýbajúci `Origin` s čistým obsahom prah neprekročí.
+
+Pozor pri overovaní lokálne: `next dev` chodí na inom hoste než produkcia, a
+vlastný dopyt z prehliadača bude mať `Origin` vždy — takže sa signál dá overiť
+len tým, že sa POST pošle bez tej hlavičky ručne.
