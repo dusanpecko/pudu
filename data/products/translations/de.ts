@@ -225,14 +225,14 @@ export const productTextsDe: Record<
       "AMR 600 Underride — flacher autonomer Roboter mit 600 kg Traglast, der unter ein Regal fährt, es anhebt und verfährt. Technische Daten und Einsatzbereiche.",
   },
   "pudu-mp2000": {
-    name: "AMR MP 2000",
+    name: "Fork 2000",
     category: "KI-nativer autonomer Palettenroboter für Lasten bis 2.000 kg.",
     headline: "Paletten bis 2.000 kg. Gabeln in 20 Sekunden aufgenommen.",
     shortDescription:
       "Autonomer Palettenhubwagen mit 200 mm Hub, der die Palette selbst erkennt, einen freien Lagerplatz findet und in einem 2 m breiten Gang rechtwinklig ein- und auslagert.",
     description:
-      "Der AMR MP 2000 ist ein autonomer Palettenroboter für Lager, Fertigung und Distributionszentren. Mit 3D-LiDAR-SLAM und visueller Navigation wird er ohne bauliche Anpassungen eingesetzt, erkennt Palettentyp und Belegung des Lagerplatzes selbst und passt sich Paletten an, die bis zu 15 cm oder 15° versetzt abgestellt wurden. Zwei Gabelvarianten — 620 mm Standard und 550 mm schmal — decken gängige Europaletten ebenso ab wie Sonderladungsträger.",
-    imageAlt: "Autonomer Palettenroboter AMR MP 2000 mit Gabeln und Sensormast",
+      "Der Fork 2000 ist ein autonomer Palettenroboter für Lager, Fertigung und Distributionszentren. Mit 3D-LiDAR-SLAM und visueller Navigation wird er ohne bauliche Anpassungen eingesetzt, erkennt Palettentyp und Belegung des Lagerplatzes selbst und passt sich Paletten an, die bis zu 15 cm oder 15° versetzt abgestellt wurden. Zwei Gabelvarianten — 620 mm Standard und 550 mm schmal — decken gängige Europaletten ebenso ab wie Sonderladungsträger.",
+    imageAlt: "Autonomer Palettenroboter Fork 2000 mit Gabeln und Sensormast",
     features: [
       {
         title: "KI-Palettenerkennung",
@@ -272,8 +272,8 @@ export const productTextsDe: Record<
           "Aufträge über PUDU Link, APIs oder Auftragstasten, optional mit Anbindung an Aufzüge und Automatiktüren. Wechselt jederzeit vom autonomen in den manuellen Modus.",
       },
     ],
-    seoTitle: "AMR MP 2000 | Autonomer Palettenroboter | PUDU Industrial",
+    seoTitle: "Fork 2000 | Autonomer Palettenroboter | PUDU Industrial",
     seoDescription:
-      "AMR MP 2000 — autonomer Palettenroboter mit bis zu 2.000 kg Traglast, 200 mm Hub und KI-Palettenerkennung für Lager, Fertigung und Distribution. Technische Daten und Einsatzbereiche.",
+      "Fork 2000 — autonomer Palettenroboter mit bis zu 2.000 kg Traglast, 200 mm Hub und KI-Palettenerkennung für Lager, Fertigung und Distribution. Technische Daten und Einsatzbereiche.",
   },
 };

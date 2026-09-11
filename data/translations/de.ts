@@ -144,6 +144,7 @@ export const de: Translation = {
     charging: "Ladezeit",
     learnMore: "Mehr erfahren",
     featuredBadge: "Empfehlung",
+    newBadge: "Neu",
     requestOffer: "Angebot anfragen",
     specifications: "Technische Daten",
     features: "Hauptfunktionen",

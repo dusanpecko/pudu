@@ -6,7 +6,7 @@ export const cz: Translation = {
     homeTitle:
       "Robotické vozíky | Autonomní logistika a průmyslové roboty v praxi.",
     homeDescription:
-      "Autonomní robotické vozíky řady O2P, T-series, AMR T150, T300, T600 a MP2000 pro vaše potřeby převozu materiálu. Přesná navigace, bezpečná přeprava a nasazení s cílem plánovat a řídit tok vaší logistiky která roste s vámi.",
+      "Autonomní robotické vozíky řady O2P, T-series, AMR T150, T300, T600 a Fork 2000 pro vaše potřeby převozu materiálu. Přesná navigace, bezpečná přeprava a nasazení s cílem plánovat a řídit tok vaší logistiky která roste s vámi.",
     keywordsLabel:
       "robotické vozíkyAMR, intralogistika, průmyslová a logistická automatizace.",
   },
@@ -145,6 +145,7 @@ export const cz: Translation = {
     charging: "Nabíjení",
     learnMore: "Zjistit více",
     featuredBadge: "Doporučujeme",
+    newBadge: "Novinka",
     requestOffer: "Vyžádat nabídku",
     specifications: "Technické parametry",
     features: "Hlavní funkce",

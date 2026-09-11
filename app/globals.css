@@ -1088,6 +1088,17 @@ h3 {
   box-shadow: 0 0 22px -4px var(--accent-halo);
 }
 
+/* The newest model. Lime rather than the accent, and in the other corner of the
+   picture, so a card can be both recommended and new without the two pills
+   fighting for the same spot. The lime is darkened for the light theme by the
+   same token the status dot uses, so white text stays readable on it. */
+.product-card .badge.new {
+  right: auto;
+  left: 0;
+  background: var(--lime);
+  box-shadow: none;
+}
+
 
 
 .product-card::before {

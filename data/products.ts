@@ -34,10 +34,51 @@ const IMAGES = {
 } as const;
 
 /**
- * Canonical order of the fleet — drives navigation, static params and the
- * previous/next links on product pages.
+ * Canonical order of the fleet — drives the home row, the navigation, the
+ * static params, the enquiry form's product list and the previous/next links on
+ * product pages. The newest model leads; the T-series follow by payload.
  */
 export const products: Product[] = [
+  // The newest model, so it leads. A different class of machine from the four
+  // T-series carriers below: a pallet-handling robot
+  // with forks rather than a platform. Values are the manufacturer's for the
+  // standard-fork model MPID01-M; the narrow-fork MPID01-N differs only in fork
+  // width (550 mm against 620 mm), which the copy mentions rather than the
+  // table, since a single width column would misstate one of the two.
+  {
+    slug: "pudu-mp2000",
+    isNew: true,
+    heroImage: IMAGES.mp2000,
+    socialImage: IMAGES.mp2000Social,
+    payload: "2000 kg",
+    runtime: "12 h",
+    // Right-angle stacking aisle for a 1200 × 1000 pallet — the figure that
+    // decides whether the machine fits a warehouse, so it takes the aisle slot.
+    clearance: "200 cm",
+    // Shortened from "3D LiDAR SLAM + VSLAM": in the highlight strip it broke
+    // onto three lines and made its cell taller than the other three.
+    navigation: "3D LiDAR + VSLAM",
+    specifications: [
+      { key: "payload", value: { kind: "measure", amount: 2000, unit: "kg" } },
+      { key: "runtimeEmpty", value: { kind: "measure", amount: 12, unit: "hours" } },
+      { key: "runtimeLoaded", value: { kind: "measure", amount: 6, unit: "hours" } },
+      { key: "lift", value: { kind: "measure", amount: 200, unit: "mm" } },
+      { key: "clearance", value: { kind: "measure", amount: 200, unit: "cm" } },
+      {
+        // Unloaded. Loaded it is 1.2 m/s, which the features copy gives.
+        key: "speed",
+        value: { kind: "measure", amount: 1.6, unit: "mps", upTo: true },
+      },
+      {
+        key: "dimensions",
+        value: { kind: "dimensions", width: 1585, depth: 910, height: 1870 },
+      },
+      // The manufacturer states "about 2 h" with no charge percentage, so the
+      // `charging` value kind — which renders "2 h to 90 %" — would invent one.
+      { key: "charging", value: { kind: "text", text: "≈ 2 h" } },
+    ],
+  },
+
   {
     slug: "pudu-t150",
     heroImage: IMAGES.t150,
@@ -132,44 +173,6 @@ export const products: Product[] = [
         value: { kind: "dimensions", width: 845, depth: 500, height: 255 },
       },
       { key: "lift", value: { kind: "measure", amount: 60, unit: "mm" } },
-    ],
-  },
-
-  // A different class of machine from the four above: a pallet-handling robot
-  // with forks rather than a platform. Values are the manufacturer's for the
-  // standard-fork model MPID01-M; the narrow-fork MPID01-N differs only in fork
-  // width (550 mm against 620 mm), which the copy mentions rather than the
-  // table, since a single width column would misstate one of the two.
-  {
-    slug: "pudu-mp2000",
-    heroImage: IMAGES.mp2000,
-    socialImage: IMAGES.mp2000Social,
-    payload: "2000 kg",
-    runtime: "12 h",
-    // Right-angle stacking aisle for a 1200 × 1000 pallet — the figure that
-    // decides whether the machine fits a warehouse, so it takes the aisle slot.
-    clearance: "200 cm",
-    // Shortened from "3D LiDAR SLAM + VSLAM": in the highlight strip it broke
-    // onto three lines and made its cell taller than the other three.
-    navigation: "3D LiDAR + VSLAM",
-    specifications: [
-      { key: "payload", value: { kind: "measure", amount: 2000, unit: "kg" } },
-      { key: "runtimeEmpty", value: { kind: "measure", amount: 12, unit: "hours" } },
-      { key: "runtimeLoaded", value: { kind: "measure", amount: 6, unit: "hours" } },
-      { key: "lift", value: { kind: "measure", amount: 200, unit: "mm" } },
-      { key: "clearance", value: { kind: "measure", amount: 200, unit: "cm" } },
-      {
-        // Unloaded. Loaded it is 1.2 m/s, which the features copy gives.
-        key: "speed",
-        value: { kind: "measure", amount: 1.6, unit: "mps", upTo: true },
-      },
-      {
-        key: "dimensions",
-        value: { kind: "dimensions", width: 1585, depth: 910, height: 1870 },
-      },
-      // The manufacturer states "about 2 h" with no charge percentage, so the
-      // `charging` value kind — which renders "2 h to 90 %" — would invent one.
-      { key: "charging", value: { kind: "text", text: "≈ 2 h" } },
     ],
   },
 ];

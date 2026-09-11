@@ -49,6 +49,7 @@ export default async function ProductSlider({ locale }: ProductSliderProps) {
               payloadLabel={t.specs.payload}
               runtimeLabel={t.specs.runtime}
               featuredLabel={t.product.featuredBadge}
+              newLabel={t.product.newBadge}
             />
           ))}
         </Strip>

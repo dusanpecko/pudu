@@ -224,16 +224,16 @@ export const productTextsCz: Record<
       "AMR 600 Podběhový — nízký autonomní robot s nosností do 600 kg, který zajede pod regál s paletou, zvedne ho a přemístí. Technické parametry a oblasti využití.",
   },
   "pudu-mp2000": {
-    name: "AMR MP 2000",
+    name: "Fork 2000",
     category:
       "Autonomní paletový robot s AI navigací pro manipulaci s paletami do 2 000 kg.",
     headline: "Palety do 2 000 kg. Vidlice zasunuté za 20 sekund.",
     shortDescription:
       "Autonomní paletový vozík se zdvihem 200 mm, který sám rozpozná paletu, najde volné skladové místo a zvládne pravoúhlé zakládání v uličce široké 2 metry.",
     description:
-      "AMR MP 2000 je autonomní paletový robot pro sklady, výrobu a distribuční centra. Díky 3D LiDAR SLAM a vizuální navigaci se nasadí bez stavebních úprav, sám rozpozná typ palety i obsazenost skladového místa a přizpůsobí se paletě odložené s odchylkou až 15 cm nebo 15°. Dvě verze vidlic — standardní 620 mm a úzká 550 mm — pokrývají běžné evropské i nestandardní nosiče.",
+      "Fork 2000 je autonomní paletový robot pro sklady, výrobu a distribuční centra. Díky 3D LiDAR SLAM a vizuální navigaci se nasadí bez stavebních úprav, sám rozpozná typ palety i obsazenost skladového místa a přizpůsobí se paletě odložené s odchylkou až 15 cm nebo 15°. Dvě verze vidlic — standardní 620 mm a úzká 550 mm — pokrývají běžné evropské i nestandardní nosiče.",
     imageAlt:
-      "Autonomní paletový robot AMR MP 2000 s vidlicemi a sloupkem se senzory",
+      "Autonomní paletový robot Fork 2000 s vidlicemi a sloupkem se senzory",
     features: [
       {
         title: "Rozpoznávání palet s AI",
@@ -273,8 +273,8 @@ export const productTextsCz: Record<
           "Úkoly přes PUDU Link, API nebo tlačítka, propojení s výtahy a automatickými dveřmi. Kdykoli přepne z autonomního do manuálního režimu.",
       },
     ],
-    seoTitle: "AMR MP 2000 | Autonomní paletový robot | PUDU Industrial",
+    seoTitle: "Fork 2000 | Autonomní paletový robot | PUDU Industrial",
     seoDescription:
-      "AMR MP 2000 — autonomní paletový robot s nosností do 2 000 kg, zdvihem 200 mm a AI rozpoznáváním palet pro sklady, výrobu a distribuci. Technické parametry a oblasti využití.",
+      "Fork 2000 — autonomní paletový robot s nosností do 2 000 kg, zdvihem 200 mm a AI rozpoznáváním palet pro sklady, výrobu a distribuci. Technické parametry a oblasti využití.",
   },
 };

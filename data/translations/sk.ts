@@ -34,7 +34,7 @@ export const sk = {
     homeTitle:
       "Robotické vozíky AMR | Autonómna logistika a priemyselné roboty v praxi.",
     homeDescription:
-      "Autonómne robotické vozíky rady O2P, T-series, AMR T150, T300, T600 a MP2000 pre vaše potreby transportu materiálu. Presná navigácia, bezpečná preprava a nasadenie s cieľom plánovať a riadiť tok vašej logistiky ktorá rastie s vami.",
+      "Autonómne robotické vozíky rady O2P, T-series, AMR T150, T300, T600 a Fork 2000 pre vaše potreby transportu materiálu. Presná navigácia, bezpečná preprava a nasadenie s cieľom plánovať a riadiť tok vašej logistiky ktorá rastie s vami.",
     keywordsLabel:
       "robotické vozíkyAMR, intralogistika, priemyselná a logistická automatizácia.",
   },
@@ -151,6 +151,7 @@ export const sk = {
     charging: "Nabíjanie",
     learnMore: "Zistiť viac",
     featuredBadge: "Odporúčame",
+    newBadge: "Novinka",
     requestOffer: "Vyžiadať ponuku",
     specifications: "Technické parametre",
     features: "Hlavné funkcie",

@@ -144,6 +144,7 @@ export const en: Translation = {
     charging: "Charging",
     learnMore: "Learn more",
     featuredBadge: "Recommended",
+    newBadge: "New",
     requestOffer: "Request a quote",
     specifications: "Technical specifications",
     features: "Key features",

@@ -15,6 +15,8 @@ type ProductCardProps = {
   runtimeLabel: string;
   /** Label for the recommended model; the badge is skipped without it. */
   featuredLabel?: string;
+  /** Label for the newest model; likewise skipped without it. */
+  newLabel?: string;
 };
 
 /** Product tile, one snap point in the fleet row on the home page. */
@@ -24,10 +26,12 @@ export default async function ProductCard({
   payloadLabel,
   runtimeLabel,
   featuredLabel,
+  newLabel,
 }: ProductCardProps) {
   const content = await getProductContent(product, locale);
   const image = await resolveHeroImage(product.slug, product.heroImage);
   const featured = Boolean(product.featured && featuredLabel);
+  const fresh = Boolean(product.isNew && newLabel);
 
   return (
     // A plain article: the row it sits in is revealed as a whole by the strip,
@@ -40,6 +44,8 @@ export default async function ProductCard({
         <span className="tag">{content.category}</span>
         <span className="shot">
           {featured ? <span className="badge">{featuredLabel}</span> : null}
+          {/* Opposite corner from the recommendation, so a card can wear both. */}
+          {fresh ? <span className="badge new">{newLabel}</span> : null}
           <Image
             className={image.hasBackdrop ? "blend-backdrop" : undefined}
             src={image.src}

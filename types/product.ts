@@ -84,6 +84,8 @@ export type Product = {
   charging?: string;
   /** Full parameter table; labels and units are localized at render time. */
   specifications: SpecEntry[];
-  /** Highlighted in the fleet grid as the recommended model. */
+  /** Highlighted in the fleet row as the recommended model. */
   featured?: boolean;
+  /** Marked in the fleet row as the newest model. Independent of `featured`. */
+  isNew?: boolean;
 };
