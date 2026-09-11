@@ -223,4 +223,58 @@ export const productTextsCz: Record<
     seoDescription:
       "AMR 600 Podběhový — nízký autonomní robot s nosností do 600 kg, který zajede pod regál s paletou, zvedne ho a přemístí. Technické parametry a oblasti využití.",
   },
+  "pudu-mp2000": {
+    name: "AMR MP 2000",
+    category:
+      "Autonomní paletový robot s AI navigací pro manipulaci s paletami do 2 000 kg.",
+    headline: "Palety do 2 000 kg. Vidlice zasunuté za 20 sekund.",
+    shortDescription:
+      "Autonomní paletový vozík se zdvihem 200 mm, který sám rozpozná paletu, najde volné skladové místo a zvládne pravoúhlé zakládání v uličce široké 2 metry.",
+    description:
+      "AMR MP 2000 je autonomní paletový robot pro sklady, výrobu a distribuční centra. Díky 3D LiDAR SLAM a vizuální navigaci se nasadí bez stavebních úprav, sám rozpozná typ palety i obsazenost skladového místa a přizpůsobí se paletě odložené s odchylkou až 15 cm nebo 15°. Dvě verze vidlic — standardní 620 mm a úzká 550 mm — pokrývají běžné evropské i nestandardní nosiče.",
+    imageAlt:
+      "Autonomní paletový robot AMR MP 2000 s vidlicemi a sloupkem se senzory",
+    features: [
+      {
+        title: "Rozpoznávání palet s AI",
+        description:
+          "Podporuje palety se třemi ližinami i s obvodovým rámem a učí se rozpoznávat nestandardní nosiče pro přesné nabrání vidlicemi.",
+      },
+      {
+        title: "Zasunutí vidlic za 20 sekund",
+        description:
+          "Rychlost až 1,6 m/s bez nákladu a 1,2 m/s s nákladem zkracuje pracovní cyklus a zrychluje tok materiálu.",
+      },
+      {
+        title: "Bezpečnost ze všech stran",
+        description:
+          "Hloubkové kamery a 3D LiDAR sledují lidi, techniku i překážky v reálném čase. Dynamickým se vyhne nebo zastaví, statické obejde novou trasou.",
+      },
+    ],
+    applications: [
+      {
+        title: "Zásobování výrobních linek",
+        description:
+          "Doručování palet s materiálem k linkám podle taktu výroby.",
+      },
+      {
+        title: "Skladová manipulace s paletami",
+        description:
+          "Autonomní nabrání, přesun a odložení palet včetně zakládání v úzkých uličkách.",
+      },
+      {
+        title: "Distribuční centra",
+        description:
+          "Přesun palet mezi příjmem, skladovými zónami a expedicí bez obsluhy.",
+      },
+      {
+        title: "Integrace a smíšený provoz",
+        description:
+          "Úkoly přes PUDU Link, API nebo tlačítka, propojení s výtahy a automatickými dveřmi. Kdykoli přepne z autonomního do manuálního režimu.",
+      },
+    ],
+    seoTitle: "AMR MP 2000 | Autonomní paletový robot | PUDU Industrial",
+    seoDescription:
+      "AMR MP 2000 — autonomní paletový robot s nosností do 2 000 kg, zdvihem 200 mm a AI rozpoznáváním palet pro sklady, výrobu a distribuci. Technické parametry a oblasti využití.",
+  },
 };

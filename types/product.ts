@@ -2,7 +2,8 @@ export type ProductSlug =
   | "pudu-t150"
   | "pudu-t300"
   | "pudu-t600-upright"
-  | "pudu-t600-underride";
+  | "pudu-t600-underride"
+  | "pudu-mp2000";
 
 /** Keys of technical parameters — the label itself lives in the translations. */
 export type SpecKey =

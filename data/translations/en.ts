@@ -73,7 +73,7 @@ export const en: Translation = {
         "Industrial autonomous mobile robots AMR T-series for intralogistics automation transform material movement into a precise, safe, and uninterrupted flow from the point of origin to the point of consumption, ensuring maximum efficiency.",
       exploreProducts: "Discover our fleet",
       contactUs: "Request a consultation",
-      statModels: "AMR T-Series models",
+      statModels: "AMR models",
       statPayload: "payload range",
       statUptime: "ready for operation",
       hudStatus: "SYSTEM ONLINE",

@@ -9,7 +9,13 @@ type ProductGridProps = {
   locale: Locale;
 };
 
-/** The fleet: four product tiles in the order used by the original design. */
+/**
+ * The fleet, one tile per product in canonical order.
+ *
+ * The grid is four to a row, which was the whole fleet when the design was
+ * drawn. It no longer is, so the CSS wraps and centres what does not fill a row
+ * rather than leaving it orphaned at the left — see `.cards` in globals.css.
+ */
 export default async function ProductGrid({ locale }: ProductGridProps) {
   const t = await getTranslations(locale);
   const products = getHomeProducts();

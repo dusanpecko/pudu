@@ -80,7 +80,7 @@ export const sk = {
         "Priemyselné autonómne mobilné roboty AMR T-series pre automatizáciu intralogistiky menia pohyb materiálu na presný, bezpečný a nepretržitý tok z miesta pôvodu do miesta spotreby tak, aby bola dosiahnutá maximálna efektivita.",
       exploreProducts: "Objavte našu flotilu",
       contactUs: "Požiadať o konzultáciu",
-      statModels: "modely AMR T-Series",
+      statModels: "modely AMR",
       statPayload: "nosnosť",
       statUptime: "pripravené na prevádzku",
       hudStatus: "SYSTÉM ONLINE",

@@ -159,8 +159,8 @@ Z toho vyplýva niekoľko vlastností, ktoré sú v praxi podstatné:
 
 ### 3.2 Ako sa doručuje
 
-Stránky sa **predgenerujú pri nasadení** — 20 obsahových stránok, teda štyri jazyky
-krát domovská stránka a štyri produkty, plus stránky chýb, `robots.txt`
+Stránky sa **predgenerujú pri nasadení** — 24 obsahových stránok, teda štyri jazyky
+krát domovská stránka a päť produktov, plus stránky chýb, `robots.txt`
 a `sitemap.xml`. Administrácia sa vykresľuje na vyžiadanie, pretože zobrazuje
 aktuálny stav databázy.
 

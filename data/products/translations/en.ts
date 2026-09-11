@@ -225,4 +225,59 @@ export const productTextsEn: Record<
     seoDescription:
       "AMR 600 Underride — a low-profile autonomous robot up to 600 kg payload that drives under a rack, lifts it and moves it. Specifications and applications.",
   },
+  "pudu-mp2000": {
+    name: "AMR MP 2000",
+    category:
+      "AI-native autonomous pallet handling robot for loads up to 2,000 kg.",
+    headline: "Pallets up to 2,000 kg. Forks engaged in 20 seconds.",
+    shortDescription:
+      "An autonomous pallet truck with a 200 mm lift that recognises the pallet, finds a free storage slot and performs right-angle stacking in a 2 m aisle on its own.",
+    description:
+      "The AMR MP 2000 is an autonomous pallet handling robot for warehouses, manufacturing and distribution centres. With 3D LiDAR SLAM and visual navigation it deploys without site modifications, recognises the pallet type and storage-slot occupancy by itself, and adapts to pallets set down up to 15 cm or 15° off position. Two fork versions — 620 mm standard and 550 mm narrow — cover common European pallets as well as non-standard load carriers.",
+    imageAlt:
+      "AMR MP 2000 autonomous pallet handling robot with forks and a sensor mast",
+    features: [
+      {
+        title: "AI pallet recognition",
+        description:
+          "Supports three-runner and perimeter-base pallets and learns to recognise non-standard load carriers for precise fork engagement.",
+      },
+      {
+        title: "Forks engaged in 20 seconds",
+        description:
+          "Speeds of up to 1.6 m/s unloaded and 1.2 m/s loaded shorten the handling cycle and accelerate material flow.",
+      },
+      {
+        title: "Safety from every side",
+        description:
+          "Depth cameras and 3D LiDAR track people, equipment and obstacles in real time. Dynamic ones it avoids or stops for; static ones it reroutes around.",
+      },
+    ],
+    applications: [
+      {
+        title: "Line-side material delivery",
+        description:
+          "Delivering pallets of material to production lines in step with takt time.",
+      },
+      {
+        title: "Warehouse pallet handling",
+        description:
+          "Autonomous pick-up, transfer and put-down of pallets, including stacking in narrow aisles.",
+      },
+      {
+        title: "Distribution centres",
+        description:
+          "Moving pallets between receiving, storage zones and dispatch without an operator.",
+      },
+      {
+        title: "Integration and mixed operation",
+        description:
+          "Tasks via PUDU Link, APIs or task buttons, with optional links to elevators and automatic doors. Switches from autonomous to manual mode at any time.",
+      },
+    ],
+    seoTitle:
+      "AMR MP 2000 | Autonomous pallet handling robot | PUDU Industrial",
+    seoDescription:
+      "AMR MP 2000 — an autonomous pallet handling robot with up to 2,000 kg payload, 200 mm lift and AI pallet recognition for warehouses, manufacturing and distribution. Specifications and applications.",
+  },
 };

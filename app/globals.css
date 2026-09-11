@@ -1014,15 +1014,23 @@ h3 {
   margin: 0;
 }
 
+/* Fleet grid: four to a row, as the design was drawn for four products. Flex
+   rather than grid so that a row the fleet does not fill — five products, a row
+   of four and one over — centres its remainder instead of leaving a single
+   tile stranded at the left edge. Widths are computed from the row, so the
+   tiles stay identical to each other whatever the count. */
 .cards {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 15px;
 }
 
-/* Reveal wrapper around a card — keeps every tile the same height. */
+/* Reveal wrapper around a card — keeps every tile the same height within its
+   row, and carries the tile width the container computes above. */
 .card-shell {
   display: flex;
+  flex: 0 1 calc((100% - 3 * 15px) / 4);
 }
 
 .card-shell .product-card {
@@ -2199,8 +2207,8 @@ h3 {
     height: 390px;
   }
 
-  .cards {
-    grid-template-columns: 1fr 1fr;
+  .card-shell {
+    flex-basis: calc((100% - 15px) / 2);
   }
 
   .feature-grid,
@@ -2274,7 +2282,10 @@ h3 {
     flex-wrap: wrap;
   }
 
-  .cards,
+  .card-shell {
+    flex-basis: 100%;
+  }
+
   .feature-grid,
   .modes,
   .specs,

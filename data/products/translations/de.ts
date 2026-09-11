@@ -224,4 +224,56 @@ export const productTextsDe: Record<
     seoDescription:
       "AMR 600 Underride — flacher autonomer Roboter mit 600 kg Traglast, der unter ein Regal fährt, es anhebt und verfährt. Technische Daten und Einsatzbereiche.",
   },
+  "pudu-mp2000": {
+    name: "AMR MP 2000",
+    category: "KI-nativer autonomer Palettenroboter für Lasten bis 2.000 kg.",
+    headline: "Paletten bis 2.000 kg. Gabeln in 20 Sekunden aufgenommen.",
+    shortDescription:
+      "Autonomer Palettenhubwagen mit 200 mm Hub, der die Palette selbst erkennt, einen freien Lagerplatz findet und in einem 2 m breiten Gang rechtwinklig ein- und auslagert.",
+    description:
+      "Der AMR MP 2000 ist ein autonomer Palettenroboter für Lager, Fertigung und Distributionszentren. Mit 3D-LiDAR-SLAM und visueller Navigation wird er ohne bauliche Anpassungen eingesetzt, erkennt Palettentyp und Belegung des Lagerplatzes selbst und passt sich Paletten an, die bis zu 15 cm oder 15° versetzt abgestellt wurden. Zwei Gabelvarianten — 620 mm Standard und 550 mm schmal — decken gängige Europaletten ebenso ab wie Sonderladungsträger.",
+    imageAlt: "Autonomer Palettenroboter AMR MP 2000 mit Gabeln und Sensormast",
+    features: [
+      {
+        title: "KI-Palettenerkennung",
+        description:
+          "Unterstützt Paletten mit drei Kufen und mit umlaufendem Boden und lernt, Sonderladungsträger für eine präzise Gabelaufnahme zu erkennen.",
+      },
+      {
+        title: "Gabelaufnahme in 20 Sekunden",
+        description:
+          "Geschwindigkeiten bis 1,6 m/s ohne Last und 1,2 m/s mit Last verkürzen den Arbeitszyklus und beschleunigen den Materialfluss.",
+      },
+      {
+        title: "Sicherheit von allen Seiten",
+        description:
+          "Tiefenkameras und 3D-LiDAR erfassen Personen, Geräte und Hindernisse in Echtzeit. Dynamischen weicht er aus oder hält an, statische umfährt er auf neuer Route.",
+      },
+    ],
+    applications: [
+      {
+        title: "Linienversorgung in der Fertigung",
+        description:
+          "Zustellung von Materialpaletten an die Linien im Takt der Produktion.",
+      },
+      {
+        title: "Palettenhandling im Lager",
+        description:
+          "Autonome Aufnahme, Transport und Ablage von Paletten einschließlich Einlagern in schmalen Gängen.",
+      },
+      {
+        title: "Distributionszentren",
+        description:
+          "Palettentransport zwischen Wareneingang, Lagerzonen und Versand ohne Bediener.",
+      },
+      {
+        title: "Integration und Mischbetrieb",
+        description:
+          "Aufträge über PUDU Link, APIs oder Auftragstasten, optional mit Anbindung an Aufzüge und Automatiktüren. Wechselt jederzeit vom autonomen in den manuellen Modus.",
+      },
+    ],
+    seoTitle: "AMR MP 2000 | Autonomer Palettenroboter | PUDU Industrial",
+    seoDescription:
+      "AMR MP 2000 — autonomer Palettenroboter mit bis zu 2.000 kg Traglast, 200 mm Hub und KI-Palettenerkennung für Lager, Fertigung und Distribution. Technische Daten und Einsatzbereiche.",
+  },
 };

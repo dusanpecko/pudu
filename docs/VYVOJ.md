@@ -153,7 +153,7 @@ ktorá pokazí, keď chýba.
 | --- | --- |
 | zmena textu | editor prekladov v administrácii, nie kód |
 | nová sekcia s textami | kľúče do 4 × `data/translations/*.ts`, komponent, hotovo — editor ju uvidí sám |
-| nový produkt | `data/products.ts` (neutrálne dáta) + `data/products/translations/*` (4 jazyky) + obrázky cez administráciu |
+| nový produkt | `ProductSlug` v `types/product.ts`; `data/products.ts` (neutrálne dáta + render s priehľadnosťou do `public/images/products/`, ten je povinný ako záloha); `data/products/translations/*` (4 jazyky — generuj cez `serializeProductTexts`, inak spadne round-trip test); fotky a lepší render potom cez administráciu. Vzor: commit MP 2000 |
 | piaty jazyk | `lib/i18n.ts` (locale, doména), preklady, `next.config.ts` redirect, sitemap — vzor: commit nemčiny `6b54ec3` |
 | zmena doby uchovávania dopytov | `RETENTION_YEARS` v `lib/enquiries.ts` — a zosúladiť so zásadami OÚ |
 | nový editor | administrácia → Používatelia (nie Vercel) |

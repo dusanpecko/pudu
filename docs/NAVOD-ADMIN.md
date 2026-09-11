@@ -221,7 +221,7 @@ jeden obrázok nedá zaradiť do galérie aj do hero panela naraz.
 **Hero pozícia** je hlavný obrázok stránky a zobrazí sa v nej **iba prvý**
 obrázok — ak ich tam bude viac, administrácia na to upozorní.
 
-Obe skupiny majú tie isté miesta: **Domovská stránka** a štyri produkty.
+Obe skupiny majú tie isté miesta: **Domovská stránka** a päť produktov.
 
 ### Nahranie obrázka
 
