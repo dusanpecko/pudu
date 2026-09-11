@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import Reveal from "@/components/effects/Reveal";
 import { cx } from "@/lib/cx";
 import type { Locale } from "@/lib/i18n";
 import { resolveHeroImage } from "@/lib/gallery";
@@ -18,7 +17,7 @@ type ProductCardProps = {
   featuredLabel?: string;
 };
 
-/** Product tile used in the fleet grid on the home page. */
+/** Product tile, one snap point in the fleet row on the home page. */
 export default async function ProductCard({
   product,
   locale,
@@ -31,7 +30,9 @@ export default async function ProductCard({
   const featured = Boolean(product.featured && featuredLabel);
 
   return (
-    <Reveal as="article" className={cx("card-shell", featured && "is-featured")}>
+    // A plain article: the row it sits in is revealed as a whole by the strip,
+    // and each tile is a snap point.
+    <article className={cx("card-shell", "fleet-item", featured && "is-featured")}>
       <Link
         className={cx("product-card", featured && "featured")}
         href={localizedPath(locale, { type: "product", slug: product.slug })}
@@ -45,7 +46,7 @@ export default async function ProductCard({
             alt={content.imageAlt}
             width={image.width}
             height={image.height}
-            sizes="(max-width: 620px) 88vw, (max-width: 950px) 44vw, 300px"
+            sizes="(max-width: 620px) 86vw, (max-width: 950px) 46vw, 380px"
           />
         </span>
         <h3>{content.name}</h3>
@@ -62,6 +63,6 @@ export default async function ProductCard({
           ↗
         </span>
       </Link>
-    </Reveal>
+    </article>
   );
 }

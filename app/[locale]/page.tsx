@@ -5,7 +5,7 @@ import ContactSection from "@/components/contact/ContactSection";
 import PhotoGallery from "@/components/gallery/PhotoGallery";
 import FutureSection from "@/components/home/FutureSection";
 import HomeHero from "@/components/home/HomeHero";
-import ProductGrid from "@/components/home/ProductGrid";
+import ProductSlider from "@/components/home/ProductSlider";
 import TechnologySection from "@/components/home/TechnologySection";
 import TickerBand from "@/components/home/TickerBand";
 import { HOME_GALLERY, resolveSocialImage } from "@/lib/gallery";
@@ -46,7 +46,7 @@ export default async function HomePage({ params }: PageParams) {
     <>
       <HomeHero locale={locale} />
       <TickerBand locale={locale} />
-      <ProductGrid locale={locale} />
+      <ProductSlider locale={locale} />
       <TechnologySection locale={locale} />
       <FutureSection locale={locale} />
       <PhotoGallery locale={locale} gallery={HOME_GALLERY} />

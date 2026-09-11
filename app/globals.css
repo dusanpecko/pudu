@@ -1014,23 +1014,20 @@ h3 {
   margin: 0;
 }
 
-/* Fleet grid: four to a row, as the design was drawn for four products. Flex
-   rather than grid so that a row the fleet does not fill — five products, a row
-   of four and one over — centres its remainder instead of leaving a single
-   tile stranded at the left edge. Widths are computed from the row, so the
-   tiles stay identical to each other whatever the count. */
-.cards {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
+/* Fleet: one row of product tiles that scrolls sideways, on the same strip the
+   photo gallery uses (.strip-*). It was a grid of four while the fleet was
+   four; a fifth product left a tile stranded on a second row. Three tiles fill
+   a wide row, the rest are a swipe or an arrow away. The width is computed from
+   the row and the strip's 22px gap, so the tiles stay identical to each other
+   whatever the count. */
+.fleet-item {
+  flex: 0 0 calc((100% - 2 * 22px) / 3);
+  scroll-snap-align: start;
 }
 
-/* Reveal wrapper around a card — keeps every tile the same height within its
-   row, and carries the tile width the container computes above. */
+/* Wrapper around a card — keeps every tile the same height within the row. */
 .card-shell {
   display: flex;
-  flex: 0 1 calc((100% - 3 * 15px) / 4);
 }
 
 .card-shell .product-card {
@@ -1442,21 +1439,22 @@ h3 {
   margin: 0;
 }
 
-/* Photo gallery — deployment shots uploaded in /admin/gallery.
-   One row that scrolls sideways: scroll-snap does the work, so dragging and the
-   arrow keys keep functioning whether or not the buttons have their script. */
+/* Strip — one row of anything that scrolls sideways (components/ui/Strip.tsx),
+   used by the photo gallery and the fleet. Scroll-snap does the work, so dragging
+   and the arrow keys keep functioning whether or not the buttons have their
+   script. */
 .gallery-slider {
   margin-top: 46px;
 }
 
-.gallery-controls {
+.strip-controls {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
   margin-bottom: 16px;
 }
 
-.gallery-arrow {
+.strip-arrow {
   display: grid;
   place-items: center;
   width: 40px;
@@ -1469,17 +1467,17 @@ h3 {
   transition: 0.25s;
 }
 
-.gallery-arrow:hover:not(:disabled) {
+.strip-arrow:hover:not(:disabled) {
   background: var(--accent-solid);
   color: var(--on-accent);
 }
 
-.gallery-arrow:disabled {
+.strip-arrow:disabled {
   opacity: 0.35;
   cursor: default;
 }
 
-.gallery-track {
+.strip-track {
   display: flex;
   gap: 22px;
   overflow-x: auto;
@@ -1491,6 +1489,7 @@ h3 {
   scrollbar-width: thin;
 }
 
+/* Photo gallery — deployment shots uploaded in /admin/gallery. */
 .gallery-item {
   /* Two cards plus a sliver of the third on a wide screen, so it is visible
      that the row continues. */
@@ -2207,8 +2206,8 @@ h3 {
     height: 390px;
   }
 
-  .card-shell {
-    flex-basis: calc((100% - 15px) / 2);
+  .fleet-item {
+    flex-basis: calc((100% - 22px) / 2);
   }
 
   .feature-grid,
@@ -2282,8 +2281,9 @@ h3 {
     flex-wrap: wrap;
   }
 
-  .card-shell {
-    flex-basis: 100%;
+  /* One tile at a time, with a sliver of the next one showing — as the gallery. */
+  .fleet-item {
+    flex-basis: 86%;
   }
 
   .feature-grid,
