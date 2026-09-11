@@ -1,4 +1,5 @@
 import GalleryGrid, { type GalleryItem } from "@/components/gallery/GalleryGrid";
+import JsonLd from "@/components/layout/JsonLd";
 import SectionHeading from "@/components/ui/SectionHeading";
 import { loadGallery, textFor, type GalleryKey } from "@/lib/gallery";
 import type { Locale } from "@/lib/i18n";
@@ -93,14 +94,8 @@ export default async function PhotoGallery({
         />
       </div>
 
-      <script
-        type="application/ld+json"
-        // Serialised by us from our own data, never from user input that could
-        // close the tag.
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
-        }}
-      />
+      {/* Server-rendered HTML only — see JsonLd for why not a bare <script>. */}
+      <JsonLd data={structuredData} />
     </section>
   );
 }

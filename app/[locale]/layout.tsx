@@ -79,6 +79,11 @@ export default async function LocaleLayout({
          ThemeScript replaces it before the first paint with the stored choice or
          the system preference. */
       data-theme="light"
+      /* That replacement happens before React hydrates, so the attribute React
+         finds differs from the one it rendered — by design. Without this, every
+         dark-theme visitor produces a hydration warning in development for a
+         mismatch that is the feature working. Suppression is one element deep. */
+      suppressHydrationWarning
     >
       <head>
         <ThemeScript />

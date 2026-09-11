@@ -158,3 +158,4 @@ ktorá pokazí, keď chýba.
 | zmena doby uchovávania dopytov | `RETENTION_YEARS` v `lib/enquiries.ts` — a zosúladiť so zásadami OÚ |
 | nový editor | administrácia → Používatelia (nie Vercel) |
 | doladenie spam filtra | váhy signálov v `lib/spam.ts`, prah `THRESHOLD`; `tests/spam.test.ts` drží hranice |
+| štruktúrované dáta (JSON-LD) alebo inline skript | `components/layout/JsonLd.tsx`, vzor `ThemeScript.tsx` — oba vkladajú cez `useServerInsertedHTML` do SSR HTML mimo React stromu. **Nikdy bare `<script>` v komponente**: React 19 ho pri klientskom renderi (napr. prepnutie jazyka) vytvorí, nevykoná a vypíše varovanie; pri skripte témy to znamenalo stratu zvolenej témy |

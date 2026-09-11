@@ -14,6 +14,12 @@ import { ROOT } from "./helpers.ts";
  * system preference. That last case is the one that regressed during
  * development (a single try/catch took the preference down with the storage
  * read), which is why it is pinned here.
+ *
+ * The script has a twin: `resolveTheme()`, the function ThemeScript runs on
+ * every client mount, because a language switch re-creates `<html>` and an
+ * inline script does not run twice. The last test runs both against the same
+ * seven cases and requires them to agree — the two are written separately, and
+ * this is what stops them drifting apart.
  */
 
 function shippedScript(): string {
@@ -53,6 +59,52 @@ function run(options: {
   return documentElement.dataset.theme;
 }
 
+type Case = {
+  stored?: string | null;
+  storageBlocked?: boolean;
+  systemLight: boolean;
+};
+
+/**
+ * Runs the body of `resolveTheme()` — cut from the shipped file like the script
+ * is — against the same mocked browser. The body carries no type annotations for
+ * exactly this reason.
+ */
+function runResolver(options: Case): string | undefined {
+  const source = readFileSync(
+    join(ROOT, "components/layout/ThemeScript.tsx"),
+    "utf8",
+  );
+  const match = source.match(
+    /function resolveTheme\(\): "light" \| "dark" \{([\s\S]*?)\n\}/,
+  );
+  if (!match) throw new Error("resolveTheme not found in ThemeScript.tsx");
+
+  const localStorage = {
+    getItem(): string | null {
+      if (options.storageBlocked) throw new Error("blocked");
+      return options.stored ?? null;
+    },
+  };
+  const window = {
+    matchMedia(query: string) {
+      return { matches: query.includes("light") ? options.systemLight : !options.systemLight };
+    },
+  };
+
+  return new Function("localStorage", "window", match[1])(localStorage, window);
+}
+
+const CASES: Case[] = [
+  { stored: "light", systemLight: false },
+  { stored: "dark", systemLight: true },
+  { stored: null, systemLight: true },
+  { stored: null, systemLight: false },
+  { stored: "banana", systemLight: false },
+  { storageBlocked: true, systemLight: true },
+  { storageBlocked: true, systemLight: false },
+];
+
 test("stored light wins over a dark system", () => {
   assert.equal(run({ stored: "light", systemLight: false }), "light");
 });
@@ -79,4 +131,10 @@ test("blocked storage still honours a light system", () => {
 
 test("blocked storage still honours a dark system", () => {
   assert.equal(run({ storageBlocked: true, systemLight: false }), "dark");
+});
+
+test("the client-side resolver agrees with the script on every case", () => {
+  for (const options of CASES) {
+    assert.equal(runResolver(options), run(options), JSON.stringify(options));
+  }
 });

@@ -3,7 +3,7 @@
 Ako sa web testuje, čo je pokryté zámerne a čo zámerne nie.
 
 ```bash
-npm test          # jednotkové testy — ~70 testov, pod sekundu, bez siete
+npm test          # jednotkové testy — ~71 testov, pod sekundu, bez siete
 npm run smoke     # 32 kontrol živej produkcie — len na čítanie, ~15 s
 ```
 
@@ -25,7 +25,7 @@ všetky stránky, a Vercel rozbitý build nenasadí.
 | --- | --- |
 | `translation-roundtrip.test.ts` | regenerácia nezmeneného dátového súboru = **bajt na bajt** ten istý súbor. Záruka editora prekladov; raz sa potichu rozišla (audit N4), tento test bol chýbajúci alarm |
 | `translation-edits.test.ts` | úprava kľúča, ktorý v kóde už neexistuje, sa **zahodí** — preto sa staré texty nikdy nevracajú; a `applyEdits` nemení vstup |
-| `theme-script.test.ts` | 7 prípadov skriptu témy vrátane **zablokovaného úložiska** — presne ten prípad, ktorý počas vývoja regresol |
+| `theme-script.test.ts` | 7 prípadov skriptu témy vrátane **zablokovaného úložiska** — presne ten prípad, ktorý počas vývoja regresol; a parita s `resolveTheme()`, klientským dvojníkom skriptu, ktorý tému vracia po prepnutí jazyka |
 | `mailer-sender.test.ts` | meno odosielateľa: adresa vždy z nastavení, a **cez meno sa nedá prepašovať hlavička** (nový riadok, úvodzovky, spätné lomky) |
 | `gallery-crop.test.ts` | orez má vždy žiadaný pomer, vždy sa zmestí, ohnisko na okraji **nepretečie** |
 | `editors-env.test.ts` | `ADMIN_EMAILS`: normalizácia adries, prázdna premenná nepúšťa nikoho — polovica poistky proti zamknutiu |

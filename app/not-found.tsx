@@ -29,6 +29,9 @@ export default async function GlobalNotFound() {
       className={fontVariables}
       data-scroll-behavior="smooth"
       data-theme="light"
+      // ThemeScript changes this before hydration; the mismatch is intentional.
+      // See the same attribute in app/[locale]/layout.tsx.
+      suppressHydrationWarning
     >
       <head>
         <ThemeScript />
